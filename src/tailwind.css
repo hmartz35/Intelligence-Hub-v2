@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html {
+    background: #06090e;
+    color: #dde2f3;
+  }
+  body {
+    @apply m-0 min-h-screen overflow-x-hidden bg-void font-ui text-[14px] leading-relaxed text-ink antialiased;
+  }
+  button {
+    font: inherit;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+  ::selection {
+    background: rgba(0, 163, 255, .3);
+    color: #dde2f3;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(8, 14, 26, .7);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 163, 255, .45);
+  }
+}
+
+@layer components {
+  .command-background {
+    @apply fixed inset-0 z-0 pointer-events-none;
+    background:
+      linear-gradient(rgba(0, 163, 255, .035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 163, 255, .025) 1px, transparent 1px),
+      radial-gradient(circle at 72% 18%, rgba(0, 163, 255, .18), transparent 28%),
+      radial-gradient(circle at 20% 85%, rgba(255, 186, 32, .08), transparent 28%),
+      #06090e;
+    background-size: 38px 38px, 38px 38px, auto, auto, auto;
+  }
+  .scanline {
+    @apply pointer-events-none fixed left-0 right-0 z-50 h-28 animate-scan bg-gradient-to-b from-transparent via-cyan/10 to-transparent;
+  }
+  .command-shell {
+    @apply relative z-10 grid min-h-screen grid-cols-1 lg:grid-cols-[292px_1fr];
+  }
+  .command-sidebar {
+    @apply sticky top-0 z-40 h-auto border-b border-line bg-void/90 p-4 backdrop-blur-2xl lg:h-screen lg:border-b-0 lg:border-r;
+  }
+  .brand-block {
+    @apply border border-line bg-panel/65 p-4 shadow-insetline backdrop-blur-xl;
+  }
+  .brand-line {
+    @apply flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.12em] text-cyan;
+  }
+  .brand-line span {
+    @apply h-2 w-2 rounded-full bg-cyan shadow-[0_0_16px_rgba(0,163,255,.9)];
+  }
+  .brand-block h1 {
+    @apply mt-3 text-lg font-semibold leading-tight text-ink;
+  }
+  .brand-block p {
+    @apply mt-2 font-mono text-[10px] uppercase tracking-[.08em] text-dim;
+  }
+  .command-main {
+    @apply min-w-0 p-4 sm:p-6 xl:p-7;
+  }
+  .top-status {
+    @apply mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3 font-mono text-[10px] uppercase tracking-[.1em] text-muted;
+  }
+  .terminal-nav {
+    @apply flex h-11 items-center gap-3 border border-transparent bg-transparent px-3 text-left font-mono text-[11px] uppercase tracking-[.08em] text-muted transition hover:border-line2 hover:bg-panel/75 hover:text-ink;
+  }
+  .terminal-nav-active {
+    @apply border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_18px_rgba(0,163,255,.16)];
+  }
+  .terminal-count {
+    @apply border border-line bg-void/80 px-2 py-0.5 text-[10px] text-dim;
+  }
+  .command-hero {
+    @apply relative grid gap-4 overflow-hidden border border-line bg-panel/70 p-5 shadow-insetline backdrop-blur-xl lg:grid-cols-[1fr_auto];
+  }
+  .command-hero::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-cyan/70 shadow-[0_0_18px_rgba(0,163,255,.75)];
+  }
+  .hero-copy h2 {
+    @apply mt-2 font-display text-5xl leading-none text-ink sm:text-6xl;
+  }
+  .hero-copy p {
+    @apply mt-4 max-w-4xl text-[15px] leading-7 text-slate-300;
+  }
+  .hero-panel {
+    @apply flex flex-wrap items-start gap-2 lg:max-w-[340px] lg:justify-end;
+  }
+  .metrics-grid {
+    @apply mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-6;
+  }
+  .metric-tile {
+    @apply border border-line bg-panel/75 p-3 shadow-insetline backdrop-blur-xl;
+  }
+  .metric-label {
+    @apply font-mono text-[10px] uppercase tracking-[.1em] text-dim;
+  }
+  .metric-value {
+    @apply mt-2 font-display text-4xl leading-none;
+  }
+  .metric-value span {
+    @apply ml-1 font-mono text-[11px] text-muted;
+  }
+  .workspace-grid {
+    @apply mt-4 grid gap-3 xl:grid-cols-[1.35fr_.65fr];
+  }
+  .lower-grid {
+    @apply mt-3 grid gap-3 xl:grid-cols-2;
+  }
+  .panel {
+    @apply min-w-0 border border-line bg-panel/75 p-4 shadow-insetline backdrop-blur-xl;
+  }
+  .panel-large {
+    @apply min-h-[560px];
+  }
+  .panel-head {
+    @apply mb-3 flex items-start justify-between gap-3 border-b border-line pb-3;
+  }
+  .panel-head h3 {
+    @apply mt-1 text-base font-semibold text-ink;
+  }
+  .node-kicker {
+    @apply font-mono text-[10px] uppercase tracking-[.12em] text-dim;
+  }
+  .node-title {
+    @apply mt-1 text-sm font-semibold text-ink;
+  }
+  .chip {
+    @apply inline-flex items-center border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[.08em];
+  }
+  .chip-cyan {
+    @apply border-cyan/40 bg-cyan/10 text-cyan;
+  }
+  .chip-amber {
+    @apply border-amber/40 bg-amber/10 text-amber;
+  }
+  .chip-red {
+    @apply border-red/40 bg-red/10 text-red;
+  }
+  .primary-action {
+    @apply bg-cyan px-4 py-2 text-xs font-bold uppercase tracking-[.08em] text-void transition hover:bg-cyan/90;
+  }
+  .terminal-frame {
+    @apply relative overflow-hidden border border-line2 bg-void/70 p-4;
+  }
+  .terminal-frame::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,163,255,.14),transparent_36%)] opacity-80;
+  }
+  .terminal-frame-head {
+    @apply relative z-10 flex items-start justify-between gap-3;
+  }
+  .terminal-title {
+    @apply mt-1 font-display text-4xl leading-none text-ink;
+  }
+  .segmented {
+    @apply relative z-10 mt-4 flex flex-wrap gap-2;
+  }
+  .segmented button {
+    @apply border border-line bg-panel/80 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-muted transition hover:border-cyan/50 hover:text-cyan;
+  }
+  .segmented .segment-active {
+    @apply border-cyan bg-cyan/10 text-cyan;
+  }
+  .sensor-map {
+    @apply relative z-10 mt-4 h-[300px] overflow-hidden border border-line bg-[#050914];
+  }
+  .sensor-grid {
+    @apply absolute inset-0;
+    background:
+      linear-gradient(rgba(0, 163, 255, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 163, 255, .06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .map-lines {
+    @apply absolute inset-0 h-full w-full fill-none stroke-cyan/70;
+    stroke-width: .55;
+    filter: drop-shadow(0 0 3px rgba(0, 163, 255, .9));
+  }
+  .map-lines .danger {
+    @apply stroke-red/80;
+    filter: drop-shadow(0 0 3px rgba(255, 77, 77, .9));
+  }
+  .map-node {
+    @apply absolute z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan/50 bg-cyan/10 transition hover:scale-110 hover:border-cyan;
+  }
+  .map-node span {
+    @apply absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan shadow-[0_0_12px_rgba(0,163,255,.9)];
+  }
+  .map-node-active {
+    @apply border-amber bg-amber/15 shadow-[0_0_22px_rgba(255,186,32,.28)];
+  }
+  .map-node-1 { left: 18%; top: 30%; }
+  .map-node-2 { left: 72%; top: 28%; }
+  .map-node-3 { left: 83%; top: 46%; }
+  .map-node-4 { left: 22%; top: 76%; }
+  .data-card {
+    @apply border border-line bg-panel/70 p-3 shadow-insetline backdrop-blur-xl;
+  }
+  .screen-list {
+    @apply grid max-h-[560px] gap-2 overflow-auto pr-1;
+  }
+  .screen-row {
+    @apply flex min-h-14 items-center gap-3 border border-line bg-void/50 px-3 py-2 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
+  }
+  .screen-row-active {
+    @apply border-cyan/70 bg-cyan/10 shadow-[0_0_16px_rgba(0,163,255,.12)];
+  }
+  .hierarchy-grid {
+    @apply grid gap-3 md:grid-cols-2;
+  }
+  .hierarchy-node {
+    @apply border border-line bg-void/50 p-3 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
+  }
+  .hierarchy-node-active {
+    @apply border-cyan/70 bg-cyan/10;
+  }
+  .asset-row {
+    @apply flex items-center justify-between gap-3 border border-line bg-void/55 p-3;
+  }
+  .planet-table {
+    @apply grid gap-1;
+  }
+  .planet-row {
+    @apply grid grid-cols-[1fr_auto_auto_auto] gap-3 border-b border-line/70 py-2 font-mono text-[11px] text-muted last:border-b-0;
+  }
+  .briefing-tool {
+    @apply flex items-center justify-between gap-3 border border-line bg-void/55 p-3 text-left text-sm font-semibold text-ink transition hover:border-cyan/60 hover:bg-cyan/10;
+  }
+  .log-entry {
+    @apply border-b border-dashed border-line py-2 text-[13px] leading-6 text-slate-300 last:border-b-0;
+  }
+  .swatch {
+    @apply h-6 border border-white/10;
+  }
+}

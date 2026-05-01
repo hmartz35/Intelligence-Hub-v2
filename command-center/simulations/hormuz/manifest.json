@@ -1,0 +1,7 @@
+{
+  "id": "legacy-hormuz-escalation",
+  "scope": "legacy-hormuz",
+  "entry": "command-center/simulations/hormuz/index.js",
+  "assetRoot": "command-center/assets/legacy/hormuz",
+  "source": "Legacy Hormuz escalation simulation"
+}

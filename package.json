@@ -1,0 +1,14 @@
+{
+  "name": "intelligence-hub-v2",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./global-ui.css --minify",
+    "test": "node --test",
+    "verify": "npm run build:css && npm test"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

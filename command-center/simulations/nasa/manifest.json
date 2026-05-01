@@ -1,0 +1,7 @@
+{
+  "id": "legacy-nasa-planetary",
+  "scope": "legacy-nasa",
+  "entry": "command-center/simulations/nasa/index.js",
+  "assetRoot": "command-center/assets/legacy/nasa",
+  "source": "NASA Planetary Fact Sheet"
+}
