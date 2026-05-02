@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Weapons Explorer · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D12;--bg-1:#0E131A;--surface:#141A24;--surface-2:#1A2131;--surface-3:#222A3B;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--warm-border:rgba(255,177,134,.28);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--violet-soft:rgba(184,160,255,.10);--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 10% -5%,rgba(109,217,255,.05),transparent 55%),radial-gradient(ellipse at 95% 110%,rgba(184,160,255,.04),transparent 55%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(10,13,18,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:1500px;margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 8px rgba(109,217,255,.5)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.wrap{position:relative;z-index:1;max-width:1500px;margin:0 auto;padding:28px clamp(14px,2.5vw,32px) 80px}
+.hdr{padding-bottom:24px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:end;gap:28px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.hdr .lt{max-width:760px}
+.hdr .eye{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-bottom:12px}
+.hdr h1{font-family:var(--display);font-size:clamp(38px,5vw,56px);font-weight:400;margin:0 0 10px;letter-spacing:-.02em;line-height:1}
+.hdr h1 i{font-style:italic;color:var(--accent)}
+.hdr p{color:var(--ink-2);font-size:15px;margin:0;max-width:640px;line-height:1.6}
+.hdr .rt{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px}
+.pill{border:1px solid var(--border);padding:5px 10px;color:var(--ink-3);border-radius:100px;background:var(--surface)}
+.pill.a{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+
+.controls{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.controls{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.controls{grid-template-columns:1fr}}
+.ctl{display:flex;flex-direction:column;gap:8px}
+.ctl .lab{display:flex;justify-content:space-between;align-items:baseline}
+.ctl .lab .n{font-family:var(--ui);font-size:12.5px;color:var(--ink-2);font-weight:500}
+.ctl .lab .v{font-family:var(--mono);font-size:12.5px;color:var(--accent);font-weight:500}
+.ctl .hint{font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:20px;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-moz-range-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%;margin-top:-6px;transition:.15s}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%}
+input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(109,217,255,.15)}
+.seg{display:inline-flex;background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px;gap:2px}
+.seg button{background:transparent;border:none;color:var(--ink-3);font-family:var(--ui);font-size:11.5px;padding:5px 12px;cursor:pointer;border-radius:4px;transition:.12s;font-weight:500}
+.seg button.on{background:var(--accent);color:#06121a}
+.seg button:not(.on):hover{color:var(--ink)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:12.5px;font-weight:500;cursor:pointer;transition:.15s;border-radius:var(--r-sm)}
+.btn:hover{background:var(--accent-bright)}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--border-2)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn.small{padding:6px 10px;font-size:11px}
+
+.kpi{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
+@media(max-width:960px){.kpi{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.kpi .c{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.kpi .lbl{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:6px}
+.kpi .v{font-family:var(--display);font-size:24px;font-weight:400;color:var(--ink);line-height:1}
+.kpi .v.a{color:var(--accent)}.kpi .v.w{color:var(--warm)}.kpi .v.s{color:var(--success)}
+.kpi .d{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:5px}
+
+.grid{display:grid;grid-template-columns:360px 1fr 360px;gap:12px}
+@media(max-width:1250px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden}
+.panel h3{font-family:var(--ui);font-size:13.5px;font-weight:500;color:var(--ink);margin:0;padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10.5px;font-weight:400}
+.panel .body{padding:0;flex:1;overflow:auto;max-height:620px}
+.panel .body.pad{padding:16px 18px}
+.panel .body::-webkit-scrollbar{width:6px}
+.panel .body::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+
+.plat{padding:12px 16px;border-bottom:1px solid var(--divider);cursor:pointer;transition:.12s;position:relative}
+.plat:hover{background:var(--surface-2)}
+.plat.sel{background:var(--accent-soft)}
+.plat.sel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent)}
+.plat .row1{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px}
+.plat .nm{font-family:var(--ui);font-size:13px;color:var(--ink);font-weight:500;letter-spacing:-.005em}
+.plat .cat{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border:1px solid var(--border-2);border-radius:var(--r-sm)}
+.plat .stats{display:flex;gap:10px;font-family:var(--mono);font-size:10.5px;color:var(--ink-4);flex-wrap:wrap}
+.plat .stats b{color:var(--ink-3);font-weight:500}
+.plat .stats .cep{color:var(--accent)}
+
+.tgt{padding:11px 16px;border-bottom:1px solid var(--divider);display:flex;gap:12px;align-items:center;cursor:pointer;transition:.12s}
+.tgt:hover{background:var(--surface-2)}
+.tgt input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.tgt .body{flex:1;min-width:0}
+.tgt .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:3px}
+.tgt .cls{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.06em}
+.tgt .nm{font-family:var(--ui);font-size:12.5px;color:var(--ink-2);font-weight:500}
+.tgt .val{font-family:var(--mono);font-size:10.5px;color:var(--accent)}
+.tgt .stats{font-family:var(--mono);font-size:10px;color:var(--ink-4);display:flex;gap:10px}
+.tgt.assigned{background:rgba(109,217,255,.05)}
+.tgt .assign{font-family:var(--mono);font-size:10px;color:var(--success);margin-top:3px}
+
+.package-item{padding:10px 16px;border-bottom:1px solid var(--divider);font-size:12.5px}
+.package-item .r1{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:3px}
+.package-item .r1 b{color:var(--ink);font-weight:500}
+.package-item .plt{color:var(--accent)}
+.package-item .de-bar{height:3px;background:var(--border);margin-top:6px;border-radius:2px;overflow:hidden}
+.package-item .de-bar::before{content:"";display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--success));width:var(--w,0);transition:.3s}
+.package-item .meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:4px;display:flex;gap:10px}
+.package-item .meta span b{color:var(--ink-3);font-weight:500}
+
+.pareto-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;margin-top:16px}
+.pareto-wrap h3{font-family:var(--ui);font-size:13.5px;color:var(--ink);margin:0 0 14px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.pareto-wrap h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10.5px;font-weight:400}
+.pareto-wrap svg{width:100%;display:block;height:300px}
+.pareto-wrap .legend{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:10px}
+.pareto-wrap .legend .sw{display:inline-block;width:12px;height:12px;vertical-align:middle;margin-right:6px;border-radius:50%}
+
+.empty{padding:30px 20px;text-align:center;color:var(--ink-4);font-family:var(--mono);font-size:11.5px;line-height:1.6}
+.ftr{margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--ink-4);line-height:1.7;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.ftr a{color:var(--ink-3);text-decoration:none}.ftr a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Weapons Explorer</span></div>
+  <div style="display:flex;gap:14px;align-items:center"><span>v2.0 · 12 platforms · 18 target classes</span></div>
+</div></div>
+
+<div class="wrap">
+<header class="hdr">
+  <div class="lt">
+    <div class="eye">Strike planner · Damage expectancy · Optimization</div>
+    <h1>Strike <i>package planning</i></h1>
+    <p>Damage expectancy from CEP, P<sub>k</sub>, and target hardening. Select targets and solve the optimal strike package under a budget constraint. Toggle Optimize mode to run the greedy knapsack. Pareto frontier shows the cost-value tradeoff across budget levels.</p>
+  </div>
+  <div class="rt">
+    <span class="pill a">Damage expectancy</span><span class="pill a">Knapsack optimizer</span><span class="pill">Pareto frontier</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="ctl">
+    <div class="lab"><span class="n">Budget</span><span class="v" id="v-budget">$40.0M</span></div>
+    <input type="range" min="5" max="150" value="40" step="1" id="s-budget">
+    <div class="hint">Total munitions cost envelope (platform cost not included)</div>
+  </div>
+  <div class="ctl">
+    <div class="lab"><span class="n">Mode</span></div>
+    <div class="seg">
+      <button class="on" data-mode="optimize">Optimize</button>
+      <button data-mode="manual">Manual</button>
+    </div>
+    <div class="hint">Optimize: greedy knapsack · Manual: assign weapons per target</div>
+  </div>
+  <div class="ctl">
+    <div class="lab"><span class="n">Weather / masking</span><span class="v" id="v-wx">1.00</span></div>
+    <input type="range" min="60" max="100" value="100" id="s-wx">
+    <div class="hint">Multiplier on P<sub>k</sub> (0.6 = heavy degradation)</div>
+  </div>
+  <div class="ctl" style="flex-direction:row;align-items:flex-end;gap:6px">
+    <button class="btn" id="btn-run">Run optimizer</button>
+    <button class="btn ghost small" id="btn-select-all">All tgts</button>
+    <button class="btn ghost small" id="btn-clear">Clear</button>
+  </div>
+</div>
+
+<div class="kpi">
+  <div class="c"><div class="lbl">Targets selected</div><div class="v a" id="k-tgts">0</div><div class="d" id="k-tgts-d">—</div></div>
+  <div class="c"><div class="lbl">Package cost</div><div class="v" id="k-cost">$0.0M</div><div class="d" id="k-cost-d">vs budget</div></div>
+  <div class="c"><div class="lbl">Expected damage value</div><div class="v s" id="k-value">0</div><div class="d" id="k-value-d">max possible —</div></div>
+  <div class="c"><div class="lbl">Mean DE</div><div class="v a" id="k-de">—</div><div class="d" id="k-de-d">per engaged target</div></div>
+  <div class="c"><div class="lbl">Efficiency</div><div class="v" id="k-eff">—</div><div class="d" id="k-eff-d">value / $M</div></div>
+  <div class="c"><div class="lbl">Pareto rank</div><div class="v w" id="k-rank">—</div><div class="d" id="k-rank-d">vs frontier</div></div>
+</div>
+
+<section class="grid">
+  <div class="panel">
+    <h3><span>Platforms · 12</span><span class="sub">Click for details</span></h3>
+    <div class="body" id="plat-list"></div>
+  </div>
+  <div class="panel">
+    <h3><span>Target list · 18 classes</span><span class="sub"><span id="sel-count">0</span> selected</span></h3>
+    <div class="body" id="tgt-list"></div>
+  </div>
+  <div class="panel">
+    <h3><span>Strike package</span><span class="sub" id="pkg-sub">Unassigned</span></h3>
+    <div class="body" id="pkg-list"><div class="empty">Select targets and press <b style="color:var(--accent)">Run optimizer</b> to build a strike package.<br><br>Or switch to Manual mode to assign platforms to each target yourself.</div></div>
+  </div>
+</section>
+
+<div class="pareto-wrap">
+  <h3><span>Pareto frontier · Cost vs expected damage value</span><span class="sub">Greedy solutions across budget range</span></h3>
+  <svg id="pareto" viewBox="0 0 900 300" preserveAspectRatio="none"></svg>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--success)"></span>Frontier (non-dominated)</span>
+    <span><span class="sw" style="background:var(--ink-4);opacity:.5"></span>Dominated solutions</span>
+    <span><span class="sw" style="background:var(--accent)"></span>Current package</span>
+    <span><span class="sw" style="background:var(--warm);border-radius:2px"></span>Your budget</span>
+  </div>
+</div>
+
+<footer class="ftr">
+  <div>Weapons Explorer v2.0 — <a href="./index.html">Portfolio</a> · <a href="https://github.com/Sacandaga/coding-practice">GitHub</a></div>
+  <div>Illustrative P<sub>k</sub> / CEP values · not operational</div>
+</footer>
+</div>
+
+<script>
+// ============ Data ============
+// Platforms: id, name, category, cost ($M per round), CEP (m), lethalRadius (m), standoff (km)
+const PLATFORMS=[
+  {id:'tlam',  name:'Tomahawk TLAM Block V',  cat:'CRUISE',   cost:2.0,  cep:10, lr:18, range:1600, penetrate:false, antiship:true},
+  {id:'jassm', name:'JASSM-ER',              cat:'CRUISE',   cost:1.5,  cep:3,  lr:14, range:1000, penetrate:false, antiship:false},
+  {id:'lrasm', name:'LRASM',                 cat:'ANTI-SHIP',cost:3.5,  cep:3,  lr:16, range:930,  penetrate:false, antiship:true},
+  {id:'slam',  name:'SLAM-ER',               cat:'CRUISE',   cost:1.0,  cep:3,  lr:12, range:270,  penetrate:false, antiship:false},
+  {id:'harp',  name:'Harpoon Block II+',     cat:'ANTI-SHIP',cost:1.4,  cep:10, lr:14, range:240,  penetrate:false, antiship:true},
+  {id:'jdam',  name:'GBU-31 JDAM · F-35',    cat:'DIRECT',   cost:0.15, cep:5,  lr:16, range:28,   penetrate:false, antiship:false},
+  {id:'sdb',   name:'GBU-53 SDB-II',         cat:'DIRECT',   cost:0.3,  cep:3,  lr:6,  range:110,  penetrate:false, antiship:true},
+  {id:'mop',   name:'GBU-57 MOP · B-2',      cat:'PENETRATOR',cost:3.5, cep:1,  lr:10, range:28,   penetrate:true,  antiship:false},
+  {id:'hell',  name:'AGM-114 Hellfire · MQ-9',cat:'DIRECT',   cost:0.15, cep:2,  lr:4,  range:11,   penetrate:false, antiship:false},
+  {id:'sm6',   name:'SM-6 (land-attack mode)',cat:'CRUISE',   cost:5.0,  cep:5,  lr:13, range:460,  penetrate:false, antiship:true},
+  {id:'jsow',  name:'JSOW-C',                cat:'STANDOFF', cost:0.7,  cep:3,  lr:10, range:110,  penetrate:false, antiship:false},
+  {id:'shark', name:'LRHW · Hypersonic',     cat:'HYPERSONIC',cost:18.0, cep:8,  lr:22, range:2775, penetrate:true,  antiship:false},
+];
+
+// Targets: id, name, hardening (0-1), value (1-15), category, isShip, isAir
+const TARGETS=[
+  {id:'t1', name:'Hardened C2 bunker (Iran)',   hard:0.90, val:12, cat:'HARDENED'},
+  {id:'t2', name:'Fordow enrichment facility',  hard:0.97, val:15, cat:'HARDENED'},
+  {id:'t3', name:'BM launcher · Fateh-110',     hard:0.30, val:9,  cat:'MOBILE'},
+  {id:'t4', name:'UAV production · Shahed',     hard:0.45, val:10, cat:'FIXED'},
+  {id:'t5', name:'ASCM site · Noor cluster',    hard:0.40, val:8,  cat:'FIXED'},
+  {id:'t6', name:'IADS node · Bavar-373',       hard:0.55, val:9,  cat:'FIXED'},
+  {id:'t7', name:'Port · Hodeidah',             hard:0.65, val:7,  cat:'INFRA'},
+  {id:'t8', name:'Air base runway · Sana\'a',   hard:0.55, val:6,  cat:'FIXED'},
+  {id:'t9', name:'Fuel depot · IRGC-N',         hard:0.30, val:6,  cat:'FIXED'},
+  {id:'t10',name:'Weapons storage · Saada',     hard:0.55, val:6,  cat:'FIXED'},
+  {id:'t11',name:'IRGC-QF command vehicle',     hard:0.15, val:5,  cat:'MOBILE'},
+  {id:'t12',name:'Fast-attack craft (FIAC)',    hard:0.20, val:4,  cat:'SHIP', ship:true},
+  {id:'t13',name:'Frigate · Jamaran-class',     hard:0.60, val:9,  cat:'SHIP', ship:true},
+  {id:'t14',name:'Ammunition storage',          hard:0.45, val:5,  cat:'FIXED'},
+  {id:'t15',name:'Iran missile production',     hard:0.55, val:12, cat:'FIXED'},
+  {id:'t16',name:'IRGC-QF HQ complex',          hard:0.70, val:11, cat:'HARDENED'},
+  {id:'t17',name:'Houthi launcher (mobile)',    hard:0.20, val:7,  cat:'MOBILE'},
+  {id:'t18',name:'Radar · long-range EW',       hard:0.50, val:7,  cat:'FIXED'},
+];
+
+// State
+const S={budget:40,wx:1.0,mode:'optimize',selTgts:new Set(),package:new Map(),selPlat:null};
+const $=id=>document.getElementById(id);
+
+// ============ Damage expectancy ============
+// P_k = 1 - exp(-ln(2) * (LR/CEP)^2 * (1 - hardening^k))   where k softens hardening effect
+// For penetrators vs hardened targets, boost; for missiles vs hardened, dampen
+function pkSingle(plat, tgt, wx=1){
+  // Base: ratio of lethal radius to CEP squared
+  const ratio = plat.lr / Math.max(plat.cep, 0.5);
+  let base = 1 - Math.exp(-Math.LN2 * ratio * ratio * 0.35);  // scaled
+  // Hardening effect
+  let hardMult;
+  if(plat.penetrate){
+    hardMult = tgt.hard >= 0.8 ? 0.85 : (1 - tgt.hard*0.3);  // penetrators effective on hardened
+  } else {
+    hardMult = 1 - Math.pow(tgt.hard, 1.2);
+  }
+  // Ship targets need antiship weapon
+  if(tgt.ship && !plat.antiship) hardMult *= 0.25;
+  // Weather
+  return Math.max(0.02, Math.min(0.96, base * hardMult * wx));
+}
+// DE with N rounds
+function deMulti(pk, n){ return 1 - Math.pow(1-pk, n); }
+
+// Best weapon for a given target: returns {plat, n, cost, de, value}
+function bestForTarget(tgt, budget, wx){
+  let best=null;
+  for(const plat of PLATFORMS){
+    const pk = pkSingle(plat, tgt, wx);
+    if(pk < 0.1) continue; // skip useless
+    // Try N=1..4 rounds
+    for(let n=1;n<=4;n++){
+      const cost=n*plat.cost;
+      if(cost>budget) break;
+      const de=deMulti(pk,n);
+      const val=de * tgt.val;
+      const mvd=val/cost;
+      if(!best || mvd > best.mvd) best = {plat, n, cost, de, value:val, mvd, pk};
+    }
+  }
+  return best;
+}
+
+// Greedy knapsack optimizer
+function optimize(tgts, budget, wx){
+  const assignments = new Map();
+  // Step 1: Compute candidate assignments (target-weapon-N tuples) with value/$ ratio
+  const candidates=[];
+  for(const tgt of tgts){
+    for(const plat of PLATFORMS){
+      const pk = pkSingle(plat, tgt, wx);
+      if(pk < 0.1) continue;
+      for(let n=1;n<=4;n++){
+        const cost=n*plat.cost;
+        const de=deMulti(pk,n);
+        const val=de*tgt.val;
+        candidates.push({tgt, plat, n, cost, de, value:val, mvd: val/cost});
+      }
+    }
+  }
+  // Sort by marginal value per dollar desc
+  candidates.sort((a,b)=>b.mvd - a.mvd);
+  let spent=0;
+  for(const c of candidates){
+    if(assignments.has(c.tgt.id)) continue;  // one weapon assignment per target
+    if(spent + c.cost > budget) continue;
+    assignments.set(c.tgt.id, c);
+    spent += c.cost;
+  }
+  return {assignments, spent};
+}
+
+// Compute Pareto frontier: for each budget B in range, run optimizer; plot (cost, total value)
+function paretoFrontier(tgts, wx, maxB=150){
+  const points=[];
+  for(let b=5;b<=maxB;b+=3){
+    const r=optimize(tgts, b, wx);
+    let val=0;
+    for(const a of r.assignments.values()) val+=a.value;
+    points.push({budget:b, cost:r.spent, value:val});
+  }
+  // Mark Pareto-optimal (non-dominated)
+  points.forEach(p=>p.dominated=false);
+  for(let i=0;i<points.length;i++){
+    for(let j=0;j<points.length;j++){
+      if(i===j) continue;
+      if(points[j].cost <= points[i].cost && points[j].value > points[i].value){ points[i].dominated=true; break; }
+      if(points[j].cost < points[i].cost && points[j].value >= points[i].value){ points[i].dominated=true; break; }
+    }
+  }
+  return points;
+}
+
+// ============ Rendering ============
+function renderPlatforms(){
+  $('plat-list').innerHTML = PLATFORMS.map(p => `
+    <div class="plat ${S.selPlat===p.id?'sel':''}" data-id="${p.id}">
+      <div class="row1"><span class="nm">${p.name}</span><span class="cat">${p.cat}</span></div>
+      <div class="stats">
+        <span>CEP <b class="cep">${p.cep}m</b></span>
+        <span>LR <b>${p.lr}m</b></span>
+        <span>Range <b>${p.range}km</b></span>
+        <span>Cost <b>$${p.cost.toFixed(2)}M</b></span>
+        ${p.penetrate?'<span style="color:var(--warm)">Penetrator</span>':''}
+        ${p.antiship?'<span style="color:var(--accent)">Anti-ship</span>':''}
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.plat').forEach(el=>el.addEventListener('click',()=>{
+    S.selPlat = S.selPlat===el.dataset.id?null:el.dataset.id;
+    renderPlatforms();
+    renderTargets(); // show Pk vs selected platform
+  }));
+}
+
+function renderTargets(){
+  const plat = S.selPlat ? PLATFORMS.find(p=>p.id===S.selPlat) : null;
+  $('tgt-list').innerHTML = TARGETS.map(t => {
+    const assigned = S.package.has(t.id);
+    const pk = plat ? pkSingle(plat, t, S.wx) : null;
+    return `
+      <div class="tgt ${assigned?'assigned':''}" data-id="${t.id}">
+        <input type="checkbox" ${S.selTgts.has(t.id)?'checked':''} data-id="${t.id}">
+        <div class="body">
+          <div class="h"><span class="cls">${t.cat}</span><span class="val">V ${t.val}</span></div>
+          <div class="nm">${t.name}</div>
+          <div class="stats">
+            <span>Hard <b style="color:var(--ink-3)">${t.hard.toFixed(2)}</b></span>
+            ${plat?`<span>P<sub>k</sub> · ${plat.name.split('·')[0].trim()} <b style="color:${pk>.6?'var(--success)':pk>.3?'var(--accent)':'var(--ink-4)'}">${pk.toFixed(2)}</b></span>`:''}
+          </div>
+          ${assigned ? `<div class="assign">→ ${S.package.get(t.id).plat.name} × ${S.package.get(t.id).n} · DE ${S.package.get(t.id).de.toFixed(2)} · $${S.package.get(t.id).cost.toFixed(2)}M</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.querySelectorAll('.tgt input').forEach(cb => cb.addEventListener('change', e => {
+    e.stopPropagation();
+    if(cb.checked) S.selTgts.add(cb.dataset.id); else S.selTgts.delete(cb.dataset.id);
+    $('sel-count').textContent = S.selTgts.size;
+    $('k-tgts').textContent = S.selTgts.size;
+    if(S.mode==='optimize') runOptimize();
+    else updateKPIs();
+  }));
+  $('sel-count').textContent = S.selTgts.size;
+  $('k-tgts').textContent = S.selTgts.size;
+}
+
+function renderPackage(){
+  const pkg = [...S.package.values()];
+  if(pkg.length===0){
+    $('pkg-list').innerHTML = `<div class="empty">Select targets and press <b style="color:var(--accent)">Run optimizer</b> to build a strike package.<br><br>Or switch to Manual mode to assign platforms to each target yourself.</div>`;
+    $('pkg-sub').textContent = 'Unassigned';
+    return;
+  }
+  pkg.sort((a,b)=>b.value-a.value);
+  $('pkg-list').innerHTML = pkg.map(a => `
+    <div class="package-item">
+      <div class="r1"><b>${a.tgt.name}</b><span class="val" style="font-family:var(--mono);font-size:11px;color:var(--accent)">${a.value.toFixed(1)} EV</span></div>
+      <div class="plt" style="font-size:11.5px">${a.plat.name} × ${a.n}</div>
+      <div class="de-bar" style="--w:${a.de*100}%"></div>
+      <div class="meta"><span>DE <b>${(a.de*100).toFixed(0)}%</b></span><span>Cost <b>$${a.cost.toFixed(2)}M</b></span><span>P<sub>k</sub> <b>${a.pk.toFixed(2)}</b></span></div>
+    </div>
+  `).join('');
+  $('pkg-sub').textContent = `${pkg.length} targets engaged`;
+}
+
+function updateKPIs(){
+  const pkg = [...S.package.values()];
+  const cost = pkg.reduce((s,a)=>s+a.cost, 0);
+  const value = pkg.reduce((s,a)=>s+a.value, 0);
+  const maxVal = [...S.selTgts].reduce((s,id)=>s + TARGETS.find(t=>t.id===id).val, 0);
+  const mde = pkg.length ? pkg.reduce((s,a)=>s+a.de, 0)/pkg.length : 0;
+  const eff = cost>0 ? value/cost : 0;
+  $('k-cost').textContent = '$'+cost.toFixed(1)+'M';
+  $('k-cost-d').textContent = `of $${S.budget}M · ${cost>S.budget?'OVER':'within budget'}`;
+  $('k-cost-d').style.color = cost>S.budget?'var(--danger)':'var(--ink-4)';
+  $('k-value').textContent = value.toFixed(1);
+  $('k-value-d').textContent = `max possible ${maxVal.toFixed(0)} · ${maxVal>0?(value/maxVal*100).toFixed(0):0}%`;
+  $('k-de').textContent = mde.toFixed(2);
+  $('k-eff').textContent = eff.toFixed(2);
+  // Pareto rank: compute frontier and check position
+  renderPareto();
+}
+
+function renderPareto(){
+  const tgts = [...S.selTgts].map(id=>TARGETS.find(t=>t.id===id));
+  if(tgts.length===0){
+    $('pareto').innerHTML = `<text x="450" y="150" font-family="JetBrains Mono" font-size="12" fill="#5A6574" text-anchor="middle">Select at least one target to render the Pareto frontier.</text>`;
+    $('k-rank').textContent = '—';
+    return;
+  }
+  const pts = paretoFrontier(tgts, S.wx, 150);
+  // Current package
+  const pkg = [...S.package.values()];
+  const curCost = pkg.reduce((s,a)=>s+a.cost,0);
+  const curVal = pkg.reduce((s,a)=>s+a.value,0);
+  // SVG scales
+  const W=900, H=300, pad={l:60,r:20,t:16,b:44};
+  const maxCost = Math.max(...pts.map(p=>p.cost), curCost, S.budget, 1);
+  const maxVal = Math.max(...pts.map(p=>p.value), curVal, 1);
+  const xAt = c => pad.l + (c/maxCost)*(W-pad.l-pad.r);
+  const yAt = v => pad.t + (1 - v/maxVal)*(H-pad.t-pad.b);
+  let s = '<g stroke="#1F2735" stroke-width="1" fill="none">';
+  for(let i=0;i<=4;i++){
+    const y=pad.t+i*(H-pad.t-pad.b)/4, v=maxVal-i*maxVal/4;
+    s+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}"/>`;
+    s+=`<text x="${pad.l-8}" y="${y+4}" font-family="JetBrains Mono" font-size="10" fill="#5A6574" text-anchor="end">${v.toFixed(0)}</text>`;
+  }
+  for(let i=0;i<=5;i++){
+    const x=pad.l+i*(W-pad.l-pad.r)/5, c=i*maxCost/5;
+    s+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${H-pad.b}" opacity="${i===0?1:.3}"/>`;
+    s+=`<text x="${x}" y="${H-pad.b+18}" font-family="JetBrains Mono" font-size="10" fill="#5A6574" text-anchor="middle">$${c.toFixed(0)}M</text>`;
+  }
+  s+='</g>';
+  // Budget line
+  s+=`<line x1="${xAt(S.budget)}" y1="${pad.t}" x2="${xAt(S.budget)}" y2="${H-pad.b}" stroke="#FFB186" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+  s+=`<text x="${xAt(S.budget)+6}" y="${pad.t+14}" font-family="JetBrains Mono" font-size="10" fill="#FFB186">Budget</text>`;
+  // Plot points
+  const frontierPts = pts.filter(p=>!p.dominated).sort((a,b)=>a.cost-b.cost);
+  // Frontier line
+  if(frontierPts.length>1){
+    let path='';
+    frontierPts.forEach((p,i)=>path+=(i===0?'M':'L')+xAt(p.cost)+','+yAt(p.value)+' ');
+    s+=`<path d="${path}" stroke="#7DDBB0" stroke-width="2" fill="none" opacity=".5"/>`;
+  }
+  // Dominated points
+  pts.filter(p=>p.dominated).forEach(p => s+=`<circle cx="${xAt(p.cost)}" cy="${yAt(p.value)}" r="2.5" fill="#5A6574" opacity=".4"/>`);
+  // Frontier points
+  frontierPts.forEach(p => s+=`<circle cx="${xAt(p.cost)}" cy="${yAt(p.value)}" r="3.5" fill="#7DDBB0"/>`);
+  // Current
+  if(curCost>0){
+    s+=`<circle cx="${xAt(curCost)}" cy="${yAt(curVal)}" r="6" fill="#6DD9FF" stroke="#0A0D12" stroke-width="2"/>`;
+    s+=`<text x="${xAt(curCost)+10}" y="${yAt(curVal)-6}" font-family="JetBrains Mono" font-size="10" fill="#6DD9FF">Current · $${curCost.toFixed(1)}M / ${curVal.toFixed(1)} EV</text>`;
+  }
+  // Axis labels
+  s+=`<text x="${W/2}" y="${H-8}" font-family="JetBrains Mono" font-size="11" fill="#8B95A3" text-anchor="middle">Package cost ($M)</text>`;
+  s+=`<text x="${18}" y="${H/2}" font-family="JetBrains Mono" font-size="11" fill="#8B95A3" text-anchor="middle" transform="rotate(-90 18 ${H/2})">Expected damage value</text>`;
+  $('pareto').innerHTML = s;
+
+  // Rank
+  if(curCost>0){
+    // Find best-frontier value at this cost
+    let bestAtCost = 0;
+    for(const p of frontierPts) if(p.cost<=curCost) bestAtCost = Math.max(bestAtCost, p.value);
+    const ratio = bestAtCost>0 ? curVal/bestAtCost : 1;
+    $('k-rank').textContent = (ratio*100).toFixed(0)+'%';
+    $('k-rank-d').textContent = ratio>=0.98 ? 'on frontier' : ratio>=0.85 ? 'near frontier' : 'dominated';
+  } else {
+    $('k-rank').textContent = '—';
+  }
+}
+
+// ============ Wiring ============
+function runOptimize(){
+  const tgts = [...S.selTgts].map(id=>TARGETS.find(t=>t.id===id));
+  if(tgts.length===0){ S.package.clear(); renderPackage(); updateKPIs(); renderTargets(); return; }
+  const r = optimize(tgts, S.budget, S.wx);
+  S.package = new Map(r.assignments);
+  renderPackage(); updateKPIs(); renderTargets();
+}
+
+$('s-budget').addEventListener('input', e => {
+  S.budget = +e.target.value;
+  $('v-budget').textContent = '$'+S.budget.toFixed(1)+'M';
+  if(S.mode==='optimize') runOptimize(); else updateKPIs();
+});
+$('s-wx').addEventListener('input', e => {
+  S.wx = e.target.value/100;
+  $('v-wx').textContent = S.wx.toFixed(2);
+  if(S.mode==='optimize') runOptimize(); else { S.package.clear(); renderPackage(); updateKPIs(); renderTargets(); }
+});
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  S.mode = b.dataset.mode;
+  if(S.mode==='optimize') runOptimize();
+  else { S.package.clear(); renderPackage(); updateKPIs(); renderTargets(); }
+}));
+$('btn-run').addEventListener('click', runOptimize);
+$('btn-select-all').addEventListener('click', () => {
+  TARGETS.forEach(t=>S.selTgts.add(t.id));
+  renderTargets();
+  if(S.mode==='optimize') runOptimize();
+  else updateKPIs();
+});
+$('btn-clear').addEventListener('click', () => {
+  S.selTgts.clear(); S.package.clear();
+  renderTargets(); renderPackage(); updateKPIs();
+});
+
+// Manual mode: click target when platform selected, assigns that platform
+document.addEventListener('click', e => {
+  if(S.mode!=='manual') return;
+  const tgtEl = e.target.closest('.tgt');
+  if(!tgtEl || e.target.tagName==='INPUT') return;
+  const tid = tgtEl.dataset.id;
+  const tgt = TARGETS.find(t=>t.id===tid);
+  if(!S.selPlat){ return; }
+  const plat = PLATFORMS.find(p=>p.id===S.selPlat);
+  const pk = pkSingle(plat, tgt, S.wx);
+  // Default N=2; user can toggle off by clicking again
+  if(S.package.has(tid)){ S.package.delete(tid); }
+  else {
+    const n=2; const de=deMulti(pk,n); const cost=n*plat.cost;
+    S.package.set(tid, {tgt, plat, n, cost, de, value:de*tgt.val, pk});
+  }
+  renderTargets(); renderPackage(); updateKPIs();
+});
+
+// Initial
+// Pre-select a reasonable target mix
+['t3','t4','t5','t6','t9','t14','t17'].forEach(id=>S.selTgts.add(id));
+renderPlatforms(); renderTargets(); runOptimize();
+</script>
+</body>
+</html>

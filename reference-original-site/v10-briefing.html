@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 15 · NSC Briefing · V10</title>
+<meta name="description" content="Capstone V10 NSC Principals Meeting briefing book · Iran theater Day 15 · 16 March 2026">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--surface-3:#1C2434;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--warm-border:rgba(255,177,134,.28);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px;--maxw:1180px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 10% -5%,rgba(255,177,134,.06),transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(109,217,255,.05),transparent 55%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--warm);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(255,177,134,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:40px clamp(16px,3vw,40px) 100px}
+.head{border-top:3px solid var(--warm);padding-top:22px;margin-bottom:40px}
+.class-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:22px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em}
+.class-bar .lt{color:var(--ink);font-weight:500}
+.class-bar .lt .sub{display:block;font-weight:400;color:var(--ink-3);margin-top:4px}
+.class-bar .rt{color:var(--warm);text-align:right;line-height:1.5}
+.class-bar .rt b{display:block;color:var(--warm);font-weight:500}
+.head .eye{font-family:var(--mono);font-size:11.5px;color:var(--warm);letter-spacing:.06em;margin-bottom:12px}
+h1.title{font-family:var(--display);font-size:clamp(40px,6vw,72px);font-weight:400;line-height:1;margin:0 0 14px;letter-spacing:-.022em}
+h1.title i{font-style:italic;color:var(--warm)}
+.addressees{margin-top:26px;padding:18px 22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:grid;grid-template-columns:auto 1fr;gap:16px 24px;align-items:start}
+@media(max-width:700px){.addressees{grid-template-columns:1fr}}
+.addressees .k{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;padding-top:2px}
+.addressees .v{font-family:var(--ui);font-size:13.5px;color:var(--ink-2)}
+.addressees .v b{color:var(--ink);font-weight:500}
+h2.sec{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--warm);border-top:1px solid var(--border);padding-top:18px;margin:56px 0 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;letter-spacing:.06em}
+h2.sec .lbl{color:var(--ink);font-family:var(--display);font-size:32px;font-weight:400;letter-spacing:-.012em}
+h2.sec .lbl i{font-style:italic;color:var(--warm)}
+h2.sec .n{color:var(--ink-4);font-family:var(--mono);font-size:11px}
+.stats-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:900px){.stats-hero{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.stats-hero{grid-template-columns:1fr}}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;position:relative}
+.stat .l{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:8px}
+.stat .v{font-family:var(--display);font-size:42px;font-weight:400;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.stat .v.w{color:var(--warm)}.stat .v.d{color:var(--danger)}.stat .v.g{color:var(--success)}
+.stat .d{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:10px}
+.stat .d.w{color:var(--warm)}.stat .d.g{color:var(--success)}.stat .d.d{color:var(--danger)}
+.stat .delta{position:absolute;top:16px;right:20px;font-family:var(--mono);font-size:11px;color:var(--warm)}
+.exec{background:var(--surface);border-left:3px solid var(--warm);border-radius:0 var(--r-lg) var(--r-lg) 0;padding:26px 30px;margin-bottom:16px}
+.exec .k{font-family:var(--mono);font-size:10.5px;color:var(--warm);letter-spacing:.06em;margin-bottom:10px}
+.exec p{color:var(--ink-2);line-height:1.7;margin:0 0 14px;font-size:14.5px}
+.exec p:last-child{margin-bottom:0}
+.exec p b{color:var(--ink);font-weight:500}
+.exec p em{color:var(--warm);font-style:normal;font-weight:500}
+.matrix{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.matrix table{width:100%;border-collapse:collapse;font-size:13.5px}
+.matrix th{background:var(--surface-2);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;font-weight:500;border-bottom:1px solid var(--border)}
+.matrix td{padding:12px 14px;border-bottom:1px solid var(--divider);color:var(--ink-2);vertical-align:top;line-height:1.5}
+.matrix tr:last-child td{border-bottom:none}
+.matrix td.name{color:var(--ink);font-weight:500;font-family:var(--ui);min-width:140px}
+.matrix .pill{display:inline-block;padding:2px 8px;border-radius:100px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;font-weight:500;border:1px solid currentColor}
+.matrix .pill.c{color:var(--danger);background:var(--danger-soft)}
+.matrix .pill.h{color:var(--warm);background:var(--warm-soft)}
+.matrix .pill.m{color:var(--accent);background:var(--accent-soft)}
+.matrix .pill.l{color:var(--success);background:var(--success-soft)}
+.matrix .pill.latent{color:var(--ink-3);background:var(--surface-3)}
+.trend{font-family:var(--mono);font-size:11px}
+.trend.up{color:var(--danger)}.trend.flat{color:var(--warm)}.trend.down{color:var(--success)}
+.scoreboard{background:var(--surface);border:1px solid var(--accent-border);border-radius:var(--r-lg);padding:26px 30px 22px}
+.scoreboard .sb-head{display:flex;align-items:baseline;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.scoreboard .sb-head .score{font-family:var(--display);font-size:48px;color:var(--accent);line-height:1;letter-spacing:-.02em}
+.scoreboard .sb-head .label{font-size:14px;color:var(--ink-2);line-height:1.4}
+.scoreboard .sb-head .label b{color:var(--ink);font-weight:500}
+.predictions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:760px){.predictions{grid-template-columns:1fr}}
+.pred{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;position:relative}
+.pred .n{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.04em;margin-bottom:6px}
+.pred .t{color:var(--ink);font-weight:500;font-size:13.5px;margin-bottom:6px;line-height:1.35}
+.pred .e{color:var(--ink-3);font-size:12.5px;line-height:1.5;margin-bottom:8px}
+.pred .tag{font-family:var(--mono);font-size:10px;color:var(--success);letter-spacing:.04em}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:820px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px}
+.chart-card h3{font-family:var(--ui);font-size:13px;color:var(--ink);margin:0 0 4px;font-weight:500;letter-spacing:-.005em}
+.chart-card .sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:16px}
+.chart-wrap{position:relative;height:240px}
+.options-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.options-grid{grid-template-columns:1fr}}
+.option{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;display:flex;flex-direction:column}
+.option.rec{border-color:var(--accent);background:linear-gradient(180deg,rgba(109,217,255,.04),var(--surface));position:relative}
+.option.rec::before{content:"JCS RECOMMENDS";position:absolute;top:-10px;left:20px;background:var(--accent);color:#06121a;font-family:var(--mono);font-size:9.5px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:.08em}
+.option .ord{font-family:var(--mono);font-size:10.5px;color:var(--accent);margin-bottom:8px;letter-spacing:.04em}
+.option.rec .ord{color:var(--accent)}
+.option .title{font-family:var(--display);font-size:22px;font-weight:400;color:var(--ink);letter-spacing:-.01em;line-height:1.2;margin-bottom:8px}
+.option .title i{font-style:italic;color:var(--accent)}
+.option .desc{color:var(--ink-2);font-size:13px;line-height:1.55;margin-bottom:14px}
+.option ul{list-style:none;padding:0;margin:auto 0 0;display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.option ul li{color:var(--ink-2);padding-left:18px;position:relative;line-height:1.45}
+.option ul li.p{color:var(--success)} .option ul li.p::before{content:"+";color:var(--success);position:absolute;left:4px;font-weight:600}
+.option ul li.n{color:var(--danger)} .option ul li.n::before{content:"−";color:var(--danger);position:absolute;left:4px;font-weight:600}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:820px){.two-col{grid-template-columns:1fr}}
+.two-col .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px}
+.two-col .card h4{font-family:var(--ui);font-size:13px;color:var(--ink);margin:0 0 12px;font-weight:500;letter-spacing:-.005em;display:flex;align-items:center;gap:8px}
+.two-col .card h4::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--success)}
+.two-col .card.neg h4::before{background:var(--danger)}
+.two-col .card ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.two-col .card li{color:var(--ink-2);font-size:13px;line-height:1.55;padding-left:14px;position:relative}
+.two-col .card li::before{content:"·";position:absolute;left:2px;color:var(--ink-4);font-weight:600}
+.two-col .card li b{color:var(--ink);font-weight:500}
+.assess-box{background:var(--surface-2);border-left:3px solid var(--warm);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:16px 20px;margin-top:14px}
+.assess-box .k{font-family:var(--mono);font-size:10.5px;color:var(--warm);letter-spacing:.04em;margin-bottom:6px}
+.assess-box p{margin:0;color:var(--ink-2);font-size:13.5px;line-height:1.6}
+.forecasts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:820px){.forecasts{grid-template-columns:1fr}}
+.forecast{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px}
+.forecast h4{font-family:var(--ui);font-size:13px;color:var(--ink);margin:0 0 4px;font-weight:500}
+.forecast .range{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:14px}
+.forecast .row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--divider);font-size:13px;gap:10px}
+.forecast .row:last-child{border-bottom:none}
+.forecast .row .lbl{color:var(--ink-2);font-size:12.5px;line-height:1.4}
+.forecast .row .pct{font-family:var(--mono);color:var(--accent);font-weight:500;font-size:12px;white-space:nowrap}
+.loac{background:var(--danger-soft);border:1px solid rgba(255,122,138,.3);border-radius:var(--r-lg);padding:22px 26px}
+.loac .k{font-family:var(--mono);font-size:10.5px;color:var(--danger);letter-spacing:.04em;margin-bottom:8px}
+.loac h3{font-family:var(--display);font-size:22px;font-weight:400;margin:0 0 14px;color:var(--ink);letter-spacing:-.01em}
+.loac p{color:var(--ink-2);font-size:13.5px;line-height:1.65;margin:0 0 10px}
+.loac p.em{font-weight:500;color:var(--ink);font-size:14.5px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,122,138,.2)}
+.final{background:linear-gradient(180deg,rgba(109,217,255,.06),var(--surface));border:1px solid var(--accent);border-radius:var(--r-lg);padding:28px 32px}
+.final .k{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:12px}
+.final h3{font-family:var(--display);font-size:30px;font-weight:400;margin:0 0 14px;color:var(--ink);letter-spacing:-.015em;line-height:1.15}
+.final h3 i{font-style:italic;color:var(--accent)}
+.final p{color:var(--ink-2);font-size:14.5px;line-height:1.7;margin:0}
+.final p b{color:var(--ink);font-weight:500}
+.fn{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--ink-4);line-height:1.7}
+.fn a{color:var(--ink-3);text-decoration:none}.fn a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Day 15 · NSC Briefing</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><span>V10 · 14 March 2026</span><span class="sep">/</span><a href="https://hmartz35.github.io/Coding-Practice/docs/CJCS_Memo_V10.pdf" style="color:var(--ink-3);text-decoration:none">Full PDF ↗</a></div>
+</div></div>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="class-bar">
+    <div class="lt">OFFICE OF THE CHAIRMAN · JOINT CHIEFS OF STAFF<span class="sub">Briefing book · Day 15 · V10 · 14 Mar 2026</span></div>
+    <div class="rt"><b>CONFIDENTIAL</b>NSC Principals Only<br>Simulation / academic exercise</div>
+  </div>
+  <div class="eye">CJCS BRIEFING BOOK · NSC PRINCIPALS MEETING · MON 16 MAR 2026</div>
+  <h1 class="title">Day fifteen. The Iran theater <i>at decision point</i>.</h1>
+  <p style="color:var(--ink-2);font-size:16.5px;line-height:1.65;max-width:780px;margin:16px 0 0">Fifteen days into the largest U.S. military engagement since the 2003 invasion of Iraq, the Joint Chiefs present three decision requirements to the President: continue, escalate, or de-escalate; whether to pre-position for Houthi reentry; and how fast to reopen Hormuz.</p>
+  <div class="addressees">
+    <span class="k">FROM</span><span class="v"><b>Chairman, Joint Chiefs of Staff</b> · The Pentagon</span>
+    <span class="k">TO</span><span class="v"><b>POTUS / NSC Principals</b></span>
+    <span class="k">REFS</span><span class="v">V8 · V9 · OPLAN 5120</span>
+    <span class="k">STATUS</span><span class="v" style="color:var(--warm)">Escalation Rung 7 — Limited Strategic Reprisal</span>
+  </div>
+</header>
+
+<!-- I. Theater snapshot -->
+<h2 class="sec"><span class="lbl">I · Theater <i>snapshot</i></span><span class="n">Day 15 · 14 Mar 2026</span></h2>
+<div class="stats-hero">
+  <div class="stat"><div class="l">IRANIAN MISSILES FIRED</div><div class="v w">500+</div><div class="d w">Ballistic launches declining</div></div>
+  <div class="stat"><div class="l">IRANIAN DRONES FIRED</div><div class="v w">~2,000</div><div class="d w">Sustained tempo</div></div>
+  <div class="stat"><div class="l">BRENT CRUDE</div><div class="v w">$105+</div><div class="d w">↑ 40% from pre-war</div></div>
+  <div class="stat"><div class="l">HORMUZ STATUS</div><div class="v d">CLOSED</div><div class="d d">16+ ships attacked</div></div>
+  <div class="stat"><div class="l">DAILY BURN RATE</div><div class="v w">$1.5–1.9B</div><div class="d w">No appropriation</div></div>
+  <div class="stat"><div class="l">ESCALATION RUNG</div><div class="v w">7 / 10</div><div class="d w">Fastest since 1991</div></div>
+</div>
+<p style="font-family:var(--mono);font-size:11px;color:var(--ink-4);margin:8px 0 0">Source: V10 §I–II · Brent +40% from $75 baseline · Hormuz transit 21M bbl/day pre-war → effectively zero · Mojtaba Khamenei elected Supreme Leader Mar 8 after Feb 28 strike</p>
+
+<!-- II. Executive Summary -->
+<h2 class="sec"><span class="lbl">II · Executive <i>summary</i></span><span class="n">CJCS to POTUS</span></h2>
+<div class="exec">
+  <div class="k">CJCS TO POTUS</div>
+  <p><b>Mr. President</b> — The United States is fifteen days into the most significant military engagement since the 2003 invasion of Iraq. The February 28 joint US–Israel strike campaign killed Supreme Leader Khamenei and decapitated much of the senior IRGC command. Iran has responded with over 500 ballistic missiles and 2,000 drones against U.S. regional installations and Israel. The Strait of Hormuz is effectively closed. GCC allies are absorbing daily attacks. Oil prices have surged 40%+. Campaign costs approach $1.5–1.9 billion per day with no congressional appropriation in place.</p>
+  <p>Three decisions are before you Monday. <b>Iran theater:</b> the Joint Chiefs assess that a <em>managed exit</em> — sustained military pressure paired with diplomatic re-engagement via Oman — offers the highest probability of a favorable endstate while avoiding catastrophic escalation. <b>Houthi reentry:</b> 40–50% probability of limited Red Sea attacks within 30 days; pre-positioning for Operation Rough Rider II is recommended immediately. <b>Hormuz reopening:</b> escort operations should begin within 72 hours — every day of closure costs the global economy $1.5–2 billion in disrupted trade.</p>
+  <p>The Joint Chiefs assess the most likely endstate (35%) is a protracted stalemate exceeding 60 days at a cost above $50 billion absent diplomatic intervention. The recommended course of action combines Hormuz escorts, Houthi deterrence signaling, and reactivation of the Omani diplomatic channel.</p>
+</div>
+
+<!-- III. Theater Matrix -->
+<h2 class="sec"><span class="lbl">III · Theater status <i>matrix</i></span><span class="n">Day 15 trend</span></h2>
+<div class="matrix">
+  <table>
+    <thead><tr><th>Theater</th><th>Status</th><th>Threat</th><th>Trend</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Iran (Direct)</td><td><span class="pill c">Critical</span></td><td>Active</td><td><span class="trend up">▲ Escalating</span></td><td>Kharg Island struck (90 sites). Fordow, Natanz, Isfahan hit with GBU-57. DIA: enriched uranium may have been moved pre-strike.</td></tr>
+      <tr><td class="name">Strait of Hormuz</td><td><span class="pill c">Critical</span></td><td>Active</td><td><span class="trend up">▲ Worsening</span></td><td>Effectively closed. IRGC fired on 2 vessels. 16+ ships attacked since Feb 28. New Supreme Leader vowed continued closure.</td></tr>
+      <tr><td class="name">GCC States</td><td><span class="pill h">High</span></td><td>Active</td><td><span class="trend up">▲ Escalating</span></td><td>Bahrain: 114 missiles, 190 drones intercepted. Saudi Arabia intercepting daily drone waves. Dubai Creek Harbour tower struck. Oman: 2 killed.</td></tr>
+      <tr><td class="name">Lebanon / Hezbollah</td><td><span class="pill h">High</span></td><td>Reactivated</td><td><span class="trend up">▲</span></td><td>Hezbollah reactivated. Expanded operations possible if Iran requests escalation.</td></tr>
+      <tr><td class="name">Iraq / PMF</td><td><span class="pill m">Moderate</span></td><td>Probing</td><td><span class="trend up">▲</span></td><td>Kataib Hezbollah and PMF launching attacks against U.S. bases. KC-46 crash killed 6 (non-hostile).</td></tr>
+      <tr><td class="name">Yemen / Houthis</td><td><span class="pill m">Moderate</span></td><td>Mobilized</td><td><span class="trend flat">→ Latent</span></td><td>Not yet kinetic. Rhetorical solidarity, mass mobilization (300,000+). 40–50% probability of Red Sea attacks within 30 days.</td></tr>
+      <tr><td class="name">Israel</td><td><span class="pill h">High</span></td><td>Co-belligerent</td><td><span class="trend up">▲</span></td><td>Conducting strikes inside Tehran. Absorbing Iranian missile barrages. Iron Dome / Arrow / David's Sling stressed.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- IV. V8 Scoreboard -->
+<h2 class="sec"><span class="lbl">IV · V8 predictive <i>validation</i></span><span class="n">12-month scorecard</span></h2>
+<div class="scoreboard">
+  <div class="sb-head">
+    <span class="score">6 / 6</span>
+    <div class="label"><b>V8 core predictions confirmed</b> · framework sound<br><span style="color:var(--ink-3);font-size:12.5px">One-year retroactive scorecard against the V8 CJCS memo (9 Mar 2025)</span></div>
+  </div>
+  <div class="predictions">
+    <div class="pred"><div class="n">01 · CONFIRMED</div><div class="t">Decapitation produces hardline continuity, not moderation</div><div class="e">Khamenei killed Feb 28 → Mojtaba elected Mar 8 → IRGC pledged loyalty → posture deepened.</div><div class="tag">Confidence: High</div></div>
+    <div class="pred"><div class="n">02 · CONFIRMED</div><div class="t">Iranian proxy networks retain capability despite air campaign</div><div class="e">Hezbollah reactivated · Iraqi PMF launching attacks · Houthis at elevated readiness.</div><div class="tag">Confidence: High</div></div>
+    <div class="pred"><div class="n">03 · CONFIRMED</div><div class="t">Conflict escalates to direct U.S.–Iran engagement</div><div class="e">USS Charlotte sank IRIS Dena · Strikes on Kharg, Fordow, Natanz, Isfahan · 500+ missiles fired at U.S. targets.</div><div class="tag">Confidence: High</div></div>
+    <div class="pred"><div class="n">04 · CONFIRMED</div><div class="t">Oil market vulnerability becomes strategic lever</div><div class="e">Hormuz closed · Oil +40% · IEA released record 400M barrels · U.S. gas $3.63/gal (22-mo high).</div><div class="tag">Confidence: High</div></div>
+    <div class="pred"><div class="n">05 · CONFIRMED</div><div class="t">OPSEC failures compound operational risks</div><div class="e">Signal chat incident · State of the Union telegraphed strike intent 4 days before Feb 28.</div><div class="tag">Confidence: Moderate</div></div>
+    <div class="pred"><div class="n">06 · CONFIRMED</div><div class="t">Civil unrest validates internal pressure as highest-leverage covert option</div><div class="e">Jan 2026 mass protests largest since Islamic Revolution · Treasury confirmed engineered dollar shortage.</div><div class="tag">Confidence: High</div></div>
+  </div>
+  <p style="margin:18px 0 0;font-size:13px;color:var(--ink-3);line-height:1.55;padding-top:16px;border-top:1px solid var(--border)"><b style="color:var(--warm)">Critical gap —</b> V8 underestimated the speed and scale of escalation. The Iran Response Probability Matrix (V8 Appendix S) estimated 22–30% probability of direct ballistic missile response. Actual outcome exceeded worst-case modeling.</p>
+</div>
+
+<!-- V. Cost & Oil charts -->
+<h2 class="sec"><span class="lbl">V · Conflict cost &amp; <i>oil</i></span><span class="n">Day 1 → Day 15</span></h2>
+<div class="charts-row">
+  <div class="chart-card">
+    <h3>Cumulative campaign cost</h3>
+    <div class="sub">USD billions · burn $1.5–1.9B/day · no appropriation</div>
+    <div class="chart-wrap"><canvas id="chartCost"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>Brent crude price</h3>
+    <div class="sub">$/barrel · pre-war $75 → Day 15 $105+ · 400M bbl SPR released</div>
+    <div class="chart-wrap"><canvas id="chartOil"></canvas></div>
+  </div>
+</div>
+
+<!-- VI. Forward Options -->
+<h2 class="sec"><span class="lbl">VI · Forward military <i>options</i></span><span class="n">CJCS recommendation</span></h2>
+<div class="options-grid">
+  <div class="option">
+    <div class="ord">OPTION 1 · Status quo plus</div>
+    <div class="title">Continue current <i>operations</i></div>
+    <div class="desc">Sustain air and missile campaign while adding Hormuz escorts and GCC force protection.</div>
+    <ul>
+      <li class="p">Maintains initiative</li>
+      <li class="p">No ground commitment</li>
+      <li class="n">$1.5–1.9B/day unsustainable</li>
+      <li class="n">No defined endstate</li>
+    </ul>
+  </div>
+  <div class="option">
+    <div class="ord">OPTION 2 · Escalate · Rung 8</div>
+    <div class="title">Oil infrastructure &amp; <i>ground forces</i></div>
+    <div class="desc">Strike Iranian oil infrastructure. Deploy 50–100K ground troops to secure Hormuz corridor.</div>
+    <ul>
+      <li class="n">Abqaiq 2.0 retaliation</li>
+      <li class="n">Russia / China intervention risk</li>
+      <li class="n">$100B+ supplemental needed</li>
+      <li class="n">Protracted occupation</li>
+    </ul>
+  </div>
+  <div class="option rec">
+    <div class="ord">OPTION 3 · Managed exit</div>
+    <div class="title">Diplomacy via <i>Oman</i></div>
+    <div class="desc">Reactivate Omani channel. Offer 48–72 hour strike pause contingent on Hormuz reopening. Combine with Hormuz escorts and Houthi deterrence signaling.</div>
+    <ul>
+      <li class="p">Highest probability favorable endstate</li>
+      <li class="p">Avoids catastrophic escalation</li>
+      <li class="p">Preserves military leverage</li>
+      <li class="p">Restores global oil flow</li>
+    </ul>
+  </div>
+</div>
+
+<!-- VII. Houthi Reentry -->
+<h2 class="sec"><span class="lbl">VII · Houthi reentry <i>calculus</i></span><span class="n">Day 15 · 40–50% in 30 days</span></h2>
+<div class="two-col">
+  <div class="card">
+    <h4>Factors favoring restraint</h4>
+    <ul>
+      <li><b>Decapitation trauma</b> — Israel killed Houthi PM, ~12 cabinet members, missile / drone chief Zakaria Hajar (Aug–Sep 2025). Institutional memory deters provocation.</li>
+      <li><b>Arsenal degradation</b> — CENTCOM seized 750+ tons of Iranian materiel (Jul 2025). 80%+ were manufacturing inputs, not finished weapons.</li>
+      <li><b>Saudi détente at risk</b> — 2022 truce with Riyadh is the Houthis' most valuable diplomatic asset.</li>
+      <li><b>Threat-as-strategy</b> — Restraint-with-threat already keeps insurance premiums elevated and Saudi planning fixated on a southern front.</li>
+      <li><b>2025 ceasefire gains</b> — Trump halted strikes in May 2025. Resuming attacks forfeits this de-escalation gain.</li>
+    </ul>
+  </div>
+  <div class="card neg">
+    <h4 style="color:var(--ink)">Factors favoring reentry</h4>
+    <ul>
+      <li><b>Ideological imperative</b> — Abdul-Malik al-Houthi has explicitly stated "hands are on the trigger." Failure to act risks credibility.</li>
+      <li><b>Iranian activation request</b> — Mojtaba Khamenei publicly invoked the Axis of Resistance.</li>
+      <li><b>Coalition cohesion</b> — Acting in solidarity reinforces the proxy network's coherence.</li>
+      <li><b>U.S. distraction</b> — CENTCOM assets fully committed to Iran theater. Operational window is open.</li>
+    </ul>
+  </div>
+</div>
+<div class="assess-box">
+  <div class="k">JCS ASSESSMENT</div>
+  <p>The Houthis are hedging. The most likely path is symbolic / limited strikes intended to satisfy ideological commitments without triggering Operation Rough Rider II. Pre-positioning for renewed operations should begin Monday regardless of the political track.</p>
+</div>
+
+<!-- VIII. Forward Predictions -->
+<h2 class="sec"><span class="lbl">VIII · Forward <i>predictions</i></span><span class="n">30 / 60 / 90 day horizon</span></h2>
+<div class="forecasts">
+  <div class="forecast">
+    <h4>30 days</h4><div class="range">14 Mar → 13 Apr</div>
+    <div class="row"><span class="lbl">Houthi resumption of Red Sea attacks</span><span class="pct">55–70%</span></div>
+    <div class="row"><span class="lbl">Iran shifts to asymmetric warfare</span><span class="pct">65–80%</span></div>
+    <div class="row"><span class="lbl">U.S. naval escort ops begin</span><span class="pct">70–85%</span></div>
+    <div class="row"><span class="lbl">Congressional oversight hearings</span><span class="pct">80–90%</span></div>
+    <div class="row"><span class="lbl">Oil &gt; $120/barrel</span><span class="pct">40–55%</span></div>
+  </div>
+  <div class="forecast">
+    <h4>60 days</h4><div class="range">14 Mar → 13 May</div>
+    <div class="row"><span class="lbl">Ceasefire talks via Oman / Qatar</span><span class="pct">50–65%</span></div>
+    <div class="row"><span class="lbl">Mojtaba consolidates / IRGC fractures</span><span class="pct">45–60%</span></div>
+    <div class="row"><span class="lbl">U.S. ground forces to Hormuz corridor</span><span class="pct">20–35%</span></div>
+    <div class="row"><span class="lbl">Global recession from energy disruption</span><span class="pct">25–40%</span></div>
+  </div>
+  <div class="forecast">
+    <h4>90 days</h4><div class="range">14 Mar → 12 Jun</div>
+    <div class="row"><span class="lbl">Iran nuclear reconstitution begins</span><span class="pct">70–85%</span></div>
+    <div class="row"><span class="lbl">Formal ceasefire (limited scope)</span><span class="pct">35–50%</span></div>
+    <div class="row"><span class="lbl">Iranian regime survives under Mojtaba</span><span class="pct">60–75%</span></div>
+    <div class="row"><span class="lbl">U.S. domestic crisis over war costs</span><span class="pct">55–70%</span></div>
+  </div>
+</div>
+
+<!-- IX. Hormuz escort -->
+<h2 class="sec"><span class="lbl">IX · Hormuz escort · cost &amp; <i>throughput</i></span><span class="n">Phase I–III</span></h2>
+<div class="charts-row">
+  <div class="chart-card">
+    <h3>Monthly escort cost</h3>
+    <div class="sub">$M · ~$323M/mo · ~$969M for 90 days · 1–2% of daily campaign cost</div>
+    <div class="chart-wrap"><canvas id="chartHormuzCost"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>Throughput recovery</h3>
+    <div class="sub">M bbl/day · pre-war 21M · Phase I 3–5 · Phase II 8–12 · Phase III conditional</div>
+    <div class="chart-wrap"><canvas id="chartHormuzTP"></canvas></div>
+  </div>
+</div>
+
+<!-- X. LOAC -->
+<h2 class="sec"><span class="lbl">X · LOAC <i>concerns</i></span><span class="n">JAG review required</span></h2>
+<div class="loac">
+  <div class="k">GENEVA CONVENTIONS CONCERNS</div>
+  <h3>Multiple reports warrant JAG investigation</h3>
+  <p>Reports of <b>double-tap strikes</b> maximizing casualties. The IRIS Dena was sunk during a multinational exercise carrying no ammunition. The Minab school incident reportedly killed 180, mostly children. SECDEF Hegseth's "no quarter, no mercy" statement is explicitly prohibited under the Geneva Conventions.</p>
+  <p class="em">The Joint Chiefs will not execute unlawful orders regardless of political direction.</p>
+</div>
+
+<!-- XI. Recommendation -->
+<h2 class="sec"><span class="lbl">XI · <i>Recommendation</i></span><span class="n">JCS to POTUS</span></h2>
+<div class="final">
+  <div class="k">FINAL RECOMMENDATION</div>
+  <h3>Option 3 — <i>managed exit via diplomacy</i></h3>
+  <p>The Joint Chiefs recommend <b>Option 3 — managed exit via diplomacy</b> — combined with immediate Hormuz escort operations and Houthi deterrence signaling. Reactivate the Omani diplomatic channel within 72 hours. Offer a 48–72 hour strike pause contingent on Hormuz reopening. Pre-position for Operation Rough Rider II regardless of the political track. The force is ready. The authorities are the question.</p>
+</div>
+
+<footer class="fn">
+  <p style="margin:0"><b style="color:var(--ink-3)">Prepared by:</b> Office of the Chairman, Joint Chiefs of Staff. <b style="color:var(--ink-3)">References:</b> V8 CJCS memo (9 Mar 2025); V9 supplemental (31 Mar 2026); OPLAN 5120. <b style="color:var(--ink-3)">Sources:</b> CSIS · ISW · FDD Long War Journal · ACLED · Reuters · IEA · EIA · Al Jazeera · Reuters · worldmonitor.app · Atlas Institute.</p>
+  <p style="margin:14px 0 0;color:var(--ink-4);font-style:italic">Retroactive simulation exercise for academic and educational purposes. No classified or restricted information is used or represented. Drafted with AI assistance (Anthropic's Claude). <a href="./index.html">Return to portfolio</a> · <a href="https://hmartz35.github.io/Coding-Practice/docs/CJCS_Memo_V10.pdf">Full V10 PDF</a></p>
+</footer>
+
+</div>
+
+<script>
+Chart.defaults.font.family = "'Inter',sans-serif";
+Chart.defaults.color = '#8B95A3';
+Chart.defaults.borderColor = '#1F2735';
+
+const DAYS = Array.from({length:16}, (_,i)=>'Day ' + i);
+const COSTS = [0, 1.2, 2.6, 4.0, 5.7, 7.5, 9.4, 11.3, 13.2, 15.1, 17.0, 18.9, 20.9, 22.9, 24.9, 26.9];
+const OIL   = [75, 78, 84, 89, 93, 95, 97, 99, 101, 102, 103, 104, 104, 105, 106, 107];
+
+new Chart(document.getElementById('chartCost'), {
+  type:'line',
+  data:{ labels: DAYS, datasets:[{ label:'$B cumulative', data: COSTS, borderColor:'#FFB186', backgroundColor:'rgba(255,177,134,.15)', borderWidth:2.5, fill:true, tension:.25, pointRadius:0, pointHoverRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y.toFixed(1)+'B'}}}, scales:{ x:{grid:{color:'#171D27'}, ticks:{font:{size:10}}}, y:{grid:{color:'#171D27'}, ticks:{callback:v=>'$'+v+'B', font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chartOil'), {
+  type:'line',
+  data:{ labels: DAYS, datasets:[{ label:'Brent $/bbl', data: OIL, borderColor:'#6DD9FF', backgroundColor:'rgba(109,217,255,.12)', borderWidth:2.5, fill:true, tension:.25, pointRadius:0, pointHoverRadius:4 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y.toFixed(0)+'/bbl'}}}, scales:{ x:{grid:{color:'#171D27'}, ticks:{font:{size:10}}}, y:{grid:{color:'#171D27'}, min:70, ticks:{callback:v=>'$'+v, font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chartHormuzCost'), {
+  type:'bar',
+  data:{ labels:['Convoy ops','MCM (mine sweep)','Force protection','CSG tempo','ISR orbits','Diplomatic'], datasets:[{ data:[95,68,52,48,42,18], backgroundColor:['#6DD9FF','#FFB186','#B8A0FF','#6DD9FF','#7DDBB0','#FFE38A'], borderRadius:3 }]},
+  options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.x+'M/mo'}}}, scales:{ x:{grid:{color:'#171D27'}, ticks:{callback:v=>'$'+v+'M', font:{size:10}}}, y:{grid:{display:false}, ticks:{font:{size:10.5}}}}}
+});
+
+new Chart(document.getElementById('chartHormuzTP'), {
+  type:'bar',
+  data:{ labels:['Pre-war','Day 15','Phase I','Phase II','Phase III'], datasets:[{ data:[21,0.5,4,10,18], backgroundColor:['#7DDBB0','#FF7A8A','#FFB186','#6DD9FF','#7DDBB0'], borderRadius:3 }]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.parsed.y+'M bbl/day'}}}, scales:{ x:{grid:{display:false}, ticks:{font:{size:10.5}}}, y:{grid:{color:'#171D27'}, max:22, ticks:{callback:v=>v+'M', font:{size:10}}}}}
+});
+</script>
+</body>
+</html>

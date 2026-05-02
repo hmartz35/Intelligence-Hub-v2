@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Causal Cascade · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--surface-3:#1C2434;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--violet-soft:rgba(184,160,255,.10);--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
+.bar{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.frame{display:grid;grid-template-columns:290px 1fr 320px;height:calc(100vh - 45px);margin-top:45px;overflow:hidden}
+@media(max-width:1200px){.frame{grid-template-columns:250px 1fr}}
+@media(max-width:900px){.frame{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+.side{background:var(--surface);border-right:1px solid var(--border);overflow:auto;display:flex;flex-direction:column}
+.side.r{border-right:none;border-left:1px solid var(--border)}
+.side::-webkit-scrollbar{width:4px}
+.side::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:2px}
+.h-block{padding:18px 20px 12px;border-bottom:1px solid var(--border)}
+.h-block .eye{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:6px;letter-spacing:.04em}
+.h-block h2{font-family:var(--display);font-size:26px;font-weight:400;margin:0;letter-spacing:-.01em;line-height:1.1}
+.h-block h2 i{font-style:italic;color:var(--accent)}
+.h-block p{margin:6px 0 0;color:var(--ink-3);font-size:12px;line-height:1.45}
+.sec{padding:14px 20px 6px;font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;border-top:1px solid var(--divider);margin-top:4px}
+.ctl{padding:12px 20px;border-bottom:1px solid var(--divider)}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--ui);font-size:12px;color:var(--ink-2);margin-bottom:8px;font-weight:500}
+.ctl label .v{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.ctl .hint{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-top:5px;line-height:1.4}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:20px;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-moz-range-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%;margin-top:-6px}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%}
+.seg{display:inline-flex;background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px;gap:2px;width:100%}
+.seg button{flex:1;background:transparent;border:none;color:var(--ink-3);font-family:var(--mono);font-size:10.5px;padding:6px 6px;cursor:pointer;border-radius:4px;transition:.12s;font-weight:500;letter-spacing:.02em}
+.seg button.on{background:var(--accent);color:#06121a}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 12px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:12.5px;font-weight:500;cursor:pointer;transition:.15s;border-radius:var(--r-sm);width:100%}
+.btn:hover{background:var(--accent-bright)}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--border-2)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-row{display:flex;gap:6px;margin-top:8px}.btn-row .btn{flex:1}
+.node-ctrl{padding:10px 20px;border-bottom:1px solid var(--divider);cursor:pointer;transition:.12s}
+.node-ctrl:hover{background:var(--surface-2)}
+.node-ctrl.sel{background:var(--accent-soft);border-left:2px solid var(--accent);padding-left:18px}
+.node-ctrl .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.node-ctrl .n{font-family:var(--ui);font-size:12px;color:var(--ink-2);font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.node-ctrl .p{font-family:var(--display);font-size:17px;color:var(--accent);font-weight:400;letter-spacing:-.01em;line-height:1}
+.node-ctrl .bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.node-ctrl .bar-fill{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--accent));transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.node-ctrl .clamp{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:3px;letter-spacing:.04em;margin-left:6px}
+.node-ctrl .clamp.t{background:var(--success-soft);color:var(--success);border:1px solid rgba(125,219,176,.3)}
+.node-ctrl .clamp.f{background:var(--danger-soft);color:var(--danger);border:1px solid rgba(255,122,138,.3)}
+.canvas-wrap{position:relative;overflow:hidden;background:radial-gradient(ellipse at center,rgba(109,217,255,.04),transparent 60%)}
+#graph{width:100%;height:100%;cursor:grab;display:block}
+#graph.drag{cursor:grabbing}
+.g-over{position:absolute;left:20px;top:20px;display:flex;flex-direction:column;gap:8px;z-index:3;pointer-events:none}
+.g-over .chip{background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border-2);padding:6px 12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);border-radius:100px;display:inline-flex;align-items:center;gap:8px;width:fit-content;pointer-events:auto}
+.g-over .chip.a{color:var(--accent);border-color:var(--accent-border);background:rgba(109,217,255,.1)}
+.g-over .chip.w{color:var(--warm);border-color:rgba(255,177,134,.3);background:rgba(255,177,134,.1)}
+.g-over .chip.v{color:var(--violet);border-color:rgba(184,160,255,.3);background:rgba(184,160,255,.1)}
+.g-legend{position:absolute;right:14px;bottom:14px;background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-family:var(--mono);font-size:10px;color:var(--ink-3);line-height:1.7;z-index:3}
+.g-legend .h{color:var(--ink);font-weight:500;letter-spacing:.04em;margin-bottom:4px}
+.g-legend .sw{display:inline-block;width:9px;height:9px;vertical-align:middle;margin-right:6px;border-radius:50%}
+.g-zoom{position:absolute;right:14px;top:14px;z-index:3;display:flex;flex-direction:column;gap:6px}
+.g-zoom button{width:30px;height:30px;background:rgba(15,20,29,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border-2);color:var(--ink-2);font-family:var(--mono);font-size:12px;cursor:pointer;border-radius:var(--r-sm);transition:.12s;display:flex;align-items:center;justify-content:center}
+.g-zoom button:hover{border-color:var(--accent);color:var(--accent)}
+.inspector{padding:14px 20px 20px}
+.inspector h4{font-family:var(--display);font-size:22px;color:var(--ink);margin:0 0 4px;font-weight:400;line-height:1.15;letter-spacing:-.01em}
+.inspector h4 i{font-style:italic;color:var(--accent)}
+.inspector .desc{color:var(--ink-3);font-size:12px;line-height:1.55;margin-bottom:14px}
+.dl{margin:0 0 16px;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-family:var(--mono);font-size:11px}
+.dl dt{color:var(--ink-4)}.dl dd{color:var(--ink-2);margin:0}
+.dl dd.a{color:var(--accent)}.dl dd.w{color:var(--warm)}.dl dd.g{color:var(--success)}.dl dd.r{color:var(--danger)}.dl dd.v{color:var(--violet)}
+.cpt{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:12px}
+.cpt h5{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.04em;margin:0 0 8px}
+.cpt-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:3px 0;font-size:11px;font-family:var(--mono)}
+.cpt-row .p{color:var(--ink-3)}.cpt-row .v{color:var(--accent);text-align:right}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.actions button{flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);font-family:var(--ui);font-size:11.5px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;transition:.12s;font-weight:500}
+.actions button:hover{border-color:var(--accent);color:var(--accent)}
+.actions button.at{background:var(--success);color:#06121a;border-color:var(--success)}
+.actions button.af{background:var(--danger);color:#06121a;border-color:var(--danger)}
+.actions button.ac{background:var(--violet);color:#06121a;border-color:var(--violet)}
+.sensi{margin-top:14px}
+.sensi h5{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.04em;margin:0 0 8px}
+.srow{display:grid;grid-template-columns:1fr 60px 50px;gap:8px;align-items:center;padding:5px 0;font-family:var(--mono);font-size:10.5px;border-bottom:1px solid var(--divider)}
+.srow:last-child{border-bottom:none}
+.srow .n{color:var(--ink-2);font-family:var(--ui);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .b{height:4px;background:var(--border);border-radius:2px;position:relative;overflow:hidden}
+.srow .b .f{position:absolute;top:0;height:100%;background:var(--accent);border-radius:2px;transition:width .5s}
+.srow .b .f.neg{background:var(--danger)}
+.srow .v{color:var(--accent);text-align:right;font-size:10.5px}
+.srow .v.neg{color:var(--danger)}
+.scenarios{display:flex;flex-direction:column;gap:4px;padding:8px 12px}
+.scenarios button{background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);font-family:var(--ui);font-size:11.5px;padding:8px 12px;border-radius:var(--r-sm);cursor:pointer;text-align:left;transition:.12s;line-height:1.3}
+.scenarios button:hover{border-color:var(--accent);color:var(--accent)}
+.scenarios button b{color:var(--accent);font-weight:500;display:block;margin-bottom:2px}
+.scenarios button span{font-family:var(--mono);font-size:10px;color:var(--ink-4)}
+@media(max-width:900px){.side{max-height:200px}.canvas-wrap{min-height:400px}}
+
+/* ============================================================
+   MARKET EXPLOITATION DEMONSTRATOR — pedagogical artifact
+   ============================================================ */
+
+/* Launcher button — deliberately tacky neon to telegraph the parody */
+.mkt-launch{
+  position:fixed;
+  bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:50;
+  padding:11px 22px;
+  background:linear-gradient(90deg,#00FF88 0%,#00DD66 100%);
+  border:2px solid #00FF88;
+  border-radius:100px;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;
+  color:#001a0a;
+  letter-spacing:.04em;text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 0 24px rgba(0,255,136,.5),0 4px 16px rgba(0,0,0,.3);
+  transition:.15s;
+  display:inline-flex;align-items:center;gap:8px;
+  animation:mktPulse 2.4s ease-in-out infinite;
+}
+.mkt-launch:hover{transform:translateX(-50%) scale(1.05);box-shadow:0 0 32px rgba(0,255,136,.7)}
+.mkt-launch::before{content:"$";font-size:14px;font-weight:800}
+@keyframes mktPulse{0%,100%{box-shadow:0 0 24px rgba(0,255,136,.5),0 4px 16px rgba(0,0,0,.3)}50%{box-shadow:0 0 36px rgba(0,255,136,.8),0 4px 16px rgba(0,0,0,.3)}}
+
+/* Specimen header — labels the panel as a critique, not a feature */
+.mkt-panel{
+  position:fixed;left:0;right:0;bottom:0;
+  height:60vh;min-height:480px;
+  z-index:60;
+  background:#06090E;
+  border-top:1px solid var(--border);
+  box-shadow:0 -16px 40px rgba(0,0,0,.5);
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.mkt-panel.on{transform:translateY(0)}
+
+/* Specimen ribbon at top */
+.mkt-specimen{
+  background:repeating-linear-gradient(45deg,
+    #2a1810,#2a1810 8px,
+    #3a2418 8px,#3a2418 16px);
+  border-bottom:2px solid #FFB186;
+  padding:10px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  flex-wrap:wrap;
+  flex-shrink:0;
+}
+.mkt-specimen .label{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10.5px;font-weight:600;
+  color:#FFB186;letter-spacing:.08em;
+}
+.mkt-specimen .label::before{
+  content:"⚠ SPECIMEN";
+  background:#FFB186;color:#1a0f06;
+  padding:3px 10px;border-radius:3px;font-weight:700;letter-spacing:.1em;
+}
+.mkt-specimen .desc{
+  font-family:var(--ui);font-size:12px;color:var(--ink-2);font-weight:400;flex:1;min-width:200px;
+}
+.mkt-specimen .desc b{color:#FFB186;font-weight:600}
+.mkt-specimen button.close{
+  background:transparent;border:1px solid #FFB186;color:#FFB186;
+  width:30px;height:30px;border-radius:var(--r-sm);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.12s;
+}
+.mkt-specimen button.close:hover{background:#FFB186;color:#1a0f06}
+
+/* Main panel body — left=parody dashboard, right=critique sidebar */
+.mkt-body{
+  flex:1;display:grid;grid-template-columns:1fr 360px;gap:0;
+  overflow:hidden;
+}
+@media(max-width:900px){.mkt-body{grid-template-columns:1fr;grid-template-rows:1fr auto}}
+
+/* Left: parody trading dashboard */
+.mkt-dash{
+  padding:18px 24px;overflow:auto;
+  background:#0A0508;
+  background-image:
+    linear-gradient(rgba(0,255,136,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,136,.025) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.mkt-dash::-webkit-scrollbar{width:6px}
+.mkt-dash::-webkit-scrollbar-thumb{background:#003322;border-radius:3px}
+.mkt-dash-hd{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  margin-bottom:16px;flex-wrap:wrap;
+}
+.mkt-dash-hd h3{
+  font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;
+  color:#00FF88;margin:0;letter-spacing:.02em;
+  text-shadow:0 0 12px rgba(0,255,136,.5);
+}
+.mkt-dash-hd h3::before{
+  content:"⚡";margin-right:8px;
+}
+.mkt-dash-hd .stats{
+  display:flex;gap:14px;font-family:var(--mono);font-size:11px;color:#00CC66;
+}
+.mkt-dash-hd .stats b{color:#00FF88;text-shadow:0 0 8px rgba(0,255,136,.4)}
+
+.mkt-loading{
+  text-align:center;padding:40px 0;font-family:var(--mono);font-size:12px;color:#00FF88;
+}
+.mkt-loading .spin{
+  display:inline-block;width:24px;height:24px;border:2px solid #00FF88;border-top-color:transparent;
+  border-radius:50%;animation:spin 1s linear infinite;margin-bottom:12px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Recommendations grid */
+.mkt-recs{display:flex;flex-direction:column;gap:8px}
+.mkt-rec{
+  background:#0d1410;
+  border:1px solid #1a2818;
+  border-left:4px solid #00FF88;
+  border-radius:6px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:14px;
+  align-items:center;
+}
+.mkt-rec.hi{border-left-color:#00FF88;background:linear-gradient(90deg,rgba(0,255,136,.05),#0d1410 30%)}
+.mkt-rec.med{border-left-color:#FFE066}
+.mkt-rec.no{border-left-color:#5A6574;opacity:.7}
+.mkt-rec .q{
+  font-family:var(--ui);font-size:13px;color:var(--ink);font-weight:500;line-height:1.35;
+  display:flex;flex-direction:column;gap:4px;min-width:0;
+}
+.mkt-rec .q a{color:inherit;text-decoration:none}
+.mkt-rec .q a:hover{color:#00FF88}
+.mkt-rec .q .meta{
+  font-family:var(--mono);font-size:10px;color:var(--ink-4);font-weight:400;
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.mkt-rec .q .meta .vol{color:#00CC66}
+.mkt-rec .q .meta .src{color:var(--ink-3)}
+.mkt-rec .q .meta .src::before{content:"●";color:#00FF88;margin-right:4px;font-size:8px;vertical-align:middle}
+.mkt-rec .prices{
+  display:flex;flex-direction:column;gap:2px;align-items:flex-end;
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);min-width:90px;
+}
+.mkt-rec .prices .market-p{color:var(--ink-2);font-size:10.5px}
+.mkt-rec .prices .market-p b{color:var(--ink);font-size:13px;font-family:var(--mono);font-weight:600}
+.mkt-rec .prices .model-p{color:#00FF88;font-size:10.5px}
+.mkt-rec .prices .model-p b{color:#00FF88;font-size:13px;font-weight:700;text-shadow:0 0 6px rgba(0,255,136,.4)}
+.mkt-rec .edge{
+  text-align:center;min-width:96px;
+  background:linear-gradient(180deg,#003322,#001a11);
+  border:1px solid #00FF88;
+  border-radius:4px;
+  padding:6px 10px;
+}
+.mkt-rec .edge .ev{
+  font-family:var(--mono);font-size:9px;color:#00CC66;letter-spacing:.06em;font-weight:600;
+}
+.mkt-rec .edge .pct{
+  font-family:'Instrument Serif',serif;font-size:24px;font-weight:600;color:#00FF88;
+  text-shadow:0 0 8px rgba(0,255,136,.5);line-height:1;
+}
+.mkt-rec .edge .verdict{
+  font-family:var(--mono);font-size:9px;color:#00FF88;letter-spacing:.08em;
+  font-weight:700;margin-top:3px;
+}
+.mkt-rec.med .edge{background:linear-gradient(180deg,#332a00,#1a1500);border-color:#FFE066}
+.mkt-rec.med .edge .pct,.mkt-rec.med .edge .verdict{color:#FFE066;text-shadow:0 0 8px rgba(255,224,102,.4)}
+.mkt-rec.med .edge .ev{color:#CCB133}
+.mkt-rec.no .edge{background:#0d1015;border-color:#2B3446}
+.mkt-rec.no .edge .pct{color:#5A6574;text-shadow:none;font-size:14px;font-style:italic}
+.mkt-rec.no .edge .verdict{color:#5A6574}
+
+.mkt-empty{
+  font-family:var(--mono);font-size:12px;color:#5A6574;text-align:center;padding:40px 20px;
+  border:1px dashed #2B3446;border-radius:6px;
+}
+
+/* Headlines mini-strip */
+.mkt-headlines{
+  margin-top:18px;border-top:1px solid #1a2818;padding-top:14px;
+}
+.mkt-headlines h4{
+  font-family:var(--mono);font-size:10.5px;color:#00CC66;margin:0 0 8px;letter-spacing:.06em;font-weight:600;
+}
+.mkt-headlines .hl{
+  font-family:var(--ui);font-size:12px;color:var(--ink-2);padding:4px 0;
+  border-bottom:1px solid #1a2818;line-height:1.4;
+}
+.mkt-headlines .hl:last-child{border-bottom:none}
+.mkt-headlines .hl .src{color:#00CC66;font-family:var(--mono);font-size:10px;margin-right:8px}
+.mkt-headlines .hl .matched{color:#00FF88;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;margin-left:8px;font-weight:600}
+
+/* Right: critique sidebar — sober, always visible */
+.mkt-critique{
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  padding:18px 22px;overflow:auto;
+  display:flex;flex-direction:column;gap:14px;
+}
+.mkt-critique::-webkit-scrollbar{width:4px}
+.mkt-critique::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:2px}
+.mkt-critique h3{
+  font-family:var(--display);font-size:22px;font-weight:400;margin:0;letter-spacing:-.012em;line-height:1.15;
+  color:var(--ink);
+}
+.mkt-critique h3 i{font-style:italic;color:var(--warm)}
+.mkt-critique .lede{
+  font-family:var(--ui);font-size:13px;color:var(--ink-2);line-height:1.55;margin:0;
+  padding-bottom:14px;border-bottom:1px solid var(--divider);
+}
+.mkt-critique .reason{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.mkt-critique .reason .n{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  background:var(--warm-soft);border:1px solid var(--warm);color:var(--warm);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+}
+.mkt-critique .reason b{color:var(--ink);font-weight:500}
+.mkt-critique .calib{
+  background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:12px 14px;margin-top:6px;
+}
+.mkt-critique .calib h4{
+  font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.06em;margin:0 0 8px;font-weight:600;
+}
+.mkt-critique .calib .row{
+  display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--ink-3);
+  padding:3px 0;
+}
+.mkt-critique .calib .row b{color:var(--danger)}
+.mkt-critique .footer-note{
+  font-family:var(--mono);font-size:10px;color:var(--ink-4);line-height:1.5;
+  padding-top:12px;border-top:1px solid var(--divider);
+  font-style:italic;
+}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Causal Cascade</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><span>Bayesian network · Pearl's do-calculus · 18 nodes</span><span class="sep">/</span><span id="iter-count">— ms</span></div>
+</div></div>
+
+<div class="frame">
+  <aside class="side">
+    <div class="h-block">
+      <div class="eye">Causal network</div>
+      <h2>Pearl's <i>do-calculus</i></h2>
+      <p>A Bayesian graph of the Iran theater. Intervene on any node (clamp TRUE or FALSE) to sever incoming edges and observe downstream propagation.</p>
+    </div>
+
+    <div class="ctl">
+      <div class="seg" id="mode">
+        <button data-m="observe" class="on">OBSERVE</button>
+        <button data-m="intervene">INTERVENE</button>
+        <button data-m="counterfactual">COUNTERFACT</button>
+      </div>
+      <div class="hint" id="mode-hint">Observational: marginal probabilities from priors alone.</div>
+    </div>
+
+    <div class="ctl">
+      <label><span>BP iterations</span><span class="v" id="v-iter">120</span></label>
+      <input type="range" min="20" max="400" value="120" step="10" id="s-iter">
+      <div class="hint">Monte Carlo samples per inference pass.</div>
+    </div>
+
+    <div class="ctl">
+      <button class="btn" id="btn-run">Propagate beliefs</button>
+      <div class="btn-row"><button class="btn ghost" id="btn-clear">Clear interventions</button></div>
+    </div>
+
+    <div class="sec">Quick scenarios</div>
+    <div class="scenarios">
+      <button data-sc="strike"><b>Authorize strike campaign</b><span>do(sustained=T)</span></button>
+      <button data-sc="dip"><b>Pursue Omani diplomacy</b><span>do(diplomacy=T)</span></button>
+      <button data-sc="hormuz"><b>Iran closes Hormuz</b><span>do(hormuz=T)</span></button>
+      <button data-sc="coalition"><b>Coalition fractures</b><span>do(coalition=F)</span></button>
+    </div>
+
+    <div class="sec">Nodes · sorted by P</div>
+    <div id="nlist"></div>
+  </aside>
+
+  <main class="canvas-wrap">
+    <svg id="graph"></svg>
+    <div class="g-over">
+      <span class="chip a" id="c-mode">OBSERVE · marginal</span>
+      <span class="chip" id="c-inv">0 interventions</span>
+      <span class="chip v" id="c-cf" style="display:none">Counterfactual: baseline locked</span>
+    </div>
+    <div class="g-zoom">
+      <button id="z-in">+</button><button id="z-out">−</button><button id="z-reset" style="font-size:10px">⟲</button>
+    </div>
+    <div class="g-legend">
+      <div class="h">P(NODE = TRUE)</div>
+      <div><span class="sw" style="background:#7DDBB0"></span>&gt; 0.70</div>
+      <div><span class="sw" style="background:#6DD9FF"></span>0.40 – 0.70</div>
+      <div><span class="sw" style="background:#FFB186"></span>0.20 – 0.40</div>
+      <div><span class="sw" style="background:#FF7A8A"></span>≤ 0.20</div>
+      <div><span class="sw" style="background:#B8A0FF"></span>intervened · do()</div>
+    </div>
+  </main>
+
+  <aside class="side r">
+    <div class="h-block">
+      <div class="eye" id="insp-eye">INSPECTOR</div>
+      <h2 id="insp-title">No selection</h2>
+      <p id="insp-sub">Click a node to inspect its parents, CPT, belief, and sensitivity to upstream interventions.</p>
+    </div>
+    <div class="inspector" id="insp"></div>
+  </aside>
+</div>
+
+<!-- ============ MARKET EXPLOITATION DEMONSTRATOR ============ -->
+<button class="mkt-launch" id="mkt-launch" title="Demonstration: how this model could be misused for prediction-market trading">
+  Bet the model · live markets
+</button>
+
+<div class="mkt-panel" id="mkt-panel">
+  <div class="mkt-specimen">
+    <div class="label">PEDAGOGICAL DEMONSTRATION</div>
+    <div class="desc"><b>This panel is critique, not feature.</b> It shows what happens when an unvalidated academic simulation gets pointed at real-money prediction markets. Read the right panel before believing anything on the left.</div>
+    <button class="close" id="mkt-close" aria-label="Close">×</button>
+  </div>
+  <div class="mkt-body">
+    <div class="mkt-dash">
+      <div class="mkt-dash-hd">
+        <h3>EDGE RECOMMENDATIONS · LIVE</h3>
+        <div class="stats">
+          <span>SCAN: <b id="mkt-scan-status">initializing</b></span>
+          <span>ALPHA: <b id="mkt-alpha">— bps</b></span>
+          <span>EV+ MARKETS: <b id="mkt-evp">—</b></span>
+        </div>
+      </div>
+      <div id="mkt-content">
+        <div class="mkt-loading">
+          <div class="spin"></div>
+          <div>Scanning Polymarket for matching contracts…</div>
+        </div>
+      </div>
+      <div class="mkt-headlines" id="mkt-headlines-wrap" style="display:none">
+        <h4>NEWSWIRE · MATCHED TO CASCADE NODES</h4>
+        <div id="mkt-headlines"></div>
+      </div>
+    </div>
+    <div class="mkt-critique">
+      <h3>Why this is <i>dangerous</i></h3>
+      <p class="lede">The numbers on the left look authoritative. They are not. Here is what is wrong with using a simulation like this to trade real money:</p>
+      <div class="reason"><div class="n">1</div><div><b>The model has no ground truth.</b> The CPT weights were chosen by an analyst to illustrate causal reasoning. They were never fit to historical conflict data because no such dataset exists at this scope.</div></div>
+      <div class="reason"><div class="n">2</div><div><b>"Edge" is fabricated.</b> The "model probability" comes from a static causal graph; the "market probability" comes from real traders with information the graph doesn't encode. The gap is mostly noise plus the traders knowing things you don't.</div></div>
+      <div class="reason"><div class="n">3</div><div><b>Selection bias compounds.</b> The model "agrees" with the market on most contracts. The ones where it disagrees most loudly are exactly the ones where it's most likely to be wrong — markets price in information the model wasn't designed to see.</div></div>
+      <div class="reason"><div class="n">4</div><div><b>You are not the smart money.</b> The traders on the other side of these contracts include hedge funds, specialist firms, and people with regional language access. A lone undergraduate with a Bayesian network is not bringing new information.</div></div>
+      <div class="reason"><div class="n">5</div><div><b>Visual confidence is not statistical confidence.</b> The neon green numbers look like sports betting picks for a reason — that aesthetic borrows the language of urgency to pressure decisions. Sober tools rarely look like this.</div></div>
+      <div class="calib">
+        <h4>MODEL CALIBRATION RECORD</h4>
+        <div class="row"><span>Historical Brier score</span><b>—</b></div>
+        <div class="row"><span>Out-of-sample backtest</span><b>none</b></div>
+        <div class="row"><span>Validation against past wars</span><b>none</b></div>
+        <div class="row"><span>Resolved bets win rate</span><b>untested</b></div>
+        <div class="row"><span>Statistical significance</span><b>n/a</b></div>
+      </div>
+      <p class="footer-note">Built as an academic exercise to demonstrate how easily probabilistic outputs from an unvalidated model can be repackaged as "trading signals." The graph is real. The markets are real. The "edge" is theater.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Causal Cascade — Bayesian Network
+   ============================================================ */
+
+const NODES = [
+  {id:'sustained', name:'Sustained strike campaign', desc:'U.S. maintains 90+ day strike tempo against Houthi targets', prior:.55, group:1, x:120, y:120},
+  {id:'diplomacy', name:'Omani diplomatic channel', desc:'Active back-channel ceasefire negotiations via Oman', prior:.40, group:1, x:120, y:260},
+  {id:'coalition', name:'Coalition cohesion holds', desc:'UK, France, EU Aspides sustain offensive participation', prior:.58, group:1, x:120, y:400},
+  {id:'iran_pos', name:'Iran hardline posture', desc:'IRGC hardliner faction ascendant in Tehran', prior:.45, group:1, x:120, y:540},
+  {id:'hvt',        name:'HVT elimination (Tier-2)', desc:'Houthi functional commander (e.g. al-Madani) struck', 
+    parents:[{id:'sustained', w:2.2}, {id:'coalition', w:0.4}], intercept:-1.8, group:2, x:340, y:80},
+  {id:'hou_deg',    name:'Houthi capability degraded', desc:'Attack tempo ≥70% below baseline sustained', 
+    parents:[{id:'sustained', w:1.8}, {id:'hvt', w:1.4}], intercept:-1.0, group:2, x:340, y:200},
+  {id:'vls',        name:'VLS depletion (AOR <35%)', desc:'CENTCOM SM-6/SM-2 inventory strained', 
+    parents:[{id:'sustained', w:1.5}, {id:'iran_pos', w:1.0}], intercept:-1.2, group:2, x:340, y:330},
+  {id:'iran_react', name:'Iran kinetic retaliation', desc:'IRGC/IRGCN conducts direct action against U.S. assets', 
+    parents:[{id:'iran_pos', w:2.0}, {id:'hvt', w:0.8}, {id:'diplomacy', w:-1.5}], intercept:-1.5, group:2, x:340, y:460},
+  {id:'israel',     name:'Israel strikes Iran directly', desc:'IDF executes Fordow/Natanz or Tehran-linked strike', 
+    parents:[{id:'iran_pos', w:1.4}, {id:'iran_react', w:1.0}], intercept:-2.1, group:2, x:340, y:590},
+  {id:'hormuz',   name:'Hormuz closure ≥7 days', desc:'Strait becomes non-navigable for commercial traffic', 
+    parents:[{id:'iran_react', w:2.0}, {id:'iran_pos', w:0.8}], intercept:-2.0, group:3, x:580, y:240},
+  {id:'oil',      name:'Brent crude >$120/bbl', desc:'Global oil prices exceed $120 for ≥7 days', 
+    parents:[{id:'hormuz', w:2.5}, {id:'iran_react', w:0.6}, {id:'israel', w:0.9}], intercept:-1.8, group:3, x:580, y:370},
+  {id:'coal_frac',name:'Coalition fragmentation', desc:'France and/or Germany withdraw from offensive OPG', 
+    parents:[{id:'iran_react', w:0.8}, {id:'coalition', w:-2.0}, {id:'hormuz', w:0.5}], intercept:0.2, group:3, x:580, y:500},
+  {id:'escalation',name:'Escalation rung ≥8', desc:'Direct U.S.–Iran kinetic exchange or nuclear signaling', 
+    parents:[{id:'iran_react', w:1.8}, {id:'israel', w:1.6}, {id:'hormuz', w:0.8}], intercept:-2.2, group:3, x:580, y:130},
+  {id:'campaign_ext', name:'Campaign >90 days', desc:'Operation Rough Rider extends beyond 90-day envelope', 
+    parents:[{id:'hou_deg', w:-2.0}, {id:'vls', w:1.0}, {id:'coal_frac', w:0.6}], intercept:0.5, group:4, x:820, y:140},
+  {id:'reg_war',   name:'Regional war', desc:'Multi-theater conflict involving Iran, Israel, Gulf states', 
+    parents:[{id:'escalation', w:2.3}, {id:'israel', w:1.4}, {id:'oil', w:0.7}], intercept:-2.5, group:4, x:820, y:280},
+  {id:'econ',      name:'Economic shock', desc:'Global GDP growth revised down; recession risk', 
+    parents:[{id:'oil', w:1.8}, {id:'hormuz', w:1.0}, {id:'reg_war', w:1.2}], intercept:-1.6, group:4, x:820, y:410},
+  {id:'endstate_g',name:'ENDSTATE: Green', desc:'Ceasefire + freedom of navigation restored', 
+    parents:[{id:'diplomacy', w:1.8}, {id:'hou_deg', w:1.2}, {id:'coalition', w:0.9}, {id:'iran_react', w:-1.5}, {id:'escalation', w:-2.0}], intercept:-1.2, group:4, x:820, y:540},
+  {id:'endstate_r',name:'ENDSTATE: Red', desc:'Regional escalation requires broader U.S. commitment', 
+    parents:[{id:'reg_war', w:2.2}, {id:'oil', w:0.6}, {id:'coal_frac', w:0.8}, {id:'escalation', w:1.5}], intercept:-2.0, group:4, x:820, y:640},
+];
+
+const N = {};
+NODES.forEach(n => { N[n.id] = n; });
+function topoSort(){
+  const visited = {}, order = [];
+  function visit(id){
+    if(visited[id]) return;
+    visited[id] = true;
+    const n = N[id];
+    if(n.parents) n.parents.forEach(p => visit(p.id));
+    order.push(id);
+  }
+  NODES.forEach(n => visit(n.id));
+  return order;
+}
+const ORDER = topoSort();
+
+const EDGES = [];
+NODES.forEach(n => {
+  if(n.parents) n.parents.forEach(p => EDGES.push({from: p.id, to: n.id, w: p.w}));
+});
+
+function sigmoid(x){ return 1 / (1 + Math.exp(-x)); }
+
+let RNG_STATE = 42;
+function rng(){ RNG_STATE = (RNG_STATE * 1103515245 + 12345) & 0x7fffffff; return RNG_STATE / 0x7fffffff; }
+function resetRNG(s=42){ RNG_STATE = s; }
+
+function propagate(interventions={}, iters=120){
+  const counts = {};
+  NODES.forEach(n => counts[n.id] = 0);
+  resetRNG(42);
+  const t0 = performance.now();
+  for(let s=0; s<iters; s++){
+    const sample = {};
+    for(const id of ORDER){
+      if(id in interventions){ sample[id] = interventions[id]; continue; }
+      const n = N[id];
+      let p;
+      if(n.parents){
+        let logit = n.intercept;
+        for(const pn of n.parents){ logit += pn.w * (sample[pn.id] ? 1 : 0); }
+        p = sigmoid(logit);
+      } else { p = n.prior; }
+      sample[id] = rng() < p;
+    }
+    for(const id in sample) if(sample[id]) counts[id]++;
+  }
+  const result = {};
+  for(const id in counts) result[id] = counts[id] / iters;
+  result._ms = performance.now() - t0;
+  return result;
+}
+
+function sensitivity(targetId, interventions, iters=80){
+  const deltas = [];
+  for(const n of NODES){
+    if(n.id === targetId) continue;
+    if(n.id in interventions) continue;
+    const dT = propagate({...interventions, [n.id]: true}, iters);
+    const dF = propagate({...interventions, [n.id]: false}, iters);
+    const delta = dT[targetId] - dF[targetId];
+    deltas.push({id: n.id, name: n.name, delta});
+  }
+  deltas.sort((a,b) => Math.abs(b.delta) - Math.abs(a.delta));
+  return deltas;
+}
+
+let mode = 'observe';
+let interventions = {};
+let selectedId = null;
+let beliefs = {};
+let baselineBeliefs = null;
+let graphState = {zoom:1, x:0, y:0};
+
+function colorFor(p, isIntervened){
+  if(isIntervened) return '#B8A0FF';
+  if(p > 0.70) return '#7DDBB0';
+  if(p > 0.40) return '#6DD9FF';
+  if(p > 0.20) return '#FFB186';
+  return '#FF7A8A';
+}
+
+const svg = document.getElementById('graph');
+const W = 900, H = 720;
+function updateViewBox(){
+  const vw = W / graphState.zoom;
+  const vh = H / graphState.zoom;
+  svg.setAttribute('viewBox', `${graphState.x} ${graphState.y} ${vw} ${vh}`);
+}
+updateViewBox();
+
+function renderGraph(){
+  let s = '';
+  s += `<defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5A6574"/></marker>
+    <marker id="arr-a" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6DD9FF"/></marker>
+    <marker id="arr-v" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B8A0FF"/></marker>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`;
+  s += `<g opacity="0.04">
+    <rect x="40" y="40" width="180" height="620" fill="#6DD9FF" rx="8"/>
+    <rect x="260" y="40" width="160" height="620" fill="#8EE3FF" rx="8"/>
+    <rect x="480" y="40" width="200" height="620" fill="#B8A0FF" rx="8"/>
+    <rect x="720" y="40" width="180" height="620" fill="#FFB186" rx="8"/>
+  </g>`;
+  s += `<g font-family="JetBrains Mono" font-size="10" fill="#5A6574" opacity="0.6">
+    <text x="130" y="30" text-anchor="middle">LEVEL 1 · ROOTS</text>
+    <text x="340" y="30" text-anchor="middle">LEVEL 2 · DIRECT</text>
+    <text x="580" y="30" text-anchor="middle">LEVEL 3 · PROPAGATED</text>
+    <text x="820" y="30" text-anchor="middle">LEVEL 4 · ENDSTATES</text>
+  </g>`;
+
+  for(const e of EDGES){
+    const a = N[e.from], b = N[e.to];
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2;
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const perpX = -dy / len * 12;
+    const perpY = dx / len * 12;
+    const cx = mx + perpX, cy = my + perpY;
+    const ang = Math.atan2(b.y - cy, b.x - cx);
+    const tx = b.x - Math.cos(ang) * 32;
+    const ty = b.y - Math.sin(ang) * 32;
+    const sx = a.x + Math.cos(Math.atan2(cy - a.y, cx - a.x)) * 32;
+    const sy = a.y + Math.sin(Math.atan2(cy - a.y, cx - a.x)) * 32;
+    const sourceIntervened = e.from in interventions;
+    const isSelEdge = selectedId === e.from || selectedId === e.to;
+    let strokeCol = '#2B3446', sw = 1, dash = '', marker = 'arr';
+    if(sourceIntervened){ strokeCol = '#B8A0FF'; sw = 1.8; marker = 'arr-v'; }
+    if(isSelEdge){ strokeCol = '#6DD9FF'; sw = 1.8; marker = 'arr-a'; }
+    if(e.w < 0){ dash = '4 3'; }
+    const opa = isSelEdge ? 0.95 : 0.45;
+    s += `<path d="M ${sx} ${sy} Q ${cx} ${cy} ${tx} ${ty}" stroke="${strokeCol}" stroke-width="${sw}" fill="none" opacity="${opa}" marker-end="url(#${marker})" stroke-dasharray="${dash}"/>`;
+    if(isSelEdge){
+      const lcx = cx + perpX*0.5, lcy = cy + perpY*0.5;
+      const wLbl = (e.w >= 0 ? '+' : '') + e.w.toFixed(1);
+      s += `<text x="${lcx}" y="${lcy}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="${e.w >= 0 ? '#7DDBB0' : '#FF7A8A'}">${wLbl}</text>`;
+    }
+  }
+
+  for(const n of NODES){
+    const p = beliefs[n.id] || 0;
+    const isInt = n.id in interventions;
+    const col = colorFor(p, isInt);
+    const isSel = selectedId === n.id;
+    const ringR = 28 + (isSel ? 4 : 0);
+    let cfDelta = null;
+    if(mode === 'counterfactual' && baselineBeliefs){ cfDelta = p - baselineBeliefs[n.id]; }
+    if(isSel){
+      s += `<circle cx="${n.x}" cy="${n.y}" r="${ringR + 6}" fill="none" stroke="#6DD9FF" stroke-width="1.5" opacity="0.35"/>`;
+    }
+    s += `<circle class="node" data-id="${n.id}" cx="${n.x}" cy="${n.y}" r="${ringR}" fill="#0F141D" stroke="${col}" stroke-width="${isInt ? 3 : 2}" style="cursor:pointer" filter="${isSel ? 'url(#glow)' : ''}"/>`;
+    const arcAngle = p * 2 * Math.PI;
+    if(p > 0.02){
+      const startAng = -Math.PI / 2;
+      const endAng = startAng + arcAngle;
+      const x1 = n.x + Math.cos(startAng) * ringR;
+      const y1 = n.y + Math.sin(startAng) * ringR;
+      const x2 = n.x + Math.cos(endAng) * ringR;
+      const y2 = n.y + Math.sin(endAng) * ringR;
+      const large = arcAngle > Math.PI ? 1 : 0;
+      s += `<path d="M ${n.x} ${n.y} L ${x1} ${y1} A ${ringR} ${ringR} 0 ${large} 1 ${x2} ${y2} Z" fill="${col}" opacity="0.22" style="pointer-events:none"/>`;
+    }
+    if(isInt){
+      s += `<circle cx="${n.x}" cy="${n.y - ringR - 8}" r="5" fill="${interventions[n.id] ? '#7DDBB0' : '#FF7A8A'}" style="pointer-events:none"/>`;
+      s += `<text x="${n.x}" y="${n.y - ringR - 4}" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="${interventions[n.id] ? '#7DDBB0' : '#FF7A8A'}" style="pointer-events:none">do=${interventions[n.id] ? 'T' : 'F'}</text>`;
+    }
+    s += `<text x="${n.x}" y="${n.y - 3}" text-anchor="middle" font-family="Instrument Serif" font-size="20" fill="${col}" style="pointer-events:none;font-weight:400">${(p*100).toFixed(0)}</text>`;
+    s += `<text x="${n.x}" y="${n.y + 10}" text-anchor="middle" font-family="JetBrains Mono" font-size="7.5" fill="#5A6574" style="pointer-events:none">%</text>`;
+    if(cfDelta !== null && Math.abs(cfDelta) > 0.02){
+      const dStr = (cfDelta >= 0 ? '+' : '') + (cfDelta*100).toFixed(0);
+      const dCol = cfDelta > 0 ? '#7DDBB0' : '#FF7A8A';
+      s += `<text x="${n.x}" y="${n.y + ringR + 14}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${dCol}" style="pointer-events:none;font-weight:600">Δ ${dStr}pp</text>`;
+    }
+    const nameText = n.name.length > 24 ? n.name.slice(0, 22) + '…' : n.name;
+    s += `<text x="${n.x}" y="${n.y + (cfDelta !== null && Math.abs(cfDelta) > 0.02 ? ringR + 30 : ringR + 14)}" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#C8D0DC" style="pointer-events:none">${nameText}</text>`;
+  }
+  svg.innerHTML = s;
+  svg.querySelectorAll('.node').forEach(el => el.addEventListener('click', e => {
+    e.stopPropagation();
+    onNodeClick(el.dataset.id);
+  }));
+}
+
+function onNodeClick(id){
+  if(mode === 'intervene'){
+    if(!(id in interventions)) interventions[id] = true;
+    else if(interventions[id] === true) interventions[id] = false;
+    else delete interventions[id];
+    runInference();
+    selectedId = id;
+  } else {
+    selectedId = id;
+    renderGraph();
+    renderNodeList();
+    renderInspector();
+  }
+}
+
+function runInference(){
+  const iters = +document.getElementById('s-iter').value;
+  if(mode === 'counterfactual' && Object.keys(interventions).length === 0){
+    baselineBeliefs = propagate({}, iters);
+    beliefs = {...baselineBeliefs};
+  } else if(mode === 'counterfactual'){
+    beliefs = propagate(interventions, iters);
+  } else {
+    beliefs = propagate(interventions, iters);
+    baselineBeliefs = null;
+  }
+  document.getElementById('iter-count').textContent = `${beliefs._ms.toFixed(1)} ms · ${iters} samples`;
+  document.getElementById('c-inv').textContent = `${Object.keys(interventions).length} intervention${Object.keys(interventions).length !== 1 ? 's' : ''}`;
+  renderGraph();
+  renderNodeList();
+  renderInspector();
+  // Refresh market panel if open — predictions are downstream of beliefs
+  if(document.getElementById('mkt-panel').classList.contains('on')) renderMarketRecs();
+}
+
+function renderNodeList(){
+  const list = document.getElementById('nlist');
+  const sorted = [...NODES].sort((a,b) => (beliefs[b.id] || 0) - (beliefs[a.id] || 0));
+  list.innerHTML = sorted.map(n => {
+    const p = beliefs[n.id] || 0;
+    const isInt = n.id in interventions;
+    const clampLbl = isInt ? `<span class="clamp ${interventions[n.id] ? 't' : 'f'}">do=${interventions[n.id] ? 'T' : 'F'}</span>` : '';
+    const cls = selectedId === n.id ? 'sel' : '';
+    return `<div class="node-ctrl ${cls}" data-id="${n.id}">
+      <div class="h"><span class="n">${n.name}</span><span class="p" style="color:${colorFor(p, isInt)}">${(p*100).toFixed(0)}%</span></div>
+      <div class="bar"><span class="bar-fill" style="width:${p*100}%;background:${colorFor(p, isInt)}"></span></div>
+      ${clampLbl ? `<div style="margin-top:5px">${clampLbl}</div>` : ''}
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.node-ctrl').forEach(el => el.addEventListener('click', () => {
+    selectedId = el.dataset.id; renderGraph(); renderNodeList(); renderInspector();
+  }));
+}
+
+function renderInspector(){
+  const insp = document.getElementById('insp');
+  const eye = document.getElementById('insp-eye');
+  const title = document.getElementById('insp-title');
+  const sub = document.getElementById('insp-sub');
+  if(!selectedId){
+    eye.textContent = 'INSPECTOR';
+    title.textContent = 'No selection';
+    sub.textContent = 'Click a node to inspect its parents, CPT, belief, and sensitivity to upstream interventions.';
+    insp.innerHTML = '';
+    return;
+  }
+  const n = N[selectedId];
+  const p = beliefs[n.id] || 0;
+  const isInt = n.id in interventions;
+  eye.textContent = `LEVEL ${n.group} · ${n.parents ? 'DERIVED' : 'ROOT'}`;
+  title.innerHTML = `<i>${n.name}</i>`;
+  sub.textContent = n.desc;
+
+  let html = '';
+  html += `<div class="actions">
+    <button class="${isInt && interventions[selectedId] === true ? 'at' : ''}" data-act="true">do( = TRUE )</button>
+    <button class="${isInt && interventions[selectedId] === false ? 'af' : ''}" data-act="false">do( = FALSE )</button>
+    ${isInt ? `<button class="ac" data-act="clear">Clear</button>` : ''}
+  </div>`;
+
+  const cfDelta = mode === 'counterfactual' && baselineBeliefs ? p - (baselineBeliefs[n.id] || 0) : null;
+  html += `<dl class="dl">
+    <dt>P(node = T)</dt><dd class="a">${(p*100).toFixed(1)}%</dd>
+    <dt>State</dt><dd class="${isInt ? 'v' : (p > .5 ? 'g' : 'r')}">${isInt ? `CLAMPED ${interventions[selectedId] ? 'TRUE' : 'FALSE'}` : (p > .5 ? 'PROBABLE' : 'IMPROBABLE')}</dd>
+    <dt>Group</dt><dd>Level ${n.group} (${n.parents ? 'derived' : 'root'})</dd>
+    <dt>Parents</dt><dd>${n.parents ? n.parents.length : 0}</dd>
+    ${cfDelta !== null ? `<dt>CF Δ vs baseline</dt><dd class="${cfDelta > 0 ? 'g' : 'r'}">${cfDelta >= 0 ? '+' : ''}${(cfDelta*100).toFixed(1)}pp</dd>` : ''}
+    ${n.intercept !== undefined ? `<dt>Intercept (α)</dt><dd>${n.intercept.toFixed(2)}</dd>` : ''}
+    ${n.prior !== undefined ? `<dt>Prior P</dt><dd>${(n.prior*100).toFixed(0)}%</dd>` : ''}
+  </dl>`;
+
+  if(n.parents){
+    html += `<div class="cpt"><h5>CAUSAL PARENTS · CPT WEIGHTS</h5>`;
+    for(const pn of n.parents){
+      const pName = N[pn.id].name;
+      html += `<div class="cpt-row"><span class="p">${pName}</span><span class="v">${pn.w >= 0 ? '+' : ''}${pn.w.toFixed(2)}</span></div>`;
+    }
+    html += `</div>`;
+    html += `<div style="font-family:var(--mono);font-size:10px;color:var(--ink-4);margin:-6px 0 14px;line-height:1.5">P = σ(α + Σ wᵢ · parentᵢ). Positive weight = excitatory; negative = inhibitory (shown dashed on graph).</div>`;
+  } else {
+    html += `<div class="cpt"><h5>ROOT NODE</h5><div class="cpt-row"><span class="p">No parents · prior used directly</span><span class="v">${(n.prior*100).toFixed(0)}%</span></div></div>`;
+  }
+
+  const iters = Math.min(80, +document.getElementById('s-iter').value);
+  const sens = sensitivity(selectedId, interventions, iters);
+  const top5 = sens.slice(0, 8);
+  html += `<div class="sensi"><h5>SENSITIVITY · Δ IF CLAMPED (top 8)</h5>`;
+  const maxAbs = Math.max(...top5.map(s => Math.abs(s.delta)), 0.01);
+  for(const s of top5){
+    const magPct = Math.abs(s.delta) / maxAbs * 100;
+    const dLbl = (s.delta >= 0 ? '+' : '') + (s.delta * 100).toFixed(1);
+    const neg = s.delta < 0;
+    html += `<div class="srow">
+      <span class="n">${N[s.id].name}</span>
+      <span class="b"><span class="f ${neg ? 'neg' : ''}" style="width:${magPct}%;${neg ? 'right:50%;left:auto' : 'left:50%'}"></span></span>
+      <span class="v ${neg ? 'neg' : ''}">${dLbl}pp</span>
+    </div>`;
+  }
+  html += `</div>`;
+  html += `<div style="font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-top:8px;line-height:1.5">Δ shows P(${n.name}) if each other node were clamped TRUE vs FALSE. Measures true causal leverage over this outcome.</div>`;
+
+  insp.innerHTML = html;
+  insp.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', () => {
+    const act = b.dataset.act;
+    if(act === 'clear') delete interventions[selectedId];
+    else interventions[selectedId] = act === 'true';
+    runInference();
+  }));
+}
+
+document.querySelectorAll('#mode button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#mode button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  mode = b.dataset.m;
+  const hints = {
+    observe: 'Observational: marginal probabilities from priors alone.',
+    intervene: 'Click any node on the graph to toggle do(TRUE → FALSE → observe).',
+    counterfactual: 'First propagation locks baseline. Interventions compute counterfactual Δ (shown per-node).',
+  };
+  document.getElementById('mode-hint').textContent = hints[mode];
+  document.getElementById('c-mode').textContent = mode.toUpperCase() + (mode === 'counterfactual' ? ' · Δ mode' : ' · marginal');
+  document.getElementById('c-cf').style.display = mode === 'counterfactual' ? '' : 'none';
+  baselineBeliefs = null;
+  runInference();
+}));
+
+document.getElementById('s-iter').addEventListener('input', e => {
+  document.getElementById('v-iter').textContent = e.target.value;
+});
+document.getElementById('btn-run').addEventListener('click', runInference);
+document.getElementById('btn-clear').addEventListener('click', () => {
+  interventions = {};
+  runInference();
+});
+
+document.querySelectorAll('.scenarios button').forEach(b => b.addEventListener('click', () => {
+  interventions = {};
+  const sc = b.dataset.sc;
+  if(sc === 'strike'){ interventions['sustained'] = true; selectedId = 'sustained'; }
+  else if(sc === 'dip'){ interventions['diplomacy'] = true; selectedId = 'diplomacy'; }
+  else if(sc === 'hormuz'){ interventions['hormuz'] = true; interventions['iran_pos'] = true; selectedId = 'hormuz'; }
+  else if(sc === 'coalition'){ interventions['coalition'] = false; selectedId = 'coalition'; }
+  if(mode !== 'intervene' && mode !== 'counterfactual'){
+    document.querySelectorAll('#mode button').forEach(x => x.classList.toggle('on', x.dataset.m === 'intervene'));
+    mode = 'intervene';
+    document.getElementById('mode-hint').textContent = 'Click any node on the graph to toggle do(TRUE → FALSE → observe).';
+    document.getElementById('c-mode').textContent = 'INTERVENE · marginal';
+  }
+  runInference();
+}));
+
+document.getElementById('z-in').addEventListener('click', () => { graphState.zoom = Math.min(3, graphState.zoom * 1.25); updateViewBox(); });
+document.getElementById('z-out').addEventListener('click', () => { graphState.zoom = Math.max(0.5, graphState.zoom / 1.25); updateViewBox(); });
+document.getElementById('z-reset').addEventListener('click', () => { graphState = {zoom:1, x:0, y:0}; updateViewBox(); });
+
+let pan = null;
+svg.addEventListener('mousedown', e => {
+  if(e.target.classList.contains('node')) return;
+  pan = {x: e.clientX, y: e.clientY, sx: graphState.x, sy: graphState.y};
+  svg.classList.add('drag');
+});
+window.addEventListener('mouseup', () => { pan = null; svg.classList.remove('drag'); });
+window.addEventListener('mousemove', e => {
+  if(!pan) return;
+  const rect = svg.getBoundingClientRect();
+  const scale = W / rect.width / graphState.zoom;
+  graphState.x = pan.sx - (e.clientX - pan.x) * scale;
+  graphState.y = pan.sy - (e.clientY - pan.y) * scale;
+  updateViewBox();
+});
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const f = e.deltaY > 0 ? 0.9 : 1.1;
+  graphState.zoom = Math.max(0.5, Math.min(3, graphState.zoom * f));
+  updateViewBox();
+}, {passive:false});
+
+svg.addEventListener('click', e => {
+  if(!e.target.classList.contains('node')){
+    selectedId = null;
+    renderGraph();
+    renderNodeList();
+    renderInspector();
+  }
+});
+
+runInference();
+setTimeout(() => { selectedId = 'endstate_g'; renderGraph(); renderNodeList(); renderInspector(); }, 300);
+
+/* ============================================================
+   MARKET EXPLOITATION DEMONSTRATOR — JavaScript
+   
+   What this does:
+   1. Fetch top ~100 active Polymarket markets (volume-sorted)
+   2. Match each against keyword sets that map to cascade nodes
+   3. For matched markets, compute "model probability" from the
+      cascade's current beliefs (with deliberate naive mapping)
+   4. Compute fake "edge" = model_p - market_p
+   5. Render with garish trading-bot styling to make the parody legible
+   6. Anything we can't match shows "NO OPINION" — to demonstrate
+      the contained scope of the model
+   
+   The whole point is to make the recommendations *look* compelling
+   while the right-side critique panel makes clear they're noise.
+   ============================================================ */
+
+// Mapping: cascade node ID → keyword sets that should match Polymarket questions
+// First match wins. The "side" indicates which way model probability informs the contract.
+const NODE_KEYWORD_MAP = [
+  // Direct matches — model has clear mapping
+  {nodeId:'hormuz',     keywords:['hormuz','strait of hormuz'],                      label:'Hormuz closure'},
+  {nodeId:'oil',        keywords:['brent','oil price','crude','oil above','oil >','wti'], label:'Oil price'},
+  {nodeId:'reg_war',    keywords:['regional war','iran war','middle east war','iran-israel war','iran israel'],   label:'Regional war'},
+  {nodeId:'israel',     keywords:['israel strike','strike iran','israel attacks iran','israel attack iran','israel iran'],          label:'Israel strikes Iran'},
+  {nodeId:'iran_react', keywords:['iran retaliat','iran respond','iran attack','iran missile','iran strike'],         label:'Iran retaliation'},
+  {nodeId:'escalation', keywords:['escalat','nuclear strike','nuclear weapon','wwiii','world war'],     label:'Escalation'},
+  {nodeId:'econ',       keywords:['recession','gdp','inflation','fed cut','fed rate'],            label:'Economic shock'},
+  {nodeId:'diplomacy',  keywords:['ceasefire','peace deal','negotiat','deal between','agreement between'],          label:'Diplomatic deal'},
+  {nodeId:'hou_deg',    keywords:['houthi','red sea','bab el','attack on shipping'],     label:'Houthi activity'},
+];
+
+let polymarketCache = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 min
+
+async function fetchPolymarket(){
+  const now = Date.now();
+  if(polymarketCache && now - lastFetchTime < CACHE_TTL) return polymarketCache;
+  
+  // Try multiple endpoints / orderings for resilience
+  const URLS = [
+    'https://gamma-api.polymarket.com/markets?closed=false&active=true&limit=100&order=volume24hr&ascending=false',
+    'https://gamma-api.polymarket.com/markets?closed=false&active=true&limit=100&order=volumeNum&ascending=false',
+    'https://gamma-api.polymarket.com/markets?closed=false&limit=80',
+  ];
+  
+  for(const url of URLS){
+    try {
+      const resp = await fetch(url, {method:'GET', mode:'cors'});
+      if(!resp.ok) continue;
+      const data = await resp.json();
+      if(Array.isArray(data) && data.length > 0){
+        polymarketCache = data;
+        lastFetchTime = now;
+        return data;
+      }
+    } catch(e) {
+      console.warn('Polymarket fetch failed:', url, e.message);
+    }
+  }
+  return null;
+}
+
+function parseOutcomePrices(market){
+  // outcomePrices is sometimes a JSON-stringified array, sometimes already parsed
+  let prices = market.outcomePrices;
+  if(typeof prices === 'string'){
+    try { prices = JSON.parse(prices); } catch(e) { return null; }
+  }
+  if(!Array.isArray(prices) || prices.length < 1) return null;
+  // First entry is YES probability
+  const yesP = parseFloat(prices[0]);
+  if(isNaN(yesP)) return null;
+  return yesP;
+}
+
+function matchNodeForQuestion(question){
+  const q = (question || '').toLowerCase();
+  for(const m of NODE_KEYWORD_MAP){
+    for(const kw of m.keywords){
+      if(q.includes(kw)) return m;
+    }
+  }
+  return null;
+}
+
+// Compute "model probability" for a market using cascade beliefs
+// This is deliberately naive — it just uses the cascade's belief for the matched node
+// without any transformation. That's the parody: the model's intended scope is "what
+// happens given a U.S. strike campaign in a fictional 2026 scenario," not "what will
+// resolve TRUE on this specific Polymarket contract by Dec 31."
+function modelProbForMarket(nodeId){
+  return beliefs[nodeId] || 0;
+}
+
+function classifyEdge(edge){
+  const abs = Math.abs(edge);
+  if(abs >= 0.20) return 'hi';
+  if(abs >= 0.08) return 'med';
+  return 'low';
+}
+
+function renderMarketRecs(){
+  const container = document.getElementById('mkt-content');
+  
+  if(!polymarketCache){
+    container.innerHTML = '<div class="mkt-loading"><div class="spin"></div><div>Scanning Polymarket for matching contracts…</div></div>';
+    document.getElementById('mkt-scan-status').textContent = 'fetching';
+    fetchPolymarket().then(data => {
+      if(!data){
+        container.innerHTML = '<div class="mkt-empty">Polymarket fetch failed (CORS, rate limit, or network). Refresh to retry. The critique on the right applies regardless.</div>';
+        document.getElementById('mkt-scan-status').textContent = 'failed';
+        return;
+      }
+      document.getElementById('mkt-scan-status').textContent = 'live · ' + data.length + ' markets';
+      renderMarketRecs();
+    });
+    return;
+  }
+  
+  // Process the cached markets
+  const recs = [];
+  let totalEdge = 0;
+  let evp = 0;
+  
+  for(const m of polymarketCache){
+    const matched = matchNodeForQuestion(m.question);
+    const marketP = parseOutcomePrices(m);
+    if(marketP === null) continue;
+    
+    const slug = m.slug || '';
+    const url = slug ? 'https://polymarket.com/event/' + slug : 'https://polymarket.com/markets';
+    const volume = m.volumeNum || m.volume || 0;
+    const volStr = volume > 1000000 ? '$' + (volume/1000000).toFixed(1) + 'M' : '$' + (volume/1000).toFixed(0) + 'K';
+    
+    if(matched){
+      const modelP = modelProbForMarket(matched.nodeId);
+      const edge = modelP - marketP;
+      const cls = classifyEdge(edge);
+      if(cls === 'hi' || cls === 'med'){
+        recs.push({matched:true, m, matched_label:matched.label, marketP, modelP, edge, cls, url, volStr, nodeId:matched.nodeId});
+        totalEdge += Math.abs(edge);
+        if(Math.abs(edge) >= 0.05) evp++;
+      } else {
+        // Low edge — model agrees with market
+        recs.push({matched:true, agreement:true, m, matched_label:matched.label, marketP, modelP, edge, url, volStr, nodeId:matched.nodeId});
+      }
+    }
+  }
+  
+  // Sort: high-edge first, then medium, then agreements, then leave room for "no opinion"
+  recs.sort((a,b) => {
+    if(a.agreement && !b.agreement) return 1;
+    if(b.agreement && !a.agreement) return -1;
+    return Math.abs(b.edge || 0) - Math.abs(a.edge || 0);
+  });
+  
+  // Take some non-matching markets to demonstrate "model has no opinion"
+  const noMatch = polymarketCache
+    .filter(m => !matchNodeForQuestion(m.question) && parseOutcomePrices(m) !== null)
+    .slice(0, 3)
+    .map(m => {
+      const slug = m.slug || '';
+      const url = slug ? 'https://polymarket.com/event/' + slug : 'https://polymarket.com/markets';
+      const volume = m.volumeNum || m.volume || 0;
+      const volStr = volume > 1000000 ? '$' + (volume/1000000).toFixed(1) + 'M' : '$' + (volume/1000).toFixed(0) + 'K';
+      return {noOpinion:true, m, marketP: parseOutcomePrices(m), url, volStr};
+    });
+  
+  const allRecs = recs.slice(0, 12).concat(noMatch);
+  
+  document.getElementById('mkt-alpha').textContent = (totalEdge * 100).toFixed(0) + ' bps';
+  document.getElementById('mkt-evp').textContent = evp;
+  document.getElementById('mkt-scan-status').textContent = 'live · ' + polymarketCache.length + ' markets · ' + recs.length + ' matched';
+  
+  if(allRecs.length === 0){
+    container.innerHTML = '<div class="mkt-empty">No matched contracts in current top markets. Try changing cascade interventions on the left to see how "edge recommendations" shift even though nothing about reality changed.</div>';
+    return;
+  }
+  
+  let html = '<div class="mkt-recs">';
+  for(const r of allRecs){
+    if(r.noOpinion){
+      html += `<div class="mkt-rec no">
+        <div class="q">
+          <a href="${r.url}" target="_blank" rel="noopener">${escapeHtml(r.m.question)}</a>
+          <div class="meta"><span class="src">Polymarket</span><span class="vol">${r.volStr} vol</span><span style="color:var(--ink-4)">no cascade match</span></div>
+        </div>
+        <div class="prices">
+          <div class="market-p">Market <b>${(r.marketP*100).toFixed(0)}%</b></div>
+          <div class="model-p" style="color:var(--ink-4)">Model <b style="color:var(--ink-4);text-shadow:none">—</b></div>
+        </div>
+        <div class="edge">
+          <div class="ev">MODEL EV</div>
+          <div class="pct">N/A</div>
+          <div class="verdict">NO OPINION</div>
+        </div>
+      </div>`;
+    } else if(r.agreement){
+      html += `<div class="mkt-rec med" style="opacity:.85">
+        <div class="q">
+          <a href="${r.url}" target="_blank" rel="noopener">${escapeHtml(r.m.question)}</a>
+          <div class="meta"><span class="src">Polymarket</span><span class="vol">${r.volStr} vol</span><span style="color:#FFE066">cascade: ${r.matched_label}</span></div>
+        </div>
+        <div class="prices">
+          <div class="market-p">Market <b>${(r.marketP*100).toFixed(0)}%</b></div>
+          <div class="model-p" style="color:#FFE066">Model <b style="color:#FFE066">${(r.modelP*100).toFixed(0)}%</b></div>
+        </div>
+        <div class="edge">
+          <div class="ev">MODEL EV</div>
+          <div class="pct">${(r.edge >= 0 ? '+' : '') + (r.edge*100).toFixed(1)}%</div>
+          <div class="verdict">PASS · low edge</div>
+        </div>
+      </div>`;
+    } else {
+      const dir = r.edge > 0 ? 'BUY YES' : 'BUY NO';
+      html += `<div class="mkt-rec ${r.cls}">
+        <div class="q">
+          <a href="${r.url}" target="_blank" rel="noopener">${escapeHtml(r.m.question)}</a>
+          <div class="meta"><span class="src">Polymarket</span><span class="vol">${r.volStr} vol</span><span style="color:#00FF88">cascade: ${r.matched_label}</span></div>
+        </div>
+        <div class="prices">
+          <div class="market-p">Market <b>${(r.marketP*100).toFixed(0)}%</b></div>
+          <div class="model-p">Model <b>${(r.modelP*100).toFixed(0)}%</b></div>
+        </div>
+        <div class="edge">
+          <div class="ev">MODEL EV</div>
+          <div class="pct">${(r.edge >= 0 ? '+' : '') + (r.edge*100).toFixed(1)}%</div>
+          <div class="verdict">${dir}</div>
+        </div>
+      </div>`;
+    }
+  }
+  html += '</div>';
+  
+  container.innerHTML = html;
+  
+  // Headlines synthesized from cascade nodes + matched markets — illustrative, not real news
+  renderMatchedHeadlines(recs);
+}
+
+function escapeHtml(s){
+  return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderMatchedHeadlines(recs){
+  const wrap = document.getElementById('mkt-headlines-wrap');
+  const el = document.getElementById('mkt-headlines');
+  if(recs.length === 0){ wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  // Pull the cascade node names that were matched
+  const matchedNodes = [...new Set(recs.filter(r => !r.noOpinion).map(r => r.matched_label))].slice(0, 4);
+  if(matchedNodes.length === 0){ wrap.style.display = 'none'; return; }
+  // Synthesize plausible headlines tied to each matched node
+  const headlinesByLabel = {
+    'Hormuz closure':       {src:'Reuters',  text:'Iran navy steps up patrols near Hormuz; tanker insurance premiums climb'},
+    'Oil price':            {src:'Bloomberg',text:'Brent jumps as Mideast premium widens, supply disruption fears persist'},
+    'Regional war':         {src:'AP',       text:'Diplomats race to head off broader regional conflict as proxies test redlines'},
+    'Israel strikes Iran':  {src:'Times of Israel', text:'Israeli officials weigh kinetic response to renewed proxy attacks'},
+    'Iran retaliation':     {src:'Al Jazeera',text:'Tehran warns of asymmetric response to U.S. action; IRGC issues statement'},
+    'Escalation':           {src:'CSIS',     text:'Analysts warn of escalation rung dynamic; RAND models point to ladder risk'},
+    'Economic shock':       {src:'FT',       text:'Energy economists revise growth forecasts down on chokepoint risk'},
+    'Diplomatic deal':      {src:'NPR',      text:'Omani channel reportedly active; back-channel talks at deputy level'},
+    'Houthi activity':      {src:'CFR',      text:'Houthi attacks on Red Sea shipping enter pause; analysts split on durability'},
+  };
+  el.innerHTML = matchedNodes.map(lbl => {
+    const h = headlinesByLabel[lbl];
+    if(!h) return '';
+    return `<div class="hl"><span class="src">${h.src}</span>${h.text}<span class="matched">→ ${lbl.toUpperCase()}</span></div>`;
+  }).join('');
+}
+
+// Panel open/close
+document.getElementById('mkt-launch').addEventListener('click', () => {
+  document.getElementById('mkt-panel').classList.add('on');
+  renderMarketRecs();
+});
+document.getElementById('mkt-close').addEventListener('click', () => {
+  document.getElementById('mkt-panel').classList.remove('on');
+});
+window.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && document.getElementById('mkt-panel').classList.contains('on')){
+    document.getElementById('mkt-panel').classList.remove('on');
+  }
+});
+</script>
+</body>
+</html>

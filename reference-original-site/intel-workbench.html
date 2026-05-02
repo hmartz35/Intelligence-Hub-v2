@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intel Workbench · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D12;--bg-1:#0E131A;--surface:#141A24;--surface-2:#1A2131;--surface-3:#222A3B;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--warm-border:rgba(255,177,134,.28);--danger:#FF7A8A;--success:#7DDBB0;--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px;--shadow-2:0 4px 16px rgba(0,0,0,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 10% -5%,rgba(109,217,255,.05),transparent 55%),radial-gradient(ellipse at 95% 110%,rgba(184,160,255,.04),transparent 55%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(10,13,18,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:1400px;margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 8px rgba(109,217,255,.5)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:32px clamp(14px,2.5vw,32px) 80px}
+.hdr{padding-bottom:26px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:end;gap:28px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.hdr .lt{max-width:760px}
+.hdr .eye{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-bottom:12px}
+.hdr h1{font-family:var(--display);font-size:clamp(40px,5.5vw,60px);font-weight:400;margin:0 0 10px;letter-spacing:-.02em;line-height:1}
+.hdr h1 i{font-style:italic;color:var(--accent)}
+.hdr p{color:var(--ink-2);font-size:15.5px;margin:0;max-width:640px;line-height:1.6}
+.hdr .rt{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px}
+.pill{border:1px solid var(--border);padding:5px 10px;color:var(--ink-3);border-radius:100px;background:var(--surface)}
+.pill.a{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+.pill.w{border-color:var(--warm-border);color:var(--warm);background:var(--warm-soft)}
+.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+@media(max-width:960px){.strip{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.strip{grid-template-columns:repeat(2,1fr)}}
+.strip .cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;position:relative;overflow:hidden}
+.strip .lbl{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:6px}
+.strip .val{font-family:var(--display);font-size:26px;font-weight:400;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.strip .d{font-family:var(--mono);font-size:11px;color:var(--success);margin-top:6px}
+.strip .d.dn{color:var(--danger)}.strip .d.wn{color:var(--warm)}
+.strip .spark{position:absolute;bottom:0;left:0;right:0;height:22px;opacity:.6}
+.work{display:grid;grid-template-columns:340px 1fr 380px;gap:12px}
+@media(max-width:1200px){.work{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.work{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden}
+.panel h3{font-family:var(--ui);font-size:13.5px;font-weight:500;color:var(--ink);margin:0;padding:15px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;letter-spacing:-.005em}
+.panel h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10.5px;font-weight:400}
+.panel .body{padding:18px;flex:1}
+.ctrl{margin-bottom:18px}
+.ctrl .lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.ctrl .name{font-family:var(--ui);font-size:13px;color:var(--ink);font-weight:500}
+.ctrl .hint{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:6px;line-height:1.4}
+.ctrl .rv{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:500}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:22px;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-moz-range-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%;margin-top:-6px;transition:.15s}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%}
+input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(109,217,255,.15)}
+.ctrl .bar2{display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--ink-4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px 14px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;border-radius:var(--r-sm);margin-top:8px}
+.btn:hover{background:var(--accent-bright)}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--border-2)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-row{display:flex;gap:6px;margin-top:8px}
+.btn-row .btn{margin-top:0;flex:1}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin:0 -18px 18px;padding:0 18px}
+.tabs button{background:none;border:none;color:var(--ink-3);font-family:var(--ui);font-size:13px;padding:10px 14px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s;font-weight:500}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.tabs button:hover{color:var(--ink)}
+.fan-wrap svg{width:100%;display:block;overflow:visible}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:10px}
+.legend .sw{display:inline-block;width:14px;height:8px;vertical-align:middle;margin-right:6px;border-radius:1px}
+.pred{border:1px solid var(--border);background:var(--surface-2);margin-bottom:8px;border-radius:var(--r-sm);overflow:hidden;transition:.15s}
+.pred:hover{border-color:var(--border-2)}
+.pred .head{padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:start;gap:12px}
+.pred .head:hover{background:var(--surface-3)}
+.pred .txt{font-family:var(--ui);font-size:13px;color:var(--ink-2);line-height:1.4;max-width:230px}
+.pred .prob{text-align:right;flex-shrink:0}
+.pred .prob .n{font-family:var(--display);font-size:22px;color:var(--accent);font-weight:400;line-height:1;letter-spacing:-.01em}
+.pred .prob .delta{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:3px}
+.pred .prob .delta.up{color:var(--success)}.pred .prob .delta.dn{color:var(--danger)}
+.pred .pbar{height:3px;background:var(--border);position:relative;overflow:hidden}
+.pred .pbar::before{content:"";position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--accent),var(--success));width:var(--w,50%);transition:width .4s}
+.pred .evi{display:none;padding:12px 14px 14px;border-top:1px solid var(--border);background:var(--bg-1)}
+.pred.open .evi{display:block}
+.pred .evi .h{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin:0 0 10px}
+.evi-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);align-items:start}
+.evi-item:last-child{border-bottom:none}
+.evi-item .tog{flex-shrink:0;width:16px;height:16px;border:1px solid var(--border-2);background:var(--surface);cursor:pointer;border-radius:4px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:transparent;transition:.15s}
+.evi-item.on .tog{background:var(--accent);border-color:var(--accent);color:#06121a}
+.evi-item .body{flex:1}.evi-item .lbl{color:var(--ink-2);line-height:1.4;font-size:13px}
+.evi-item.on .lbl{color:var(--ink)}
+.evi-item .meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:3px}
+.evi-item .lr{font-family:var(--mono);font-size:10.5px;color:var(--accent);margin-top:3px}
+.tor-row{display:grid;grid-template-columns:150px 1fr 60px;gap:12px;align-items:center;padding:6px 0}
+.tor-lbl{font-family:var(--ui);font-size:12.5px;color:var(--ink-2)}
+.tor-viz{position:relative;height:22px}
+.tor-ax{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border-2)}
+.tor-bar{position:absolute;top:5px;bottom:5px;opacity:.85;border-radius:2px}
+.tor-bar.neg{background:var(--violet);right:50%}
+.tor-bar.pos{background:var(--accent);left:50%}
+.tor-val{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right}
+.feed{max-height:380px;overflow:auto;margin:0 -18px -18px;padding:0 18px 18px}
+.feed::-webkit-scrollbar{width:6px}
+.feed::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.feed-item{padding:10px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px}
+.feed-item .t{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);flex-shrink:0;width:52px;padding-top:2px}
+.feed-item .c{flex:1;font-size:13px;line-height:1.45}
+.feed-item .c .src{font-family:var(--mono);font-size:10.5px;color:var(--accent);margin-bottom:3px}
+.feed-item .c .txt{color:var(--ink-2)}
+.feed-item .add{font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer;padding:3px 8px;border:1px solid var(--border-2);border-radius:var(--r-sm);align-self:start;flex-shrink:0;margin-top:2px;background:transparent;transition:.15s}
+.feed-item .add:hover{border-color:var(--accent);color:var(--accent)}
+.feed-item .add.used{color:var(--accent);border-color:var(--accent-border);background:var(--accent-soft)}
+.info{font-family:var(--mono);font-size:11px;color:var(--ink-4);line-height:1.6}
+.info b{color:var(--ink-3);font-weight:500}
+.ftr{margin-top:40px;padding-top:22px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--ink-4);line-height:1.7;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.ftr a{color:var(--ink-3);text-decoration:none}
+.ftr a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Intel Workbench</span>
+  </div>
+  <div style="display:flex;gap:14px;align-items:center">
+    <span>v2.0 · seed <span id="i-seed" style="color:var(--ink-2)">—</span></span><span class="sep">/</span><span id="utc">— UTC</span>
+  </div>
+</div></div>
+
+<div class="wrap">
+<header class="hdr">
+  <div class="lt">
+    <div class="eye">Quantitative intelligence · Analytical workbench</div>
+    <h1>Forecasting under <i>uncertainty</i></h1>
+    <p>Monte Carlo simulation, Bayesian prediction updating, and sensitivity analysis for the Iran theater. All models run client-side; parameter priors are transparent; nothing is transmitted.</p>
+  </div>
+  <div class="rt">
+    <span class="pill a">Monte Carlo · 10k</span><span class="pill a">Bayesian</span><span class="pill w">Tornado</span><span class="pill">Scenario tree</span>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="cell"><div class="lbl">Brent · Wk 8 p50</div><div class="val" id="k-oil">—</div><div class="d wn" id="k-oil-d">—</div><svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" id="sp-oil"></svg></div>
+  <div class="cell"><div class="lbl">Cum cost · Wk 8 p50</div><div class="val" id="k-cost">—</div><div class="d dn" id="k-cost-d">—</div><svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" id="sp-cost"></svg></div>
+  <div class="cell"><div class="lbl">Esc rung · Wk 8 p50</div><div class="val" id="k-esc">—</div><div class="d wn" id="k-esc-d">—</div><svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" id="sp-esc"></svg></div>
+  <div class="cell"><div class="lbl">Civ cas · Wk 8 p50</div><div class="val" id="k-cas">—</div><div class="d dn" id="k-cas-d">—</div><svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none" id="sp-cas"></svg></div>
+  <div class="cell"><div class="lbl">P(Hormuz closed ≥14d)</div><div class="val" id="k-horm">—</div><div class="d wn" id="k-horm-d">—</div></div>
+  <div class="cell"><div class="lbl">Runtime</div><div class="val" id="k-run">—</div><div class="d" id="k-run-d">—</div></div>
+</div>
+
+<section class="work">
+  <div class="panel">
+    <h3><span>Scenario parameters</span><span class="sub">priors</span></h3>
+    <div class="body">
+      <div class="ctrl"><div class="lab"><span class="name">Iran aggression</span><span class="rv" id="v-iran">0.35</span></div><input type="range" min="0" max="100" value="35" id="s-iran"><div class="bar2"><span>Restraint</span><span>Direct action</span></div><div class="hint">Weekly probability of Iran direct kinetic action</div></div>
+      <div class="ctrl"><div class="lab"><span class="name">Coalition cohesion</span><span class="rv" id="v-coal">0.62</span></div><input type="range" min="0" max="100" value="62" id="s-coal"><div class="bar2"><span>Fragmenting</span><span>Unified</span></div><div class="hint">Buffers cost and oil shock</div></div>
+      <div class="ctrl"><div class="lab"><span class="name">Houthi reentry</span><span class="rv" id="v-hou">0.55</span></div><input type="range" min="0" max="100" value="55" id="s-hou"><div class="bar2"><span>Suppressed</span><span>Active</span></div><div class="hint">Weekly probability of Houthi attacks resuming</div></div>
+      <div class="ctrl"><div class="lab"><span class="name">VLS depletion</span><span class="rv" id="v-vls">0.40</span></div><input type="range" min="0" max="100" value="40" id="s-vls"><div class="bar2"><span>Sustainable</span><span>Strained</span></div><div class="hint">Munitions consumption; feeds cost nonlinearly</div></div>
+      <div class="ctrl"><div class="lab"><span class="name">Iran oil-shock σ</span><span class="rv" id="v-shock">$8 ± 3</span></div><input type="range" min="2" max="20" value="8" id="s-shock"><div class="bar2"><span>Muted</span><span>Severe</span></div><div class="hint">$/bbl shock conditional on Iran action</div></div>
+      <button class="btn" id="btn-run">Run simulation</button>
+      <div class="btn-row"><button class="btn ghost" id="btn-p-base">Base</button><button class="btn ghost" id="btn-p-esc">Escalation</button><button class="btn ghost" id="btn-p-deesc">De-esc</button></div>
+      <hr style="margin:18px 0 12px;border:none;border-top:1px solid var(--border)">
+      <div class="info">Trials <b>10,000</b> · Weeks <b>8</b> · Box–Muller N(0,1) · Coalition buffer dampens drift; cost model nonlinear in VLS pressure.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><span>Monte Carlo forecast</span><span class="sub" id="mc-sub">p10 / p50 / p90</span></h3>
+    <div class="body">
+      <div class="tabs"><button class="on" data-tab="oil">Oil $/bbl</button><button data-tab="cost">Cumulative cost</button><button data-tab="esc">Escalation rung</button><button data-tab="cas">Civilian casualties</button></div>
+      <div class="fan-wrap"><svg id="fan" viewBox="0 0 700 340" preserveAspectRatio="none"></svg>
+      <div class="legend"><span><span class="sw" style="background:rgba(109,217,255,.13)"></span>80% CI</span><span><span class="sw" style="background:rgba(109,217,255,.28)"></span>50% CI</span><span><span class="sw" style="background:#6DD9FF"></span>Median</span><span><span class="sw" style="background:rgba(125,219,176,.2);border:1px solid var(--border-2)"></span>Sample paths</span></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><span>V8 prediction tracker</span><span class="sub">Bayesian</span></h3>
+    <div class="body">
+      <div id="preds"></div>
+      <div class="btn-row"><button class="btn ghost" id="btn-reset-ev">Reset evidence</button></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3><span>Sensitivity tornado</span><span class="sub">Δ wk-8 median cost</span></h3>
+    <div class="body"><div id="tornado"></div>
+    <div class="info" style="margin-top:12px">Bars: Δ cost when each parameter is varied ±0.2. Longest bar = most decision-relevant uncertainty.</div></div>
+  </div>
+
+  <div class="panel">
+    <h3><span>Probability-mass scenario tree</span><span class="sub">joint P</span></h3>
+    <div class="body"><svg id="tree" viewBox="0 0 700 280" preserveAspectRatio="xMidYMid meet" style="width:100%;display:block"></svg>
+    <div class="info" style="margin-top:10px">Leaf radius proportional to joint probability. Color = endstate.</div></div>
+  </div>
+
+  <div class="panel">
+    <h3><span>OSINT evidence feed</span><span class="sub">simulated</span></h3>
+    <div class="body"><div class="info" style="margin-bottom:10px">Click <b>+</b> to pipe into the Bayesian updater.</div>
+    <div class="feed" id="feed"></div></div>
+  </div>
+</section>
+
+<footer class="ftr">
+  <div>Intel Workbench v2.0 — <a href="./index.html">Portfolio</a> · <a href="https://github.com/Sacandaga/Coding-Practice">GitHub</a></div>
+  <div>Vanilla JavaScript · all client-side</div>
+</footer>
+</div>
+
+<script>
+function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+let SEED=Math.floor(Math.random()*1e9),rng=mulberry32(SEED);
+function reseed(s){SEED=s;rng=mulberry32(s);document.getElementById('i-seed').textContent=s.toString(16).slice(0,8);}
+reseed(SEED);
+function randn(mu=0,s=1){const u1=Math.max(1e-9,rng()),u2=rng();return mu+s*Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);}
+const P={iran:.35,coal:.62,hou:.55,vls:.40,shock:8};
+const INIT={oil:92,cost:14.2,rung:7,cas:280};
+
+function runMC(p,trials=10000,weeks=8){
+  const paths={oil:[],cost:[],rung:[],cas:[]};
+  ['oil','cost','rung','cas'].forEach((k,i)=>{
+    paths[k]=Array.from({length:weeks+1},()=>new Float32Array(trials));
+    for(let t=0;t<trials;t++) paths[k][0][t]=[INIT.oil,INIT.cost,INIT.rung,INIT.cas][i];
+  });
+  for(let t=0;t<trials;t++){
+    let oil=INIT.oil,cost=INIT.cost,rung=INIT.rung,cas=INIT.cas;
+    for(let w=1;w<=weeks;w++){
+      const iranEv=rng()<p.iran;
+      const oilShock=iranEv?randn(p.shock,p.shock*.35):randn(0,1.4);
+      const drift=.4+randn(0,.9);
+      oil=Math.max(70,oil+drift+oilShock-p.coal*.55);
+      const houEv=rng()<p.hou;
+      const vlsPr=1+Math.pow(p.vls,1.8)*1.4;
+      cost+=Math.max(0,(.32+(1-p.coal)*.45)*vlsPr)+Math.max(0,iranEv?randn(.65,.18):randn(.14,.05))+Math.max(0,houEv?randn(.42,.12):randn(.08,.03));
+      rung=Math.max(1,Math.min(10,rung+(iranEv?randn(.35,.2):0)-.08));
+      let sc=0;for(let i=0;i<4;i++)if(rng()<p.hou*.45)sc++;
+      cas+=sc*Math.max(0,randn(14,6));
+      paths.oil[w][t]=oil;paths.cost[w][t]=cost;paths.rung[w][t]=rung;paths.cas[w][t]=cas;
+    }
+  }
+  const pct={oil:[],cost:[],rung:[],cas:[]},PC=[.1,.25,.5,.75,.9];
+  for(let w=0;w<=weeks;w++){
+    for(const k of ['oil','cost','rung','cas']){
+      const arr=Array.from(paths[k][w]);arr.sort((a,b)=>a-b);
+      pct[k].push(PC.map(q=>arr[Math.floor(q*arr.length)]));
+    }
+  }
+  let hc=0;
+  for(let t=0;t<trials;t++){let r=0,h=false;for(let w=1;w<=weeks;w++){if(paths.oil[w][t]>115){r++;if(r>=2){h=true;break;}}else r=0;}if(h)hc++;}
+  return{weeks,trials,paths,pct,hormProb:hc/trials};
+}
+
+const PREDS=[
+  {id:'p1',text:'Houthi capability degrades 60–80% within 30 days of sustained strikes',prior:.55,evidence:[
+    {id:'e1a',label:'72% drop in UAV/missile frequency, week 3',source:'CENTCOM',lrT:.82,lrF:.25},
+    {id:'e1b',label:'Al-Jawf leadership strike confirmed, BDA ≥ 80%',source:'JIOC',lrT:.72,lrF:.30},
+    {id:'e1c',label:'Hodeidah port resumed daytime ops',source:'Maxar',lrT:.18,lrF:.55}]},
+  {id:'p2',text:'Iran avoids direct kinetic engagement',prior:.70,evidence:[
+    {id:'e2a',label:'IRGC Navy fast-attack swarm at SOH',source:'MARAD',lrT:.35,lrF:.72},
+    {id:'e2b',label:'Tehran press release emphasizes restraint',source:'Al Jazeera',lrT:.78,lrF:.40},
+    {id:'e2c',label:'Quds Force Tehran meeting — elevated comms',source:'SIGINT',lrT:.30,lrF:.68}]},
+  {id:'p3',text:'Coalition cohesion declines below 0.7 within 60 days',prior:.60,evidence:[
+    {id:'e3a',label:'France declines offensive participation',source:'Reuters',lrT:.82,lrF:.35},
+    {id:'e3b',label:'India/Pakistan formally decline',source:'Axios',lrT:.76,lrF:.30},
+    {id:'e3c',label:'UK commits additional T-26 escort',source:'FT',lrT:.28,lrF:.62}]},
+  {id:'p4',text:'Oil remains below $110/bbl absent Hormuz closure',prior:.65,evidence:[
+    {id:'e4a',label:'Saudi 1.8 Mbpd rerouted via Yanbu',source:'EIA',lrT:.80,lrF:.35},
+    {id:'e4b',label:'SPR release — 30M barrels authorized',source:'DOE',lrT:.72,lrF:.30},
+    {id:'e4c',label:'MOIS reiterates Hormuz closure threat',source:'State',lrT:.22,lrF:.68}]},
+  {id:'p5',text:'Houthi political leadership remains intact',prior:.75,evidence:[
+    {id:'e5a',label:'Abdul-Malik al-Houthi weekly address continues',source:'Al-Masirah',lrT:.85,lrF:.40},
+    {id:'e5b',label:"Sana'a governance functions operational",source:'UN OCHA',lrT:.80,lrF:.38},
+    {id:'e5c',label:'Successor council reportedly forming',source:'CTC',lrT:.30,lrF:.65}]},
+  {id:'p6',text:'Strike campaign exceeds 90 days if Option 1',prior:.80,evidence:[
+    {id:'e6a',label:'Houthi launcher reconstitution at 45%',source:'DIA',lrT:.78,lrF:.32},
+    {id:'e6b',label:'VLS inventory CENTCOM AOR 41%',source:'CNO',lrT:.74,lrF:.30},
+    {id:'e6c',label:'Ceasefire framework tabled by Oman',source:'Reuters',lrT:.25,lrF:.68}]},
+];
+const OBS={};
+function bayesPost(p,obs){let l=Math.log(p.prior/(1-p.prior));for(const e of p.evidence)if(obs[e.id])l+=Math.log(e.lrT/e.lrF);return 1/(1+Math.exp(-l));}
+
+function tornado(b){
+  const base=runMC(b,2000,8).pct.cost[8][2];
+  const axes=[{k:'iran',l:'Iran aggression'},{k:'coal',l:'Coalition cohesion'},{k:'hou',l:'Houthi reentry'},{k:'vls',l:'VLS depletion'}];
+  return axes.map(a=>{
+    const lo=runMC({...b,[a.k]:Math.max(0,b[a.k]-.2)},2000,8).pct.cost[8][2];
+    const hi=runMC({...b,[a.k]:Math.min(1,b[a.k]+.2)},2000,8).pct.cost[8][2];
+    return{label:a.l,low:lo-base,high:hi-base,range:Math.abs(hi-lo)};
+  }).sort((a,b)=>b.range-a.range);
+}
+
+function tree(p){
+  const br=[
+    {name:'Sustained strikes',p:.6,children:[
+      {name:'Iran direct action',p:p.iran,children:[
+        {name:'Hormuz closure',p:.55,out:'RED',cost:32.4},
+        {name:'Proxy escalation',p:.45,out:'AMBER',cost:22.1}]},
+      {name:'Iran restraint',p:1-p.iran,children:[
+        {name:'Houthi reentry',p:p.hou,out:'AMBER',cost:18.7},
+        {name:'Houthi degraded',p:1-p.hou,out:'GREEN',cost:12.3}]}]},
+    {name:'Precision + diplomacy',p:.25,children:[
+      {name:'Oman breakthrough',p:p.coal*.5,children:[
+        {name:'Ceasefire holds',p:.65,out:'GREEN',cost:9.8},
+        {name:'Ceasefire collapses',p:.35,out:'AMBER',cost:17.2}]},
+      {name:'Diplomacy fails',p:1-p.coal*.5,children:[
+        {name:'Escalate to Op 1',p:.70,out:'AMBER',cost:19.5},
+        {name:'Hold pattern',p:.30,out:'AMBER',cost:15.1}]}]},
+    {name:'Maritime interdiction',p:.15,children:[
+      {name:'Deterrence holds',p:1-p.iran*.7,children:[
+        {name:'Attacks continue',p:p.hou,out:'AMBER',cost:14.8},
+        {name:'Attacks pause',p:1-p.hou,out:'GREEN',cost:11.2}]},
+      {name:'Deterrence fails',p:p.iran*.7,children:[
+        {name:'Shipping disrupted',p:.80,out:'RED',cost:26.3},
+        {name:'Shipping resilient',p:.20,out:'AMBER',cost:19.7}]}]},
+  ];
+  const walk=(n,pp)=>{n.jointP=pp*n.p;if(n.children)n.children.forEach(c=>walk(c,n.jointP));};
+  br.forEach(b=>walk(b,1));
+  return br;
+}
+
+const FEED=[
+  {t:'T+15d',src:'CENTCOM',text:'Houthi attacks week 3: 72% below baseline. Sustained suppression.',ev:'e1a'},
+  {t:'T+14d',src:'Reuters',text:'France declines offensive participation; intelligence-sharing only.',ev:'e3a'},
+  {t:'T+13d',src:'EIA',text:'Saudi 1.8 Mbpd rerouted via Yanbu terminal.',ev:'e4a'},
+  {t:'T+12d',src:'Al Jazeera',text:'Tehran press release emphasizes restraint; calls for UNSC action.',ev:'e2b'},
+  {t:'T+11d',src:'MARAD',text:'IRGC Navy fast-attack swarm drilling at Strait of Hormuz.',ev:'e2a'},
+  {t:'T+10d',src:'CNO Log',text:'VLS CENTCOM AOR at 41% — threshold approaching.',ev:'e6b'},
+  {t:'T+9d',src:'Al-Masirah',text:'Abdul-Malik al-Houthi weekly address continues.',ev:'e5a'},
+  {t:'T+8d',src:'JIOC',text:'Al-Jawf leadership strike confirmed. BDA ≥ 80%.',ev:'e1b'},
+  {t:'T+7d',src:'DOE',text:'SPR release of 30M barrels authorized.',ev:'e4b'},
+  {t:'T+6d',src:'Axios',text:'India and Pakistan formally decline coalition.',ev:'e3b'},
+  {t:'T+5d',src:'Maxar',text:'Hodeidah port shows restored daytime ops.',ev:'e1c'},
+  {t:'T+4d',src:'DIA',text:'Houthi launcher reconstitution rate 45%.',ev:'e6a'},
+];
+
+const $=id=>document.getElementById(id);
+let lastMC=null,activeTab='oil';
+
+function drawFan(){
+  if(!lastMC)return;
+  const svg=$('fan'),W=700,H=340,pad={l:48,r:24,t:18,b:30},ws=lastMC.weeks;
+  let data,fmtV;
+  if(activeTab==='oil'){data=lastMC.pct.oil;fmtV=v=>'$'+v.toFixed(0);}
+  else if(activeTab==='cost'){data=lastMC.pct.cost;fmtV=v=>'$'+v.toFixed(1)+'B';}
+  else if(activeTab==='esc'){data=lastMC.pct.rung;fmtV=v=>v.toFixed(1);}
+  else{data=lastMC.pct.cas;fmtV=v=>Math.round(v).toString();}
+  let yMin=Infinity,yMax=-Infinity;
+  data.forEach(r=>{yMin=Math.min(yMin,r[0]);yMax=Math.max(yMax,r[4]);});
+  const pp=(yMax-yMin)*.08;yMin-=pp;yMax+=pp;
+  if(activeTab==='esc'){yMin=Math.max(0,yMin-.5);yMax=Math.min(10,yMax+.5);}
+  const xAt=w=>pad.l+(w/ws)*(W-pad.l-pad.r);
+  const yAt=v=>pad.t+(1-(v-yMin)/(yMax-yMin))*(H-pad.t-pad.b);
+  let s='<g stroke="#1F2735" stroke-width="1" fill="none">';
+  for(let i=0;i<=4;i++){
+    const y=pad.t+i*(H-pad.t-pad.b)/4,v=yMax-i*(yMax-yMin)/4;
+    s+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}"/>`;
+    s+=`<text x="${pad.l-8}" y="${y+4}" font-family="JetBrains Mono" font-size="10" fill="#5A6574" text-anchor="end">${activeTab==='cost'?'$'+v.toFixed(0)+'B':activeTab==='oil'?'$'+v.toFixed(0):activeTab==='esc'?v.toFixed(1):Math.round(v)}</text>`;
+  }
+  for(let w=0;w<=ws;w++){
+    s+=`<line x1="${xAt(w)}" y1="${pad.t}" x2="${xAt(w)}" y2="${H-pad.b}" opacity="${w===0?1:.35}"/>`;
+    s+=`<text x="${xAt(w)}" y="${H-pad.b+18}" font-family="JetBrains Mono" font-size="10" fill="#5A6574" text-anchor="middle">W${w}</text>`;
+  }
+  s+='</g>';
+  let po='';for(let w=0;w<=ws;w++)po+=(w===0?'M':'L')+xAt(w)+','+yAt(data[w][4])+' ';for(let w=ws;w>=0;w--)po+='L'+xAt(w)+','+yAt(data[w][0])+' ';po+='Z';
+  s+=`<path d="${po}" fill="rgba(109,217,255,.13)"/>`;
+  let pi='';for(let w=0;w<=ws;w++)pi+=(w===0?'M':'L')+xAt(w)+','+yAt(data[w][3])+' ';for(let w=ws;w>=0;w--)pi+='L'+xAt(w)+','+yAt(data[w][1])+' ';pi+='Z';
+  s+=`<path d="${pi}" fill="rgba(109,217,255,.28)"/>`;
+  const key=activeTab==='oil'?'oil':activeTab==='cost'?'cost':activeTab==='esc'?'rung':'cas';
+  for(let i=0;i<48;i++){
+    const t=Math.floor(lastMC.trials*i/48);let p='';
+    for(let w=0;w<=ws;w++)p+=(w===0?'M':'L')+xAt(w)+','+yAt(lastMC.paths[key][w][t])+' ';
+    s+=`<path d="${p}" stroke="rgba(125,219,176,.08)" stroke-width="1" fill="none"/>`;
+  }
+  let m='';for(let w=0;w<=ws;w++)m+=(w===0?'M':'L')+xAt(w)+','+yAt(data[w][2])+' ';
+  s+=`<path d="${m}" stroke="#6DD9FF" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  for(let w=0;w<=ws;w++)s+=`<circle cx="${xAt(w)}" cy="${yAt(data[w][2])}" r="3" fill="#6DD9FF"/>`;
+  s+=`<text x="${W-pad.r}" y="${pad.t-4}" font-family="JetBrains Mono" font-size="10.5" fill="#6DD9FF" text-anchor="end">p50 @ W${ws} = ${fmtV(data[ws][2])}</text>`;
+  svg.innerHTML=s;
+}
+
+function drawPreds(){
+  let s='';
+  for(const p of PREDS){
+    const post=bayesPost(p,OBS),d=post-p.prior;
+    const dc=d>.02?'up':d<-.02?'dn':'',ds=(d>=0?'+':'')+(d*100).toFixed(1)+'pp';
+    s+=`<div class="pred" data-id="${p.id}">
+      <div class="head"><div class="txt">${p.text}</div><div class="prob"><div class="n">${(post*100).toFixed(0)}%</div><div class="delta ${dc}">Δ ${ds}</div></div></div>
+      <div class="pbar" style="--w:${post*100}%"></div>
+      <div class="evi"><p class="h">Prior ${(p.prior*100).toFixed(0)}% → posterior ${(post*100).toFixed(0)}%</p>
+      ${p.evidence.map(e=>{const on=!!OBS[e.id],lr=e.lrT/e.lrF;
+        return `<div class="evi-item ${on?'on':''}" data-ev="${e.id}"><div class="tog">✓</div><div class="body"><div class="lbl">${e.label}</div><div class="meta">${e.source}</div><div class="lr">LR ${lr.toFixed(2)} ${lr>1?'↑':'↓'} · P(E|H)=${e.lrT.toFixed(2)} · P(E|¬H)=${e.lrF.toFixed(2)}</div></div></div>`;
+      }).join('')}</div></div>`;
+  }
+  $('preds').innerHTML=s;
+  $('preds').querySelectorAll('.pred .head').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+  $('preds').querySelectorAll('.evi-item').forEach(it=>it.addEventListener('click',e=>{e.stopPropagation();OBS[it.dataset.ev]=!OBS[it.dataset.ev];drawPreds();document.querySelector(`.pred[data-id="${it.closest('.pred').dataset.id}"]`).classList.add('open');updateFeed();}));
+}
+
+function drawTornado(){
+  const t=tornado(P),mx=Math.max(...t.map(r=>Math.max(Math.abs(r.low),Math.abs(r.high))));
+  let s='';
+  for(const r of t){
+    const ls=r.low<0?Math.abs(r.low)/mx*50:0,rs=r.high>0?r.high/mx*50:0;
+    const lsR=r.low>0?r.low/mx*50:0,hsL=r.high<0?Math.abs(r.high)/mx*50:0;
+    s+=`<div class="tor-row"><div class="tor-lbl">${r.label}</div>
+    <div class="tor-viz"><div class="tor-ax"></div>
+      ${ls>0?`<div class="tor-bar neg" style="width:${ls}%;"></div>`:''}
+      ${hsL>0?`<div class="tor-bar neg" style="width:${hsL}%;"></div>`:''}
+      ${rs>0?`<div class="tor-bar pos" style="width:${rs}%;"></div>`:''}
+      ${lsR>0?`<div class="tor-bar pos" style="width:${lsR}%;left:50%;"></div>`:''}
+    </div><div class="tor-val">±$${r.range.toFixed(1)}B</div></div>`;
+  }
+  $('tornado').innerHTML=s;
+}
+
+function drawTree(){
+  const br=tree(P),W=700,H=280,cx=[40,200,400,620];
+  let s=`<circle cx="${cx[0]}" cy="${H/2}" r="5" fill="#6DD9FF"/><text x="${cx[0]-20}" y="${H/2+4}" font-family="JetBrains Mono" font-size="10" fill="#8B95A3">NOW</text>`;
+  const ty=[H*.18,H*.5,H*.82];
+  br.forEach((b,i)=>{
+    s+=`<line x1="${cx[0]}" y1="${H/2}" x2="${cx[1]}" y2="${ty[i]}" stroke="#2B3446" stroke-width="1"/>`;
+    s+=`<circle cx="${cx[1]}" cy="${ty[i]}" r="4" fill="#C8D0DC"/>`;
+    s+=`<text x="${cx[1]+8}" y="${ty[i]-8}" font-family="Inter" font-size="11" fill="#C8D0DC" font-weight="500">${b.name}</text>`;
+    s+=`<text x="${cx[1]+8}" y="${ty[i]+6}" font-family="JetBrains Mono" font-size="9.5" fill="#5A6574">p=${b.p.toFixed(2)}</text>`;
+    b.children.forEach((c,ci)=>{
+      const yC=ty[i]+(ci-(b.children.length-1)/2)*26;
+      s+=`<line x1="${cx[1]}" y1="${ty[i]}" x2="${cx[2]}" y2="${yC}" stroke="#1F2735" stroke-width=".8"/>`;
+      s+=`<circle cx="${cx[2]}" cy="${yC}" r="3" fill="#8B95A3"/>`;
+      s+=`<text x="${cx[2]+6}" y="${yC+3}" font-family="Inter" font-size="10" fill="#8B95A3">${c.name} · ${c.p.toFixed(2)}</text>`;
+      c.children.forEach((tN,ti)=>{
+        const yT=yC+(ti-(c.children.length-1)/2)*11;
+        const col=tN.out==='RED'?'#FF7A8A':tN.out==='AMBER'?'#FFB186':'#7DDBB0';
+        const r=2+tN.jointP*60;
+        s+=`<line x1="${cx[2]}" y1="${yC}" x2="${cx[3]-r}" y2="${yT}" stroke="${col}" stroke-width=".6" opacity="${Math.min(.9,.2+tN.jointP*8)}"/>`;
+        s+=`<circle cx="${cx[3]}" cy="${yT}" r="${r}" fill="${col}" opacity=".85"/>`;
+        s+=`<text x="${cx[3]+r+4}" y="${yT+3}" font-family="JetBrains Mono" font-size="8.5" fill="${col}">${(tN.jointP*100).toFixed(1)}% · ${tN.out}</text>`;
+      });
+    });
+  });
+  $('tree').innerHTML=s;
+}
+
+function spark(id,series,color='#6DD9FF'){
+  const svg=$(id);if(!svg||!series.length)return;
+  const min=Math.min(...series),max=Math.max(...series),r=max-min||1,n=series.length;
+  let p='';series.forEach((v,i)=>{p+=(i===0?'M':'L')+(i/(n-1))*100+','+(22-((v-min)/r)*20)+' ';});
+  svg.innerHTML=`<path d="${p}" stroke="${color}" stroke-width="1.5" fill="none"/>`;
+}
+
+function updateStrip(){
+  if(!lastMC)return;
+  const o8=lastMC.pct.oil[8][2],o0=lastMC.pct.oil[0][2];
+  const c8=lastMC.pct.cost[8][2],e8=lastMC.pct.rung[8][2],x8=lastMC.pct.cas[8][2];
+  $('k-oil').textContent='$'+o8.toFixed(1);
+  $('k-oil-d').textContent=(o8>=o0?'↑':'↓')+' '+Math.abs(o8-o0).toFixed(1)+' vs T0';
+  $('k-oil-d').className='d '+(o8>105?'dn':o8>95?'wn':'');
+  $('k-cost').textContent='$'+c8.toFixed(1)+'B';
+  $('k-cost-d').textContent='+$'+(c8-INIT.cost).toFixed(1)+'B · 8w';
+  $('k-esc').textContent=e8.toFixed(1);
+  $('k-esc-d').textContent=(e8>=INIT.rung?'↑':'↓')+' '+Math.abs(e8-INIT.rung).toFixed(1);
+  $('k-esc-d').className='d '+(e8>8?'dn':e8>6?'wn':'');
+  $('k-cas').textContent=Math.round(x8);
+  $('k-cas-d').textContent='+'+Math.round(x8-INIT.cas)+' · 8w';
+  $('k-horm').textContent=(lastMC.hormProb*100).toFixed(0)+'%';
+  $('k-horm-d').textContent='p(oil>$115 ≥2w)';
+  $('k-horm-d').className='d '+(lastMC.hormProb>.3?'dn':lastMC.hormProb>.15?'wn':'');
+  spark('sp-oil',lastMC.pct.oil.map(r=>r[2]),'#FFB186');
+  spark('sp-cost',lastMC.pct.cost.map(r=>r[2]),'#FF7A8A');
+  spark('sp-esc',lastMC.pct.rung.map(r=>r[2]),'#FFB186');
+  spark('sp-cas',lastMC.pct.cas.map(r=>r[2]),'#FF7A8A');
+}
+
+function drawFeed(){
+  $('feed').innerHTML=FEED.map(f=>`<div class="feed-item" data-ev="${f.ev}"><div class="t">${f.t}</div><div class="c"><div class="src">${f.src}</div><div class="txt">${f.text}</div></div><button class="add ${OBS[f.ev]?'used':''}">${OBS[f.ev]?'✓':'+'}</button></div>`).join('');
+  $('feed').querySelectorAll('.add').forEach(b=>b.addEventListener('click',()=>{const ev=b.closest('.feed-item').dataset.ev;OBS[ev]=!OBS[ev];drawPreds();updateFeed();}));
+}
+function updateFeed(){document.querySelectorAll('.feed-item').forEach(it=>{const b=it.querySelector('.add');if(OBS[it.dataset.ev]){b.classList.add('used');b.textContent='✓';}else{b.classList.remove('used');b.textContent='+';}});}
+
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeTab=b.dataset.tab;drawFan();}));
+
+function wireSliders(){
+  [['s-iran','v-iran',v=>(v/100).toFixed(2),v=>P.iran=v/100],
+   ['s-coal','v-coal',v=>(v/100).toFixed(2),v=>P.coal=v/100],
+   ['s-hou','v-hou',v=>(v/100).toFixed(2),v=>P.hou=v/100],
+   ['s-vls','v-vls',v=>(v/100).toFixed(2),v=>P.vls=v/100],
+   ['s-shock','v-shock',v=>`$${v} ± ${(v*.35).toFixed(1)}`,v=>P.shock=v]].forEach(([sId,vId,f,set])=>{
+    const s=$(sId),v=$(vId);
+    s.addEventListener('input',()=>{v.textContent=f(+s.value);set(+s.value);});
+  });
+}
+
+function run(){
+  const t0=performance.now();
+  reseed(Math.floor(Math.random()*1e9));
+  lastMC=runMC(P,10000,8);
+  $('k-run').textContent=(performance.now()-t0).toFixed(0)+'ms';
+  $('k-run-d').textContent='10k × 8w';
+  $('mc-sub').textContent=`p10 / p50 / p90 · seed ${SEED.toString(16).slice(0,6)}`;
+  drawFan();updateStrip();drawTornado();drawTree();
+}
+
+function preset(n){
+  const P2={base:{iran:.35,coal:.62,hou:.55,vls:.40,shock:8},esc:{iran:.70,coal:.45,hou:.75,vls:.65,shock:14},deesc:{iran:.15,coal:.78,hou:.30,vls:.25,shock:5}}[n];
+  Object.assign(P,P2);
+  $('s-iran').value=P2.iran*100;$('v-iran').textContent=P2.iran.toFixed(2);
+  $('s-coal').value=P2.coal*100;$('v-coal').textContent=P2.coal.toFixed(2);
+  $('s-hou').value=P2.hou*100;$('v-hou').textContent=P2.hou.toFixed(2);
+  $('s-vls').value=P2.vls*100;$('v-vls').textContent=P2.vls.toFixed(2);
+  $('s-shock').value=P2.shock;$('v-shock').textContent=`$${P2.shock} ± ${(P2.shock*.35).toFixed(1)}`;
+  run();
+}
+
+$('btn-run').addEventListener('click',run);
+$('btn-p-base').addEventListener('click',()=>preset('base'));
+$('btn-p-esc').addEventListener('click',()=>preset('esc'));
+$('btn-p-deesc').addEventListener('click',()=>preset('deesc'));
+$('btn-reset-ev').addEventListener('click',()=>{for(const k in OBS)delete OBS[k];drawPreds();updateFeed();});
+
+function utcTick(){const d=new Date(),z=n=>String(n).padStart(2,'0');$('utc').textContent=`${d.getUTCFullYear()}-${z(d.getUTCMonth()+1)}-${z(d.getUTCDate())} ${z(d.getUTCHours())}:${z(d.getUTCMinutes())}:${z(d.getUTCSeconds())} UTC`;}
+utcTick();setInterval(utcTick,1000);
+
+wireSliders();drawPreds();drawFeed();run();
+</script>
+</body>
+</html>

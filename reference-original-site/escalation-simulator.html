@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escalation Simulator — Yemen / Iran Campaign</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06080d;--bg2:#0c1018;--card:#151d2e;--border:#1e2b40;--text:#d8dee9;--text2:#8898aa;--text3:#4e5d6e;--accent:#4793e0;--red:#ef5350;--amber:#ffc107;--green:#4caf50;--teal:#26c6da;--purple:#ab47bc;--serif:'Instrument Serif',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+.container{max-width:1200px;margin:0 auto;padding:20px 24px}
+header{padding:24px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px}
+h1{font-family:var(--serif);font-size:clamp(24px,4vw,36px);font-weight:400;color:#fff}
+h1 em{font-style:italic;color:var(--accent)}
+.lead{font-size:14px;color:var(--text2);margin-top:6px}
+
+.layout{display:grid;grid-template-columns:200px 1fr 260px;gap:20px;align-items:start}
+
+.ladder{position:sticky;top:20px}
+.ladder h3{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.rung{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:4px;cursor:default;transition:all 0.2s;font-size:12px;position:relative}
+.rung .rnum{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:18px}
+.rung .rname{flex:1;color:var(--text2);line-height:1.3}
+.rung .rdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rung.past{opacity:0.5}.rung.past .rname{text-decoration:line-through}
+.rung.current{background:rgba(71,147,224,0.1);border:1px solid var(--accent)}
+.rung.current .rname{color:#fff;font-weight:500}
+.rung.future{opacity:0.3}
+.rung-connector{width:1px;height:4px;background:var(--border);margin-left:14px}
+
+.main-panel{min-height:500px}
+.scenario-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:16px;animation:fadeUp 0.3s ease-out}
+.scenario-card h2{font-family:var(--serif);font-size:22px;color:#fff;font-weight:400;margin-bottom:4px}
+.scenario-card .sc-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
+.scenario-card .sc-body{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+.options-grid{display:grid;gap:10px}
+.option-btn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;text-align:left;transition:all 0.2s;position:relative}
+.option-btn:hover{border-color:var(--accent);background:rgba(71,147,224,0.04);transform:translateY(-1px)}
+.option-btn .opt-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.opt-escalate .opt-label{color:var(--red)}.opt-negotiate .opt-label{color:var(--green)}.opt-covert .opt-label{color:var(--purple)}.opt-maintain .opt-label{color:var(--amber)}
+.option-btn .opt-title{font-size:14px;font-weight:500;color:#fff;margin-bottom:4px}
+.option-btn .opt-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.option-btn .opt-cost{font-family:var(--mono);font-size:11px;color:var(--amber);margin-top:6px}
+
+.result-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px;animation:fadeUp 0.3s ease-out}
+.result-card h3{font-size:14px;font-weight:500;margin-bottom:8px}
+.result-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.result-card .next-btn{margin-top:16px;padding:10px 24px;background:var(--accent);border:none;color:#fff;border-radius:8px;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:500;transition:all 0.2s}
+.result-card .next-btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+
+.dashboard{position:sticky;top:20px}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
+.dash-card h4{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.meter{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin:6px 0}
+.meter-fill{height:100%;border-radius:4px;transition:width 0.5s ease}
+.dash-val{font-family:var(--mono);font-size:18px;font-weight:500}
+.dash-label{font-size:11px;color:var(--text3);margin-top:2px}
+.endstate{padding:12px 16px;border-radius:8px;text-align:center;font-size:13px;font-weight:500;margin-top:8px}
+.endstate-green{background:rgba(76,175,80,0.1);color:var(--green);border:1px solid rgba(76,175,80,0.3)}
+.endstate-amber{background:rgba(255,193,7,0.1);color:var(--amber);border:1px solid rgba(255,193,7,0.3)}
+.endstate-red{background:rgba(239,83,80,0.1);color:var(--red);border:1px solid rgba(239,83,80,0.3)}
+
+.log{margin-top:16px}
+.log h4{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.log-entry{font-size:11px;padding:6px 0;border-bottom:1px solid rgba(30,43,64,0.3);color:var(--text2)}
+.log-entry .le-rung{font-family:var(--mono);color:var(--text3);margin-right:6px}
+
+.restart-btn{margin-top:20px;width:100%;padding:10px;background:none;border:1px solid var(--border);color:var(--text3);border-radius:8px;cursor:pointer;font-family:var(--sans);font-size:12px;transition:all 0.2s}
+.restart-btn:hover{border-color:var(--red);color:var(--red)}
+
+footer{padding:24px 0;border-top:1px solid var(--border);font-size:11px;color:var(--text3);margin-top:32px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.ladder,.dashboard{position:static}.ladder{display:flex;overflow-x:auto;gap:4px;padding-bottom:8px}.rung-connector{display:none}.rung{white-space:nowrap;flex-shrink:0}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>Escalation <em>simulator</em></h1>
+<p class="lead">Walk through the 10-rung escalation ladder. At each rung, choose a U.S. response. The adversary reacts based on probability-weighted outcomes drawn from the Iran/Proxy Response Matrix. Your choices cascade — there is no undo.</p>
+</header>
+
+<div class="layout">
+<div class="ladder" id="ladder"></div>
+<div class="main-panel" id="mainPanel"></div>
+<div class="dashboard">
+<div class="dash-card">
+<h4>Escalation level</h4>
+<div class="dash-val" id="d-esc" style="color:var(--green)">1 / 10</div>
+<div class="meter"><div class="meter-fill" id="m-esc" style="width:10%;background:var(--green)"></div></div>
+</div>
+<div class="dash-card">
+<h4>Oil price (Brent)</h4>
+<div class="dash-val" id="d-oil">$74/bbl</div>
+<div class="dash-label" id="d-oil-delta"></div>
+</div>
+<div class="dash-card">
+<h4>Campaign cost (cumulative)</h4>
+<div class="dash-val" id="d-cost" style="color:var(--amber)">$0</div>
+</div>
+<div class="dash-card">
+<h4>Coalition cohesion</h4>
+<div class="meter"><div class="meter-fill" id="m-coal" style="width:80%;background:var(--accent)"></div></div>
+<div class="dash-label" id="d-coal">Strong (80%)</div>
+</div>
+<div class="dash-card">
+<h4>Diplomatic capital</h4>
+<div class="meter"><div class="meter-fill" id="m-diplo" style="width:70%;background:var(--teal)"></div></div>
+<div class="dash-label" id="d-diplo">Moderate (70%)</div>
+</div>
+<div class="dash-card">
+<h4>Endstate assessment</h4>
+<div class="endstate endstate-green" id="d-endstate">FAVORABLE — Conflict contained</div>
+</div>
+<div class="log" id="log"><h4>Decision log</h4></div>
+<button class="restart-btn" onclick="restart()">Restart simulation</button>
+</div>
+</div>
+
+<footer>
+<p>Escalation ladder adapted from Herman Kahn's framework, calibrated against RAND escalation management literature and Iranian/Houthi decision-making context. Probability weightings derived from open-source analysis. This is a simulation/training tool for academic/educational purposes. AI assistance: Claude Opus 4.6, Anthropic.</p>
+</footer>
+</div>
+
+<script>
+const state = {rung:0, oil:74, cost:0, coalition:80, diplo:70, esc:1, log:[]};
+
+const rungs = [
+  {name:'Status quo',color:'var(--green)',desc:'Pre-November 2023. Houthi forces control northern Yemen. Red Sea shipping flows unimpeded. Iran provides weapons through Hodeidah. No U.S. military action against Houthis.'},
+  {name:'Maritime harassment',color:'var(--green)',desc:'November 2023. Houthis begin attacking commercial shipping in the Red Sea following the Gaza war. 12-15% of global trade transits this corridor. Insurance rates spike. Vessels begin rerouting around Africa.'},
+  {name:'Limited US-UK strikes',color:'var(--amber)',desc:'January 2024. Operation Prosperity Guardian + episodic US-UK strikes on Houthi military targets. Biden administration launches cruise missiles against radar, missile, and drone sites. Houthis intensify operations in response.'},
+  {name:'Sustained air campaign',color:'var(--amber)',desc:'March 2025. Operation Rough Rider. Trump orders sustained daily strikes — 1,100+ targets hit over 7 weeks. $750M+ cost. 2 aircraft lost, 7 MQ-9 drones shot down. 224 civilian casualties (Airwars). Houthis continue attacking.'},
+  {name:'HVT decapitation',color:'var(--amber)',desc:'August 2025. Israel Operation Lucky Drop kills Houthi PM al-Rahawi, Defense Minister al-Atifi, Chief of Staff al-Ghamari, and most of the Houthi cabinet. 12+ ministers killed in single strike on Sana\'a. Leadership disperses to rural areas.'},
+  {name:'US-Houthi ceasefire',color:'var(--green)',desc:'May 2025. Oman-brokered ceasefire. Houthis stop attacking US vessels; US stops bombing Yemen. Houthis explicitly exclude Israel. Trump calls it a "capitulation." Analysts note the US "backed down." Red Sea shipping partially resumes.'},
+  {name:'US-Israel strike Iran',color:'var(--red)',desc:'February 28, 2026. Operation Epic Fury. Surprise US-Israeli strikes kill Supreme Leader Khamenei, destroy 75%+ of Iran\'s missile launchers, hit 2,000+ targets. Iran retaliates — 170 ballistic missiles at Israel, strikes on US bases in Bahrain, Qatar, Kuwait, UAE.'},
+  {name:'Iran closes Hormuz',color:'var(--red)',desc:'March 4, 2026. Iran effectively closes the Strait of Hormuz using cheap drone strikes on commercial vessels. Insurance-driven shipping halt. 20% of global oil supply disrupted. Brent crude surges past $126/bbl. IEA: "largest supply disruption in history."'},
+  {name:'Houthis re-enter war',color:'var(--red)',desc:'March 28, 2026. After a month-long strategic pause, Houthis resume attacks on Israel with ballistic missiles. Deputy info minister: "Closing Bab el-Mandeb is among our options." Saudi Yanbu oil reroute through Red Sea now threatened.'},
+  {name:'Dual chokepoint crisis',color:'var(--red)',desc:'POTENTIAL. If Houthis close Bab el-Mandeb while Hormuz remains shut, 30%+ of global seaborne oil is cut off simultaneously. Oil could reach $170+/bbl. Global recession probability exceeds 60%. No modern precedent.'}
+];
+
+const scenarios = [
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Launch limited strikes on Houthi launch sites',desc:'Authorize precision strikes against confirmed missile/drone launch sites. Signal resolve without committing to sustained campaign.',cost:50,oil:5,coal:-5,diplo:-10,esc:2,result:'Strikes hit 30+ targets in Sa\'dah and Hodeidah. Houthi operational tempo intensifies within 48 hours — every prior strike campaign has produced this response. Coalition partners express concern about escalation.'},
+    {type:'negotiate',label:'Negotiate',title:'Pursue Omani diplomatic channel',desc:'Activate back-channel communication through Oman. Seek a ceasefire framework that protects shipping.',cost:0,oil:0,coal:5,diplo:10,esc:0,result:'Oman initiates contacts with Houthi leadership. Early signals are positive — the Houthis have historically been willing to negotiate. However, diplomatic timelines are measured in weeks, not days. Attacks continue during negotiations.'},
+    {type:'maintain',label:'Maintain',title:'Defensive posture — convoy escorts + interdiction',desc:'Operation Prosperity Guardian framework. Escort commercial vessels and intercept Houthi missiles. Does not degrade Houthi capability.',cost:120,oil:8,coal:0,diplo:0,esc:1,result:'Defensive intercepts continue at $4.3M per SM-6 vs. $30K per Houthi drone. The 60:1 cost asymmetry means this posture is financially unsustainable over 12-24 months. Shipping companies remain reluctant to transit.'}
+  ]},
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Operation Rough Rider — sustained daily campaign',desc:'7+ weeks of daily strikes across northern Yemen. Target missile storage, C2, radar, port infrastructure. 1,100+ planned targets.',cost:750,oil:3,coal:-15,diplo:-20,esc:3,result:'Massive kinetic campaign hits 1,100+ targets. Two aircraft lost, seven MQ-9 drones shot down. 224 civilian casualties reported. Despite destruction, Houthis continue launching missiles and drones daily. Administration officials privately acknowledge campaign has not achieved objectives.'},
+    {type:'covert',label:'Covert',title:'CYBERCOM + proxy kinetic through Saudi/UAE',desc:'GPS spoofing of Houthi drones + intelligence-enabled Saudi/UAE strikes. High deniability, lower cost.',cost:80,oil:0,coal:5,diplo:5,esc:1,result:'CYBERCOM disrupts Houthi drone navigation — several drones crash harmlessly. Saudi strikes (with US ISR support) hit confirmed weapons depots. Houthi attack accuracy degrades measurably. No US fingerprint. Lower political liability.'},
+    {type:'negotiate',label:'Negotiate',title:'Ceasefire deal — Oman-brokered bilateral',desc:'Accept Omani mediation for US-Houthi bilateral ceasefire. Houthis stop attacking US vessels; US stops strikes. Israel excluded.',cost:0,oil:-5,coal:-10,diplo:15,esc:-1,result:'Ceasefire achieved. Houthis stop attacking US shipping but explicitly exclude Israel. Trump calls it a "capitulation." Israel furious at exclusion — not given advance notice. Analysts note Houthis are "biggest winners." Red Sea partially reopens.'}
+  ]},
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Authorize Israeli strikes on Houthi leadership',desc:'Greenlight Israel to conduct decapitation strikes on Houthi senior leadership using shared intelligence. Operation Lucky Drop.',cost:20,oil:5,coal:-10,diplo:-15,esc:2,result:'Israel strikes a cabinet meeting in Sana\'a. Prime Minister, Defense Minister, and Chief of Staff killed — 12+ ministers total. Devastating blow to governance apparatus. But: al-Houthi himself not present. Operational capability intact. Houthis vow revenge. Leadership disperses to rural areas, making future targeting harder.'},
+    {type:'maintain',label:'Maintain',title:'Hold ceasefire — focus on Iran nuclear talks',desc:'Preserve US-Houthi ceasefire. Redirect diplomatic capital toward Iran nuclear negotiations through Oman.',cost:0,oil:0,coal:10,diplo:20,esc:0,result:'Ceasefire holds. Iran nuclear talks progress — Oman reports "breakthrough" by late February 2026. Iran agrees to verification framework. But: hardliners in both Washington and Tehran are skeptical. The diplomatic window is fragile.'},
+    {type:'covert',label:'Covert',title:'Expand CIA defection/opposition program',desc:'Fund internal Houthi opposition through Saudi GIP/UAE SSS intermediaries. Cultivate defectors for intelligence on weapons locations.',cost:30,oil:0,coal:0,diplo:0,esc:0,result:'CIA program shows limited results. Two mid-level commanders provide intelligence on weapons storage locations. One defection attempt fails — the commander is executed by Houthi counterintelligence. Program is slow and unreliable but generates useful targeting data.'}
+  ]},
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Operation Epic Fury — strike Iran directly',desc:'Joint US-Israeli surprise attack on Iran. Decapitation strike on supreme leader, nuclear sites, missile launchers, military infrastructure. 2,000+ targets.',cost:5000,oil:50,coal:-40,diplo:-50,esc:6,result:'Supreme Leader Khamenei killed. 75% of Iranian missile launchers destroyed. 2,000+ targets hit. But: Iran retaliates with 170+ ballistic missiles at Israel and strikes on US bases across the Gulf. Bahrain 5th Fleet HQ struck. Dozens killed. Hezbollah enters the war. Lebanon War 2026 begins. The Middle East is on fire.'},
+    {type:'negotiate',label:'Negotiate',title:'Accept nuclear deal — de-escalate',desc:'Accept the Omani-brokered nuclear framework. Iran agrees to verification. Press for broader regional de-escalation including Houthi restraint.',cost:0,oil:-10,coal:20,diplo:30,esc:-2,result:'Nuclear framework signed. Iran commits to IAEA verification. Regional tensions de-escalate. Houthis remain quiet under Iranian pressure. Oil markets stabilize. Coalition partners relieved. But: hardliners on both sides see this as appeasement. The deal is fragile and reversible.'},
+    {type:'maintain',label:'Maintain',title:'Maintain status quo — manage the equilibrium',desc:'Neither escalate nor de-escalate. Continue covert pressure, maintain defensive posture, let the ceasefire hold.',cost:100,oil:0,coal:0,diplo:0,esc:0,result:'Equilibrium holds. Houthi attacks remain paused. Iran nuclear talks stall but don\'t collapse. Oil markets stable. This is the lowest-risk path but leaves every underlying problem unresolved. The Houthis are rearming. Iran is enriching. The question is when, not whether, the next crisis arrives.'}
+  ]},
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Attempt to reopen Hormuz by force',desc:'US military campaign to reopen the Strait of Hormuz. Naval escorts, mine clearance, strikes on IRGC coastal positions. Massive operation.',cost:3000,oil:-10,coal:-10,diplo:-10,esc:1,result:'US begins operations to reopen Hormuz. IRGC coastal defenses prove more resilient than expected — 180km of Iranian coastline bristling with mines, fast boats, and shore-based missiles. Progress is slow. Oil prices remain elevated. The insurance problem persists even as military pressure increases.'},
+    {type:'negotiate',label:'Negotiate',title:'Pursue ceasefire — accept Omani mediation',desc:'Iran and the US both have incentives to stop. Reopening Hormuz is the key bargaining chip. Accept Omani mediation for a comprehensive framework.',cost:0,oil:-20,coal:15,diplo:20,esc:-3,result:'Ceasefire talks begin through Oman. Both sides are exhausted. Iran offers to reopen Hormuz in exchange for cessation of strikes. Oil markets rally on the news. But the framework is narrow — it doesn\'t address the nuclear program, Houthi weapons, or regional proxy networks. A pause, not a peace.'},
+    {type:'covert',label:'Covert',title:'Exploit Iranian domestic unrest',desc:'The January 2026 protests were the largest since 1979. Expand CIA support to Iranian civil society, labor unions, and pro-democracy movements.',cost:50,oil:0,coal:0,diplo:-5,esc:0,result:'Iranian regime is under severe internal pressure. Expanded covert support amplifies protest movements. IRGC diverts resources to internal security. This reduces Tehran\'s bandwidth for proxy coordination — making the Houthis more autonomous and potentially more amenable to bilateral deals. Long game.'}
+  ]},
+  {opts:[
+    {type:'escalate',label:'Escalate',title:'Resume strikes on Yemen — reopen the Houthi front',desc:'Violate the May 2025 ceasefire. Resume kinetic operations against Houthi targets to prevent Bab el-Mandeb closure.',cost:800,oil:15,coal:-25,diplo:-30,esc:2,result:'US resumes bombing Yemen — opening a second active front during the Iran war. Houthis immediately escalate to full maritime disruption. The ceasefire framework that kept Bab el-Mandeb open for 10 months is destroyed. Saudi Arabia furious — their Yanbu reroute is now under direct threat. Cost asymmetry makes sustained operations untenable.'},
+    {type:'negotiate',label:'Negotiate',title:'Emergency Omani channel — Bab el-Mandeb deal',desc:'Activate the Omani back-channel immediately. Offer Houthis expanded ceasefire covering Bab el-Mandeb. The window is 4-6 weeks.',cost:0,oil:-5,coal:10,diplo:15,esc:-1,result:'Omani intermediaries reach al-Houthi\'s inner circle. The Houthis\' month-long strategic pause suggests willingness to deal. Negotiations focus on: US guarantees against strikes + Saudi economic concessions in exchange for Bab el-Mandeb neutrality. Fragile but possible. Time is the critical variable.'},
+    {type:'covert',label:'Covert',title:'CYBERCOM + Saudi maritime patrol intel',desc:'Non-kinetic deterrence. Drone nav spoofing + Saudi naval patrol with US intelligence support. Preserves ceasefire framework.',cost:40,oil:0,coal:5,diplo:5,esc:0,result:'CYBERCOM degrades Houthi drone accuracy. Saudi naval patrols, backed by US GEOINT/SIGINT, create a visible deterrent in the Bab el-Mandeb approaches. The ceasefire framework holds. This buys time for diplomacy without escalation. Cost-effective. Deniable. The recommended path.'}
+  ]}
+];
+
+function renderLadder() {
+  const el = document.getElementById('ladder');
+  el.innerHTML = '<h3>Escalation ladder</h3>';
+  rungs.forEach((r, i) => {
+    const cls = i < state.rung ? 'past' : i === state.rung ? 'current' : 'future';
+    el.innerHTML += `<div class="rung ${cls}"><span class="rnum">${i+1}</span><span class="rdot" style="background:${r.color}"></span><span class="rname">${r.name}</span></div>`;
+    if (i < rungs.length - 1) el.innerHTML += '<div class="rung-connector"></div>';
+  });
+}
+
+function renderScenario() {
+  const mp = document.getElementById('mainPanel');
+  const r = rungs[state.rung];
+  const si = Math.min(state.rung, scenarios.length - 1);
+  const sc = scenarios[si];
+
+  let html = `<div class="scenario-card"><h2>Rung ${state.rung + 1}: ${r.name}</h2><div class="sc-sub" style="color:${r.color}">Current escalation level</div><div class="sc-body">${r.desc}</div>`;
+
+  if (state.rung < rungs.length - 1 && si < scenarios.length) {
+    html += '<div style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Choose your response:</div><div class="options-grid">';
+    sc.opts.forEach((opt, i) => {
+      html += `<div class="option-btn opt-${opt.type}" onclick="chooseOption(${si},${i})"><div class="opt-label">${opt.label}</div><div class="opt-title">${opt.title}</div><div class="opt-desc">${opt.desc}</div>${opt.cost > 0 ? `<div class="opt-cost">Est. cost: $${opt.cost >= 1000 ? (opt.cost/1000).toFixed(1)+'B' : opt.cost+'M'}</div>` : ''}</div>`;
+    });
+    html += '</div>';
+  } else {
+    html += `<div style="padding:20px;background:rgba(239,83,80,0.06);border:1px solid rgba(239,83,80,0.2);border-radius:12px;margin-top:16px"><div style="font-size:14px;font-weight:500;color:var(--red);margin-bottom:8px">Maximum escalation reached</div><p style="font-size:13px;color:var(--text2);line-height:1.6">The dual chokepoint scenario has materialized. Hormuz and Bab el-Mandeb are both disrupted. 30%+ of global seaborne oil is cut off. Oil prices are approaching $170/bbl. The global economy is entering recession. Every available option now carries severe consequences.</p><p style="font-size:13px;color:var(--text2);line-height:1.6;margin-top:8px">Review your decision log on the right to see how you got here — and consider whether different choices at earlier rungs might have produced a different outcome.</p></div>`;
+  }
+  html += '</div>';
+  mp.innerHTML = html;
+}
+
+function chooseOption(si, oi) {
+  const opt = scenarios[si].opts[oi];
+  state.cost += opt.cost;
+  state.oil = Math.max(30, state.oil + opt.oil);
+  state.coalition = Math.max(0, Math.min(100, state.coalition + opt.coal));
+  state.diplo = Math.max(0, Math.min(100, state.diplo + opt.diplo));
+  state.esc = Math.max(1, Math.min(10, state.esc + opt.esc));
+  state.rung = Math.min(rungs.length - 1, Math.max(0, state.rung + Math.max(1, opt.esc > 0 ? 1 : 0)));
+  if (opt.esc < 0) state.rung = Math.max(0, state.rung - 1);
+  if (opt.esc >= 3) state.rung = Math.min(rungs.length - 1, state.rung + 1);
+
+  state.log.push({rung: si + 1, choice: opt.title, type: opt.type});
+
+  const mp = document.getElementById('mainPanel');
+  const resultHtml = `<div class="result-card"><h3 style="color:${opt.type === 'escalate' ? 'var(--red)' : opt.type === 'negotiate' ? 'var(--green)' : opt.type === 'covert' ? 'var(--purple)' : 'var(--amber)'}">Consequence: ${opt.label}</h3><p>${opt.result}</p><button class="next-btn" onclick="advanceToNext()">Continue to Rung ${state.rung + 1} →</button></div>`;
+  mp.innerHTML += resultHtml;
+  mp.lastElementChild.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  updateDashboard();
+}
+
+function advanceToNext() {
+  renderLadder();
+  renderScenario();
+  updateDashboard();
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function updateDashboard() {
+  const escPct = (state.esc / 10) * 100;
+  const escColor = state.esc <= 3 ? 'var(--green)' : state.esc <= 6 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('d-esc').textContent = state.esc + ' / 10';
+  document.getElementById('d-esc').style.color = escColor;
+  document.getElementById('m-esc').style.width = escPct + '%';
+  document.getElementById('m-esc').style.background = escColor;
+
+  document.getElementById('d-oil').textContent = '$' + Math.round(state.oil) + '/bbl';
+  document.getElementById('d-oil').style.color = state.oil > 120 ? 'var(--red)' : state.oil > 100 ? 'var(--amber)' : 'var(--text)';
+  const delta = state.oil - 74;
+  document.getElementById('d-oil-delta').textContent = delta >= 0 ? '+$' + Math.round(delta) + ' from baseline' : '-$' + Math.round(Math.abs(delta)) + ' from baseline';
+
+  document.getElementById('d-cost').textContent = state.cost >= 1000 ? '$' + (state.cost/1000).toFixed(1) + 'B' : '$' + state.cost + 'M';
+
+  document.getElementById('m-coal').style.width = state.coalition + '%';
+  document.getElementById('m-coal').style.background = state.coalition > 60 ? 'var(--accent)' : state.coalition > 30 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('d-coal').textContent = (state.coalition > 60 ? 'Strong' : state.coalition > 30 ? 'Strained' : 'Fractured') + ' (' + Math.round(state.coalition) + '%)';
+
+  document.getElementById('m-diplo').style.width = state.diplo + '%';
+  document.getElementById('m-diplo').style.background = state.diplo > 50 ? 'var(--teal)' : state.diplo > 25 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('d-diplo').textContent = (state.diplo > 50 ? 'Moderate' : state.diplo > 25 ? 'Low' : 'Depleted') + ' (' + Math.round(state.diplo) + '%)';
+
+  const endEl = document.getElementById('d-endstate');
+  if (state.esc <= 3 && state.diplo > 40) {
+    endEl.className = 'endstate endstate-green';
+    endEl.textContent = 'FAVORABLE — Conflict contained';
+  } else if (state.esc <= 6 || (state.esc <= 8 && state.diplo > 30)) {
+    endEl.className = 'endstate endstate-amber';
+    endEl.textContent = 'UNCERTAIN — Partial deterrence, shipping disrupted';
+  } else {
+    endEl.className = 'endstate endstate-red';
+    endEl.textContent = 'CRITICAL — Regional war, dual chokepoint risk';
+  }
+
+  const logEl = document.getElementById('log');
+  let logHtml = '<h4>Decision log</h4>';
+  state.log.forEach(l => {
+    const tc = l.type === 'escalate' ? 'var(--red)' : l.type === 'negotiate' ? 'var(--green)' : l.type === 'covert' ? 'var(--purple)' : 'var(--amber)';
+    logHtml += `<div class="log-entry"><span class="le-rung">R${l.rung}</span><span style="color:${tc}">${l.choice}</span></div>`;
+  });
+  logEl.innerHTML = logHtml;
+}
+
+function restart() {
+  state.rung = 0; state.oil = 74; state.cost = 0; state.coalition = 80; state.diplo = 70; state.esc = 1; state.log = [];
+  renderLadder(); renderScenario(); updateDashboard();
+}
+
+renderLadder(); renderScenario(); updateDashboard();
+</script>
+</body>
+</html>

@@ -21,7 +21,7 @@
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   }
   ::selection {
-    background: rgba(0, 163, 255, .3);
+    background: rgba(14, 165, 233, .3);
     color: #dde2f3;
   }
   ::-webkit-scrollbar {
@@ -32,7 +32,7 @@
     background: rgba(8, 14, 26, .7);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 163, 255, .45);
+    background: rgba(14, 165, 233, .45);
   }
 }
 
@@ -40,9 +40,9 @@
   .command-background {
     @apply fixed inset-0 z-0 pointer-events-none;
     background:
-      linear-gradient(rgba(0, 163, 255, .035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 163, 255, .025) 1px, transparent 1px),
-      radial-gradient(circle at 72% 18%, rgba(0, 163, 255, .18), transparent 28%),
+      linear-gradient(rgba(14, 165, 233, .035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, .025) 1px, transparent 1px),
+      radial-gradient(circle at 72% 18%, rgba(14, 165, 233, .18), transparent 28%),
       radial-gradient(circle at 20% 85%, rgba(255, 186, 32, .08), transparent 28%),
       #06090e;
     background-size: 38px 38px, 38px 38px, auto, auto, auto;
@@ -63,7 +63,7 @@
     @apply flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.12em] text-cyan;
   }
   .brand-line span {
-    @apply h-2 w-2 rounded-full bg-cyan shadow-[0_0_16px_rgba(0,163,255,.9)];
+    @apply h-2 w-2 rounded-full bg-cyan shadow-[0_0_16px_rgba(14,165,233,.9)];
   }
   .brand-block h1 {
     @apply mt-3 text-lg font-semibold leading-tight text-ink;
@@ -77,26 +77,25 @@
   .top-status {
     @apply mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3 font-mono text-[10px] uppercase tracking-[.1em] text-muted;
   }
+  .data-sm {
+    @apply font-mono text-[11px] leading-5 tracking-normal;
+  }
   .terminal-nav {
-    @apply flex h-11 items-center gap-3 border border-transparent bg-transparent px-3 text-left font-mono text-[11px] uppercase tracking-[.08em] text-muted transition hover:border-line2 hover:bg-panel/75 hover:text-ink;
+    @apply relative flex h-11 items-center gap-3 border border-transparent bg-transparent px-3 text-left font-mono text-[11px] uppercase tracking-[.08em] text-muted transition hover:border-line2 hover:bg-panel/75 hover:text-ink;
   }
   .terminal-nav-active {
-    @apply border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_18px_rgba(0,163,255,.16)];
+    @apply border-cyan/50 bg-cyan/10 text-cyan shadow-[0_0_18px_rgba(14,165,233,.16)];
   }
   .terminal-count {
     @apply border border-line bg-void/80 px-2 py-0.5 text-[10px] text-dim;
   }
-  .command-hero {
+  .viewport-head {
     @apply relative grid gap-4 overflow-hidden border border-line bg-panel/70 p-5 shadow-insetline backdrop-blur-xl lg:grid-cols-[1fr_auto];
   }
-  .command-hero::after {
-    content: "";
-    @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-cyan/70 shadow-[0_0_18px_rgba(0,163,255,.75)];
-  }
-  .hero-copy h2 {
+  .viewport-head h2 {
     @apply mt-2 font-display text-5xl leading-none text-ink sm:text-6xl;
   }
-  .hero-copy p {
+  .viewport-head p {
     @apply mt-4 max-w-4xl text-[15px] leading-7 text-slate-300;
   }
   .hero-panel {
@@ -156,12 +155,21 @@
   .primary-action {
     @apply bg-cyan px-4 py-2 text-xs font-bold uppercase tracking-[.08em] text-void transition hover:bg-cyan/90;
   }
+  .terminal-strip {
+    @apply mt-4 flex flex-wrap gap-2;
+  }
+  .terminal-pill {
+    @apply flex h-10 items-center gap-2 border border-line bg-panel/70 px-3 font-mono text-[10px] uppercase tracking-[.08em] text-muted transition hover:border-cyan/50 hover:bg-cyan/10 hover:text-cyan;
+  }
+  .terminal-pill-active {
+    @apply border-cyan/70 bg-cyan/10 text-cyan shadow-[0_0_18px_rgba(14,165,233,.16)];
+  }
   .terminal-frame {
     @apply relative overflow-hidden border border-line2 bg-void/70 p-4;
   }
   .terminal-frame::before {
     content: "";
-    @apply pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(0,163,255,.14),transparent_36%)] opacity-80;
+    @apply pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(14,165,233,.14),transparent_36%)] opacity-80;
   }
   .terminal-frame-head {
     @apply relative z-10 flex items-start justify-between gap-3;
@@ -184,14 +192,14 @@
   .sensor-grid {
     @apply absolute inset-0;
     background:
-      linear-gradient(rgba(0, 163, 255, .08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 163, 255, .06) 1px, transparent 1px);
+      linear-gradient(rgba(14, 165, 233, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, .06) 1px, transparent 1px);
     background-size: 24px 24px;
   }
   .map-lines {
     @apply absolute inset-0 h-full w-full fill-none stroke-cyan/70;
     stroke-width: .55;
-    filter: drop-shadow(0 0 3px rgba(0, 163, 255, .9));
+    filter: drop-shadow(0 0 3px rgba(14, 165, 233, .9));
   }
   .map-lines .danger {
     @apply stroke-red/80;
@@ -201,7 +209,7 @@
     @apply absolute z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan/50 bg-cyan/10 transition hover:scale-110 hover:border-cyan;
   }
   .map-node span {
-    @apply absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan shadow-[0_0_12px_rgba(0,163,255,.9)];
+    @apply absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan shadow-[0_0_12px_rgba(14,165,233,.9)];
   }
   .map-node-active {
     @apply border-amber bg-amber/15 shadow-[0_0_22px_rgba(255,186,32,.28)];
@@ -217,16 +225,16 @@
     @apply grid max-h-[560px] gap-2 overflow-auto pr-1;
   }
   .screen-row {
-    @apply flex min-h-14 items-center gap-3 border border-line bg-void/50 px-3 py-2 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
+    @apply relative flex min-h-14 items-center gap-3 border border-line bg-void/50 px-3 py-2 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
   }
   .screen-row-active {
-    @apply border-cyan/70 bg-cyan/10 shadow-[0_0_16px_rgba(0,163,255,.12)];
+    @apply border-cyan/70 bg-cyan/10 shadow-[0_0_16px_rgba(14,165,233,.12)];
   }
   .hierarchy-grid {
     @apply grid gap-3 md:grid-cols-2;
   }
   .hierarchy-node {
-    @apply border border-line bg-void/50 p-3 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
+    @apply relative border border-line bg-void/50 p-3 text-left transition hover:border-cyan/50 hover:bg-cyan/10;
   }
   .hierarchy-node-active {
     @apply border-cyan/70 bg-cyan/10;
@@ -248,5 +256,53 @@
   }
   .swatch {
     @apply h-6 border border-white/10;
+  }
+  .neon-line {
+    @apply absolute bottom-0 left-3 right-3 h-px bg-cyan shadow-[0_0_12px_rgba(14,165,233,.9)];
+  }
+  .planner-grid {
+    @apply grid gap-3 lg:grid-cols-3;
+  }
+  .target-card {
+    @apply relative border border-line bg-void/55 p-4 shadow-insetline backdrop-blur-xl;
+  }
+  .target-card-active {
+    @apply border-cyan/70 bg-cyan/10 shadow-[0_0_18px_rgba(14,165,233,.14)];
+  }
+  .data-stack {
+    @apply grid gap-2;
+  }
+  .data-stack div {
+    @apply flex items-center justify-between gap-3 border-b border-line/70 pb-2 last:border-b-0;
+  }
+  .data-stack dt {
+    @apply font-mono text-[11px] leading-5 tracking-normal uppercase text-dim;
+  }
+  .data-stack dd {
+    @apply font-mono text-[11px] leading-5 tracking-normal text-ink;
+  }
+  .threat-grid {
+    @apply grid gap-3 xl:grid-cols-[.8fr_1.2fr];
+  }
+  .threat-core {
+    @apply border border-line bg-void/55 p-5 shadow-insetline backdrop-blur-xl;
+  }
+  .surface-band {
+    @apply border border-line bg-void/35 p-4 shadow-insetline backdrop-blur-xl;
+  }
+  .threat-score {
+    @apply my-6 font-display text-8xl leading-none text-red;
+  }
+  .concept-grid {
+    @apply grid gap-3 lg:grid-cols-2 2xl:grid-cols-4;
+  }
+  .state-list {
+    @apply grid gap-1;
+  }
+  .state-link {
+    @apply relative grid grid-cols-[1fr_auto] items-center gap-3 border border-transparent px-2 py-1.5 text-left text-xs text-muted transition hover:border-cyan/40 hover:bg-cyan/10 hover:text-ink;
+  }
+  .state-link-active {
+    @apply border-cyan/60 bg-cyan/10 text-cyan;
   }
 }

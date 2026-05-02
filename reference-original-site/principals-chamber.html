@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Principals Chamber · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--surface-3:#1C2434;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--danger:#FF7A8A;--success:#7DDBB0;--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 20% 0%,rgba(109,217,255,.05),transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(184,160,255,.04),transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(255,177,134,.02),transparent 60%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:1400px;margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.bar button{background:transparent;border:1px solid var(--border-2);color:var(--ink-3);font-family:var(--ui);font-size:12px;padding:4px 10px;border-radius:var(--r-sm);cursor:pointer;transition:.15s}
+.bar button:hover{color:var(--accent);border-color:var(--accent)}
+.wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px clamp(14px,2.5vw,32px) 80px}
+.hdr{padding-bottom:22px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.hdr .lt{max-width:760px}
+.hdr .eye{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-bottom:10px}
+.hdr h1{font-family:var(--display);font-size:clamp(36px,5vw,56px);font-weight:400;margin:0 0 8px;letter-spacing:-.02em;line-height:1}
+.hdr h1 i{font-style:italic;color:var(--accent)}
+.hdr p{color:var(--ink-2);font-size:15px;margin:0;max-width:640px;line-height:1.6}
+.pill{border:1px solid var(--border);padding:5px 10px;color:var(--ink-3);border-radius:100px;background:var(--surface);font-family:var(--mono);font-size:10.5px;display:inline-block}
+.pill.a{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+.hdr .rt{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Scenario input */
+.scenario{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 24px;margin-bottom:20px;position:relative}
+.scenario .label{font-family:var(--mono);font-size:11px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.scenario textarea{width:100%;background:var(--bg-1);border:1px solid var(--border);color:var(--ink);font-family:var(--ui);font-size:14px;padding:14px 16px;border-radius:var(--r-sm);resize:vertical;min-height:70px;line-height:1.5;outline:none;transition:.15s}
+.scenario textarea:focus{border-color:var(--accent)}
+.scenario .presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.scenario .presets button{background:var(--surface-2);border:1px solid var(--border);color:var(--ink-3);font-family:var(--ui);font-size:12px;padding:6px 12px;border-radius:var(--r-sm);cursor:pointer;transition:.12s}
+.scenario .presets button:hover{border-color:var(--accent);color:var(--accent)}
+.scenario .actions{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.scenario .actions .n{font-family:var(--mono);font-size:11px;color:var(--ink-4)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;border-radius:var(--r-sm)}
+.btn:hover:not(:disabled){background:var(--accent-bright)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--border-2)}
+.btn.ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+
+/* Chamber layout */
+.chamber{display:grid;grid-template-columns:1fr 340px;gap:14px;margin-bottom:16px}
+@media(max-width:1100px){.chamber{grid-template-columns:1fr}}
+
+.stage{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);min-height:600px;display:flex;flex-direction:column;overflow:hidden}
+.stage-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.stage-head .rnd{color:var(--accent);font-weight:500}
+.stage-head .state{display:flex;align-items:center;gap:8px}
+.stage-head .state::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ink-4)}
+.stage-head .state.active::before{background:var(--success);box-shadow:0 0 8px var(--success);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Table of principals (circular chamber feel) */
+.table{padding:18px 20px 12px;border-bottom:1px solid var(--divider)}
+.table-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:700px){.table-grid{grid-template-columns:repeat(2,1fr)}}
+.seat{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;align-items:center;gap:10px;position:relative;transition:.2s;min-width:0}
+.seat.speaking{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 20px rgba(109,217,255,.15)}
+.seat.spoken{border-color:var(--border-2)}
+.avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.04em;color:#06121a;background:var(--accent);position:relative;border:2px solid transparent;transition:.2s}
+.seat.speaking .avatar{border-color:var(--ink);box-shadow:0 0 12px rgba(255,255,255,.3)}
+.seat.speaking .avatar::after{content:"";position:absolute;inset:-5px;border:1.5px solid var(--accent);border-radius:50%;animation:ripple 1.2s ease-out infinite}
+@keyframes ripple{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.6);opacity:0}}
+.seat .meta{min-width:0;flex:1}
+.seat .role{font-family:var(--ui);font-size:12px;color:var(--ink);font-weight:500;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seat .conf{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);margin-top:1px}
+.seat .conf-bar{height:2px;background:var(--border);margin-top:4px;border-radius:1px;overflow:hidden}
+.seat .conf-bar::before{content:"";display:block;height:100%;width:var(--w,50%);background:var(--accent);transition:width .6s ease-out}
+
+/* Transcript */
+.transcript{flex:1;overflow:auto;padding:14px 20px;display:flex;flex-direction:column;gap:14px}
+.transcript::-webkit-scrollbar{width:6px}
+.transcript::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.turn{display:flex;gap:12px;opacity:0;animation:turnIn .4s ease-out forwards}
+@keyframes turnIn{to{opacity:1}}
+.turn .avatar{width:32px;height:32px;font-size:9.5px;align-self:start;margin-top:3px}
+.turn .body{flex:1;min-width:0}
+.turn .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px;flex-wrap:wrap}
+.turn .name{font-family:var(--ui);font-size:12.5px;font-weight:500;color:var(--ink)}
+.turn .tag{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.04em}
+.turn .tag.pos{color:var(--success)}.turn .tag.neg{color:var(--danger)}.turn .tag.neu{color:var(--warm)}
+.turn .text{font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.turn .text b{color:var(--ink);font-weight:500}
+.turn .text em{font-style:normal;color:var(--accent);font-weight:500}
+.turn .cursor{display:inline-block;width:8px;height:14px;background:var(--accent);vertical-align:-2px;margin-left:2px;animation:blink 1s step-start infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* Waveform during speaking */
+.waveform{position:absolute;right:10px;bottom:10px;display:flex;gap:2px;align-items:flex-end;height:14px;opacity:0;transition:opacity .2s}
+.seat.speaking .waveform{opacity:1}
+.waveform span{width:2px;background:var(--accent);border-radius:1px;animation:wave 0.6s ease-in-out infinite}
+.waveform span:nth-child(1){animation-delay:0s;height:30%}
+.waveform span:nth-child(2){animation-delay:.1s;height:60%}
+.waveform span:nth-child(3){animation-delay:.2s;height:80%}
+.waveform span:nth-child(4){animation-delay:.3s;height:50%}
+.waveform span:nth-child(5){animation-delay:.4s;height:70%}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.8)}}
+
+/* Side panel */
+.side{display:flex;flex-direction:column;gap:10px}
+.pnl{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.pnl h3{font-family:var(--ui);font-size:12.5px;font-weight:500;color:var(--ink);margin:0;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pnl h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10px;font-weight:400}
+.pnl .body{padding:12px 16px}
+
+.utility-row{padding:8px 0;border-bottom:1px solid var(--divider);font-size:12px}
+.utility-row:last-child{border-bottom:none}
+.utility-row .h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.utility-row .n{font-family:var(--ui);font-size:11.5px;color:var(--ink-2);font-weight:500}
+.utility-row .v{font-family:var(--mono);font-size:10.5px;color:var(--accent)}
+.utility-row .bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.utility-row .bar::before{content:"";display:block;height:100%;width:var(--w,50%);background:var(--accent)}
+.utility-row .bar.neg::before{background:var(--danger)}
+
+/* Options tracker */
+.opt{padding:10px 0;border-bottom:1px solid var(--divider)}
+.opt:last-child{border-bottom:none}
+.opt .h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:8px}
+.opt .n{font-family:var(--ui);font-size:12px;color:var(--ink-2);font-weight:500;min-width:0;flex:1}
+.opt .s{font-family:var(--display);font-size:18px;color:var(--accent);line-height:1;font-weight:400;letter-spacing:-.01em}
+.opt .s.lead{color:var(--success)}
+.opt .bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;position:relative}
+.opt .bar::before{content:"";position:absolute;left:0;top:0;bottom:0;background:var(--accent);width:var(--w,0%);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.opt.lead .bar::before{background:linear-gradient(90deg,var(--success),var(--accent))}
+.opt .votes{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-top:4px;display:flex;gap:6px;flex-wrap:wrap}
+.opt .votes span{padding:1px 5px;border:1px solid var(--border-2);border-radius:3px}
+
+.vn{border-radius:3px;padding:1px 5px;font-size:9.5px;letter-spacing:.04em}
+
+/* Final synthesis */
+.synthesis{background:linear-gradient(180deg,rgba(109,217,255,.04),var(--surface));border:1px solid var(--accent-border);border-radius:var(--r-lg);padding:24px 28px;margin-top:14px;display:none}
+.synthesis.on{display:block;animation:fadeIn .6s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.synthesis .eye{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:10px}
+.synthesis h2{font-family:var(--display);font-size:32px;font-weight:400;margin:0 0 12px;letter-spacing:-.018em;line-height:1.1}
+.synthesis h2 i{font-style:italic;color:var(--accent)}
+.synthesis p{color:var(--ink-2);line-height:1.65;margin:0 0 14px;font-size:14.5px}
+.synthesis .rec{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:12px}
+.synthesis .rec .k{font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:4px}
+.synthesis .rec .v{font-family:var(--ui);font-size:14px;color:var(--ink)}
+
+.ftr{margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--ink-4);line-height:1.7;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.ftr a{color:var(--ink-3);text-decoration:none}.ftr a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Principals Chamber</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><span>Deliberation engine · 6 principals · multi-round</span></div>
+</div></div>
+
+<div class="wrap">
+<header class="hdr">
+  <div class="lt">
+    <div class="eye">Simulated NSC deliberation · utility-driven deliberation engine</div>
+    <h1>The <i>Principals Committee</i></h1>
+    <p>Input a decision scenario and watch six NSC principals deliberate across three rounds. Each has distinct utility weights over escalation, cost, legitimacy, coalition, and domestic risk — positions are generated from those weights, then updated as they respond to one another.</p>
+  </div>
+  <div class="rt">
+    <span class="pill a">6 personas</span><span class="pill a">3 rounds</span><span class="pill">Utility-driven</span><span class="pill">Converging vote</span>
+  </div>
+</header>
+
+<div class="scenario">
+  <div class="label"><span>DECISION SCENARIO</span><span id="char-count" style="color:var(--ink-4)">0 chars</span></div>
+  <textarea id="scenario" placeholder="e.g., Should the United States authorize a targeted killing of Abdul Khaliq al-Houthi, commander of Houthi Strategic Missile Forces, with delivery via MQ-9 Reaper from Al Dhafra AB, in the next 72 hours?"></textarea>
+  <div class="presets">
+    <button data-preset="tk">TK — Houthi missile commander</button>
+    <button data-preset="hormuz">Hormuz escort escalation</button>
+    <button data-preset="fordow">Fordow MOP strike authorization</button>
+    <button data-preset="signal">Signal OPSEC incident response</button>
+  </div>
+  <div class="actions">
+    <button class="btn" id="btn-start">Convene principals</button>
+    <button class="btn ghost" id="btn-reset" disabled>Reset</button>
+    <span class="n" id="status">Idle · awaiting scenario</span>
+  </div>
+</div>
+
+<div class="chamber">
+  <div class="stage">
+    <div class="stage-head">
+      <div><span class="rnd" id="round">Round —</span> · <span id="round-lbl">awaiting convening</span></div>
+      <div class="state" id="state">Standby</div>
+    </div>
+    <div class="table">
+      <div class="table-grid" id="seats"></div>
+    </div>
+    <div class="transcript" id="transcript">
+      <div style="color:var(--ink-4);font-family:var(--mono);font-size:12px;text-align:center;padding:60px 20px;line-height:1.6">Deliberation transcript will appear here once principals are convened.<br>Each round runs opening positions → cross-table responses → closing votes.</div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="pnl">
+      <h3><span>Utility profile</span><span class="sub" id="util-for">— principal</span></h3>
+      <div class="body" id="util-body"><div style="font-family:var(--mono);font-size:11px;color:var(--ink-4);line-height:1.6">Click a principal seat to inspect their weighting across the five dimensions they use to evaluate options.</div></div>
+    </div>
+    <div class="pnl">
+      <h3><span>Option scoring</span><span class="sub" id="opt-sub">no tally yet</span></h3>
+      <div class="body" id="opt-body"><div style="font-family:var(--mono);font-size:11px;color:var(--ink-4);line-height:1.6">Live vote tally will update after each round based on each principal's stated position.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="synthesis" id="synthesis">
+  <div class="eye">FINAL SYNTHESIS · weighted consensus</div>
+  <h2 id="syn-title">—</h2>
+  <p id="syn-body"></p>
+  <div class="rec"><div class="k">RECOMMENDATION TO POTUS</div><div class="v" id="syn-rec">—</div></div>
+</div>
+
+<footer class="ftr">
+  <div>Principals Chamber v1.0 — <a href="./index.html">Portfolio</a> · <a href="./orbital-theater.html">Orbital Theater</a></div>
+  <div>Utility functions documented in source · deliberation engine runs client-side</div>
+</footer>
+</div>
+
+<script>
+/* ============================================================
+   Principals Chamber — Simulated NSC Deliberation Engine
+   Each principal has:
+   - utility weights over 5 dimensions
+   - opening-position templates keyed to scenario topic
+   - response templates keyed to other principals' positions
+   - voting preferences that converge across rounds
+   ============================================================ */
+
+const DIMENSIONS = ['escalation','cost','legitimacy','coalition','domestic'];
+
+const PRINCIPALS = [
+  {
+    id:'potus', role:'President', av:'POTUS', color:'#F5F7FA', avbg:'#FFE38A',
+    bio:'Commander-in-Chief. Chairs the committee; synthesizes.',
+    weights:{escalation:-1.0, cost:-0.5, legitimacy:0.7, coalition:0.6, domestic:-0.9},
+    voice:'formal-synthetic', // synthesizer
+  },
+  {
+    id:'sos', role:'Secretary of State', av:'SOS', color:'#C8D0DC', avbg:'#B8A0FF',
+    bio:'State Department. Coalition and diplomatic primacy.',
+    weights:{escalation:-1.2, cost:-0.3, legitimacy:1.0, coalition:1.3, domestic:-0.4},
+    voice:'diplomatic',
+  },
+  {
+    id:'sod', role:'Secretary of Defense', av:'SOD', color:'#F5F7FA', avbg:'#6DD9FF',
+    bio:'DoD. Operational feasibility and military balance.',
+    weights:{escalation:-0.2, cost:-0.8, legitimacy:0.3, coalition:0.5, domestic:-0.3},
+    voice:'operator',
+  },
+  {
+    id:'nsa', role:'National Security Advisor', av:'NSA', color:'#F5F7FA', avbg:'#FFB186',
+    bio:'White House. Integrator across agencies.',
+    weights:{escalation:-0.7, cost:-0.4, legitimacy:0.5, coalition:0.7, domestic:-0.7},
+    voice:'strategic',
+  },
+  {
+    id:'cjcs', role:'Chairman, Joint Chiefs', av:'CJCS', color:'#06121a', avbg:'#7DDBB0',
+    bio:'Joint Chiefs. Military advisor; force employment.',
+    weights:{escalation:-0.4, cost:-0.6, legitimacy:0.4, coalition:0.6, domestic:-0.2},
+    voice:'hawkish-measured',
+  },
+  {
+    id:'dci', role:'Director of CIA', av:'DCI', color:'#06121a', avbg:'#FF7A8A',
+    bio:'Central Intelligence. Clandestine equity; HUMINT risk.',
+    weights:{escalation:-0.6, cost:-0.2, legitimacy:0.2, coalition:0.3, domestic:-0.5},
+    voice:'analytical',
+  },
+];
+
+// ============ Scenario taxonomy ============
+// We detect which type of scenario from keywords in the user text, which drives
+// the option set and which templates to draw from.
+const SCENARIOS = {
+  tk: {
+    keywords:['target','kill','hvt','strike on','eliminate','leader','commander','drone'],
+    title:'Targeted killing authorization',
+    options: [
+      {id:'approve', name:'Approve — kinetic strike', escalation:0.7, cost:0.2, legitimacy:-0.6, coalition:-0.3, domestic:0.4},
+      {id:'delay',   name:'Delay — gather more PID',   escalation:-0.1, cost:0.0, legitimacy:0.4, coalition:0.2, domestic:-0.1},
+      {id:'covert',  name:'Covert pathway (Finding)',  escalation:0.3, cost:0.1, legitimacy:-0.2, coalition:-0.1, domestic:0.1},
+      {id:'decline', name:'Decline — monitor only',    escalation:-0.7, cost:-0.1, legitimacy:0.5, coalition:0.3, domestic:-0.4},
+    ],
+    intro:'The chair recognizes a targeted killing authorization question. The target is operationally relevant under the AUMF; the decision-space is PID sufficiency, escalation signaling, and legal pathway.',
+  },
+  hormuz: {
+    keywords:['hormuz','strait','escort','iran','closure','blockade','tanker'],
+    title:'Hormuz escalation response',
+    options: [
+      {id:'escort', name:'Escalate escort — 2 CSGs', escalation:0.5, cost:0.6, legitimacy:0.3, coalition:0.4, domestic:0.2},
+      {id:'hold',   name:'Hold posture · diplomatic', escalation:-0.2, cost:-0.2, legitimacy:0.5, coalition:0.2, domestic:-0.1},
+      {id:'strike', name:'Strike IRGCN facilities',   escalation:1.0, cost:0.4, legitimacy:-0.3, coalition:-0.2, domestic:0.4},
+      {id:'deesc',  name:'De-escalate via Oman',      escalation:-0.8, cost:0.0, legitimacy:0.7, coalition:0.5, domestic:-0.4},
+    ],
+    intro:'The chair recognizes an Iran theater decision. Hormuz transit is contested; the question is whether to escalate, hold, strike, or de-escalate via Oman.',
+  },
+  fordow: {
+    keywords:['fordow','natanz','nuclear','mop','gbu-57','enrich'],
+    title:'Fordow/Natanz strike authorization',
+    options: [
+      {id:'mop',    name:'MOP campaign — B-2 · Fordow',     escalation:1.2, cost:0.8, legitimacy:-0.5, coalition:-0.4, domestic:0.5},
+      {id:'covert', name:'Covert sabotage — cyber/SpecOps', escalation:0.3, cost:0.2, legitimacy:-0.2, coalition:-0.1, domestic:0.0},
+      {id:'press',  name:'Maximum sanctions pressure',      escalation:-0.1, cost:-0.1, legitimacy:0.6, coalition:0.5, domestic:-0.2},
+      {id:'deal',   name:'Back-channel deal · Oman',        escalation:-0.8, cost:-0.2, legitimacy:0.8, coalition:0.6, domestic:-0.5},
+    ],
+    intro:'The chair recognizes a nuclear program decision. Iranian enrichment has accelerated past breakout threshold; the question is strike, covert action, pressure, or negotiation.',
+  },
+  signal: {
+    keywords:['signal','opsec','group chat','leak','atlantic','goldberg'],
+    title:'OPSEC incident response',
+    options: [
+      {id:'discipline', name:'Formal discipline · firings', escalation:-0.1, cost:-0.1, legitimacy:0.4, coalition:0.2, domestic:0.3},
+      {id:'reform',     name:'Structural reform of NSC comms', escalation:-0.2, cost:0.2, legitimacy:0.5, coalition:0.3, domestic:0.1},
+      {id:'downplay',   name:'Public downplay · internal review', escalation:0.0, cost:-0.1, legitimacy:-0.4, coalition:-0.2, domestic:-0.3},
+      {id:'full',       name:'Full external investigation',  escalation:0.0, cost:0.2, legitimacy:0.7, coalition:0.2, domestic:0.2},
+    ],
+    intro:'The chair recognizes an internal OPSEC failure. Classified strike coordination occurred on commercial messaging; the question is discipline, reform, downplay, or external investigation.',
+  },
+  generic: {
+    keywords:[],
+    title:'Strategic decision',
+    options: [
+      {id:'act',    name:'Act — preferred option',        escalation:0.5, cost:0.2, legitimacy:-0.1, coalition:0.0, domestic:0.2},
+      {id:'hold',   name:'Hold posture · information',    escalation:-0.1, cost:-0.2, legitimacy:0.3, coalition:0.2, domestic:-0.1},
+      {id:'escalate', name:'Escalate decisively',         escalation:1.0, cost:0.5, legitimacy:-0.3, coalition:-0.2, domestic:0.3},
+      {id:'deesc',  name:'De-escalate / negotiate',        escalation:-0.7, cost:-0.1, legitimacy:0.6, coalition:0.4, domestic:-0.3},
+    ],
+    intro:'The chair opens an urgent policy discussion. Principals will state their positions, respond to each other, and converge on a recommendation for POTUS.',
+  },
+};
+
+function detectScenario(text){
+  const t = text.toLowerCase();
+  let best=null, bestScore=-1;
+  for(const [k,s] of Object.entries(SCENARIOS)){
+    if(k==='generic') continue;
+    let score=0; for(const kw of s.keywords) if(t.includes(kw)) score++;
+    if(score > bestScore){ bestScore=score; best=k; }
+  }
+  return bestScore > 0 ? best : 'generic';
+}
+
+// ============ Utility scoring ============
+// Given a principal's weights and an option's vector, compute utility score
+function scoreOption(principal, option){
+  let u = 0;
+  for(const d of DIMENSIONS){
+    u += (principal.weights[d] || 0) * (option[d] || 0);
+  }
+  // Add small per-principal noise for variety
+  u += (hash01(principal.id + option.id) - 0.5) * 0.15;
+  return u;
+}
+function hash01(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return ((h>>>0) % 10000) / 10000; }
+
+function rankOptions(principal, options){
+  return [...options].map(o => ({...o, u: scoreOption(principal, o)})).sort((a,b) => b.u - a.u);
+}
+
+// ============ Language generation templates ============
+// Each principal has a distinct "voice" — opening frames, transition phrases,
+// rhetorical devices, and closing lines — keyed by scenario type and their
+// preferred option.
+
+const OPENINGS = {
+  diplomatic: [
+    'With respect to the committee, ',
+    'Let me offer a diplomatic view. ',
+    'Mr. President, I want to flag the allied dimension first. ',
+    'The partners are watching this one closely. ',
+    'Before we litigate force, we should litigate legitimacy. ',
+  ],
+  operator: [
+    'The operational picture is this: ',
+    "From the Department's perspective, ",
+    'Let me be direct. ',
+    'The force is ready. The question is whether the authorities are. ',
+    'A few things on feasibility. ',
+  ],
+  strategic: [
+    'Integrating across the equities, ',
+    'Mr. President, stepping back for a moment, ',
+    "Let me try to frame what's on the table. ",
+    'This is not a discrete decision — it sits inside a larger trajectory. ',
+    'The second- and third-order effects are where I land. ',
+  ],
+  'hawkish-measured': [
+    'The Joint Chiefs assess the following. ',
+    'Sir, the force can execute. The prior questions are sequencing and LOAC. ',
+    'On the military side, the picture is clear. ',
+    'The uniformed view is this. ',
+    'We have looked at this repeatedly. The math has not changed. ',
+  ],
+  analytical: [
+    'From the intelligence perspective, ',
+    'The tradecraft reads this way. ',
+    'On the clandestine side, ',
+    "We've been watching this target deck for months. ",
+    'Agency equities are twofold. ',
+  ],
+  'formal-synthetic': [
+    "I've been listening. Let me try to pull the threads. ",
+    'The committee has offered strong positions across the space. ',
+    "Before we move to vote, let me restate what I'm hearing. ",
+    'We are not aligned, and we do not need to be fully. But we need to be clear. ',
+  ],
+};
+
+// Preferred-option rationales per voice (per option.id)
+// For brevity, we store fragments that get assembled into sentences.
+const RATIONALES = {
+  diplomatic: {
+    approve: "I cannot support a kinetic option without at least 72 hours for coalition consultation. The <em>UK especially</em> will not want to learn of this from CNN.",
+    delay: "I favor a delay. A short hold does not surrender initiative — it builds the legitimacy on which any follow-through will depend.",
+    covert: "A covert pathway preserves deniability, but I want DOJ's view on the Title 50 exposure before I sign.",
+    decline: "I support declining. We gain more from the restraint than we lose from the forbearance.",
+    escort: "Increasing escort posture is defensible under UNSC 2722. I can rally the coalition on it.",
+    hold: "Holding posture while the Oman channel reopens is exactly the kind of space the partners need.",
+    strike: "Striking IRGCN facilities will fragment the coalition before the third day. <em>France will be gone.</em> We have to weigh that.",
+    deesc: "The Oman channel is live. <em>Let it breathe.</em>",
+    mop: "A MOP campaign against Fordow changes the global nonproliferation regime. This cannot be an intra-administration decision.",
+    press: "Sanctions are our most durable instrument. The coalition will ratchet with us.",
+    deal: "A back-channel deal is the only option that does not trade a near-term win for a decade of blowback.",
+    sabotage: "Covert sabotage without attribution keeps the rule-of-law equity intact.",
+    reform: "A structural reform of NSC communications protects the institution. That's where I land.",
+    discipline: "Formal discipline sends the signal to the workforce that this cannot happen again.",
+    downplay: "Public downplay would be a grave error. It trades short-term comfort for long-term erosion.",
+    full: "A full external investigation is the only way to re-establish trust.",
+    act: "I can support acting — but the coalition needs to know before we move.",
+    escalate: "Escalating decisively will cost us allies we cannot recover quickly.",
+  },
+  operator: {
+    approve: "DoD can execute. The force package is sustainable. We've rehearsed it. My concerns are post-strike — IRGC-QF response cycles are 14–21 days, and we need VLS inventory that can absorb the first cycle.",
+    delay: "Delay is affordable for <em>72 hours</em>, not indefinitely. Beyond that, PID degrades.",
+    covert: "Covert action is Agency-lane, but DoD can backstop with Title 10 shaping operations if required.",
+    decline: "Declining is a valid posture, but it has costs on the Houthi calculus we should name.",
+    escort: "The force can surge. Two CSGs on station is sustainable for roughly 90 days before readiness implications.",
+    hold: "Holding is cheap and we can reconstitute from it. That's the defensive-in-depth option.",
+    strike: "I can build a strike package on 24 hours. The question is not whether — it's what target set and what post-strike posture.",
+    deesc: "Strategic patience is a valid operational concept. It also makes force generation cheaper.",
+    mop: "MOP is a B-2-only delivery. Two platforms, four weapons. Operationally feasible — the political-legal envelope is the long pole.",
+    covert_fordow: "Cyber against Iranian nuclear infrastructure has a precedent. Title 50 + OPSEC discipline.",
+    press: "Sanctions are durable, but defensive intercept costs are already exceeding <em>$3B annually</em>. This alone won't close the loop.",
+    deal: "I don't oppose the deal — but we should be negotiating from strength, not weakness.",
+    discipline: "The personnel dimension is real. SECDEF has already initiated administrative action.",
+    reform: "Structural reform is overdue. Every Principals meeting should be in a SCIF. Not a phone.",
+    downplay: "I would not recommend downplaying. The force is watching — this sets the standard.",
+    full: "External investigation is fine. Just — run it on classified-cleared channels.",
+    act: "The force is ready. I can execute tonight.",
+    escalate: "Escalation is executable. We just need to have made our peace with the secondary costs.",
+  },
+  strategic: {
+    approve: "The question isn't whether we can — it's whether <em>this</em> action advances the strategy. I think it does, narrowly.",
+    delay: "A short delay is not weakness. It's how we widen the coalition of consent.",
+    covert: "I can support a covert pathway if the Agency has the posture to hold if things go sideways.",
+    decline: "Declining is the wise move if the marginal operational gain is smaller than the marginal political cost. Here, I think it is.",
+    escort: "Incremental escort is consistent with our stated posture. It doesn't resolve the structural cost problem.",
+    hold: "Holding while the Oman channel activates is the sequence I recommend.",
+    strike: "Striking now collapses multiple pathways that are still open. I urge caution on sequencing.",
+    deesc: "I support the Oman channel. We've built equity there. Let's cash some of it.",
+    mop: "A Fordow strike crosses a threshold from which we cannot step back. I want the 30/60/90 day forecast on the record before we authorize.",
+    press: "Maximum pressure is our most familiar instrument. The question is whether this administration is prepared to sustain it for 24 months.",
+    deal: "A negotiated outcome, if achievable, gives us the most durable win. I would spend political capital to get one.",
+    discipline: "Discipline alone won't carry this. We need structural reform alongside it.",
+    reform: "This is a structural problem. We've been running 21st-century ops on 20th-century protocols. The reform package is where I land.",
+    downplay: "Downplaying would be strategic malpractice. It erodes the institution.",
+    full: "An external investigation is the right sequence if the findings won't degrade the force.",
+    act: "I support acting if the sequencing is right. The second-order effects have to be wargamed first.",
+    escalate: "Decisive escalation is sometimes the least-escalatory option over 24 months. I can see an argument here — but the bar is high.",
+  },
+  'hawkish-measured': {
+    approve: "The Joint Chiefs assess the action is executable with acceptable risk. The functional-leadership decapitation pathway is supported by the <em>RAND 2012 decapitation study</em> and recent strike history in the AOR.",
+    delay: "A short delay does not materially degrade execution. Beyond 96 hours, pattern-of-life degrades.",
+    covert: "A covert pathway is supportable. JSOC has rehearsed it.",
+    decline: "I do not recommend declining. The cumulative effect of non-action is a deterrence deficit that is becoming costly.",
+    escort: "Two CSGs is sustainable for the 30-day window. Beyond 60 days, readiness implications accrue.",
+    hold: "Holding is a valid reset posture, but the force is ready — we should not confuse readiness with passivity.",
+    strike: "A strike on IRGCN facilities is executable. The Joint Chiefs support the option but recommend <em>phased sequencing</em> to manage escalation.",
+    deesc: "The Chiefs do not oppose de-escalation. We do oppose signaling de-escalation as weakness.",
+    mop: "MOP against Fordow is a B-2 mission. The Chiefs assess execution risk as low. Strategic risk is significantly higher.",
+    press: "Pressure without military underpinning is not pressure.",
+    deal: "The Chiefs do not negotiate, but we respect the political process. A deal that preserves force flexibility is acceptable.",
+    discipline: "The force expects accountability. Formal discipline is warranted.",
+    reform: "Structural reform is the right answer. I recommend SECDEF lead the NSC comms review.",
+    downplay: "I do not support downplaying. Service members are watching.",
+    full: "External investigation is acceptable if it preserves operational security.",
+    act: "The force is ready. The Chiefs advise on sequencing.",
+    escalate: "Decisive action is operationally sound. The Chiefs will execute to orders — the question is for POTUS.",
+  },
+  analytical: {
+    approve: "The Agency's confidence in PID on this target is <em>high</em>. Pattern-of-life is current to within 96 hours. I can support the authorization.",
+    delay: "A short delay gives the Agency time to confirm pattern-of-life. We can hold the target.",
+    covert: "A covert pathway requires a Presidential Finding. The MON to the Gang of Eight can be delivered in 24 hours.",
+    decline: "Agency equity is minimal in declining. Source networks preserved.",
+    escort: "Intelligence supports the escort posture. IRGCN capability is known.",
+    hold: "Hold is fine from an intelligence standpoint.",
+    strike: "The Agency has sources on the ground we would expose. I recommend a 48-hour exfil window before any IRGCN-facility strike.",
+    deesc: "The Oman channel has been productive. The Agency supports the channel and can provide backstop.",
+    mop: "Agency assessment: Fordow strike will accelerate enrichment timeline in dispersed facilities we don't yet know about. We need more collection before we authorize.",
+    covert_fordow: "Cyber against Iranian nuclear infrastructure is within the tradecraft. The Agency can support.",
+    press: "Sanctions intelligence is our highest-confidence stream. Pressure works — slowly.",
+    deal: "We've tracked the regime's private posture. They may be receptive. Backchannel indicators are consistent.",
+    discipline: "This is properly a DoD issue.",
+    reform: "We have equity in the reform — our officers have been on those same threads.",
+    downplay: "The Agency recommends against downplaying.",
+    full: "External investigation must preserve SCI compartments.",
+    act: "Intelligence supports acting.",
+    escalate: "The Agency urges caution. The adversary's response function is nonlinear above rung 7.",
+  },
+  'formal-synthetic': {
+    approve: "I hear strong support, and I hear thoughtful caution. We need to act, and we need to act <em>well</em>.",
+    delay: "The committee wants some time. I'll give it — but not forever.",
+    covert: "A covert pathway seems to hold the most votes here. Let me think about sequencing.",
+    decline: "I'm not hearing enough to authorize action at this time. We hold.",
+    escort: "Increase the escort posture. I want the Oman channel activated in parallel.",
+    hold: "We hold. But not without activity.",
+    strike: "I'm not prepared to authorize a strike on IRGCN tonight. Bring me the phased plan tomorrow.",
+    deesc: "Let's pursue de-escalation through Oman. It's the lowest-regret path.",
+    mop: "A Fordow strike is the decision of a decade. I'm not making it tonight.",
+    press: "We ratchet pressure. Coalition leads.",
+    deal: "If the deal is achievable, I want to explore it. Full interagency support.",
+    discipline: "There will be accountability. SECDEF, you have my full backing on that.",
+    reform: "I am authorizing the structural reform package. Effective immediately.",
+    downplay: "We will not downplay this. That's the answer.",
+    full: "External investigation. Full cooperation from this committee.",
+    act: "We act. On my authority.",
+    escalate: "Decisive action. I'll take the political weight.",
+  },
+};
+
+// Response templates — what each voice says when responding to another principal's position
+const RESPONSES = {
+  diplomatic: [
+    "I want to respond to the Chairman. The operational feasibility point is strong, but we cannot substitute feasibility for legitimacy.",
+    "SOD's point about force posture is well-taken — and exactly why the coalition piece matters more, not less.",
+    "The DCI's tradecraft concerns reinforce the case for the diplomatic track, not the kinetic one.",
+    "I don't disagree with the Chairman's operational analysis. I disagree that operational analysis is sufficient here.",
+    "To the SOD's point about execution — we do not have a military problem. We have a political problem.",
+  ],
+  operator: [
+    "SecState's coalition concerns are valid. The Department has built the force to operate with allies or without — our recommendation is to try for allies.",
+    "To the DCI's point about exfil windows — noted and accounted for in the strike plan.",
+    "The NSA's framing is correct. We are in a <em>campaign</em>, not an <em>incident</em>.",
+    "The political dimension is real, but the force cannot be held in permanent readiness. There is a cost to that, too.",
+    "SecState raises the ally question. The Department's answer: we'll move faster than alliance coordination allows, or we'll move slower than the situation allows. Pick.",
+  ],
+  strategic: [
+    "SecState's legitimacy concern is the one I find most compelling. The CJCS's feasibility case is downstream of it.",
+    "DCI's nonlinearity point is exactly why I'm urging sequencing over single-shot decisions.",
+    "To the SOD's point — I agree the force is ready. I'm asking a different question: is the strategy ready?",
+    "The Chairman is correct that decisive action is sometimes least-escalatory. I want to know under what conditions that applies here.",
+    "If I can synthesize: the operational and coalition views are more compatible than they sound. The sequencing is where they reconcile.",
+  ],
+  'hawkish-measured': [
+    "SecState's diplomatic concern is noted. The Chiefs' position is that diplomatic action supported by credible force is durable; diplomatic action without it is not.",
+    "DCI raises the nonlinearity point. The Chiefs agree — which is why phased sequencing is in the recommendation.",
+    "The NSA's framing is helpful. The Chiefs will support whichever sequence POTUS directs.",
+    "SOD and I are aligned on feasibility. The difference is that I would add a political-military coordination line to the sequence.",
+    "I hear the SecState. The Chiefs will support coalition-first sequencing if the timeline permits.",
+  ],
+  analytical: [
+    "To the SecState's point on coalition — Agency assessment is that UK will participate on 48 hours' notice; France at 120 hours or not at all.",
+    "The Chairman's operational read is solid. I'd only add that HUMINT streams downstream of the target cluster need a 48-hour exfil buffer.",
+    "The NSA is right about second-order effects. We have collection on what Iran is likely to do; we have less on what our partners are likely to do.",
+    "SOD's point on VLS is Agency-confirmed. We project inventory drawdown to 35% within 90 days at current consumption.",
+    "Agency concurs with the coalition analysis. The fracture line runs through the Elysée, not Whitehall.",
+  ],
+  'formal-synthetic': [
+    "The committee is getting somewhere. Let me try to name where.",
+    "I hear three positions and two concerns. Let me say them back.",
+    "The gap between SOD and SecState is narrower than it sounds. I want to press on it.",
+    "Chairman, DCI — if we sequence in the way the NSA proposed, does it hold together?",
+    "This is the decision space. Not all of it has to converge tonight.",
+  ],
+};
+
+// Closings
+const CLOSINGS = {
+  diplomatic: [" I defer to POTUS, but I must place the diplomatic view on the record."," The coalition dimension is decisive for me."," My recommendation stands."],
+  operator: [" The Department stands ready."," The force will execute to orders."," That is the Department's position."],
+  strategic: [" That is where I land."," The sequencing is the policy."," I'm with the Chairman on execution, but I want to flag the strategic envelope."],
+  'hawkish-measured': [" The Chiefs will execute to POTUS's orders."," We can go tonight if directed."," That is the uniformed view."],
+  analytical: [" The Agency will support whichever pathway POTUS authorizes."," Tradecraft equities noted on the record."," Agency assessment stands."],
+  'formal-synthetic': [" We are closer than we sound."," Thank you, committee."," Let's vote."],
+};
+
+// ============ Rendering ============
+const $ = id => document.getElementById(id);
+
+function renderSeats(){
+  const grid = $('seats');
+  grid.innerHTML = PRINCIPALS.map(p => `
+    <div class="seat" data-id="${p.id}">
+      <div class="avatar" style="background:${p.avbg};color:${p.color}">${p.av}</div>
+      <div class="meta">
+        <div class="role">${p.role}</div>
+        <div class="conf" data-conf="${p.id}">Standby</div>
+        <div class="conf-bar" data-bar="${p.id}" style="--w:50%"></div>
+      </div>
+      <div class="waveform"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.seat').forEach(s => s.addEventListener('click', () => showUtility(s.dataset.id)));
+}
+renderSeats();
+
+function showUtility(id){
+  const p = PRINCIPALS.find(x=>x.id===id);
+  if(!p) return;
+  $('util-for').textContent = p.role;
+  const body = $('util-body');
+  body.innerHTML = `<div style="color:var(--ink-3);font-size:12.5px;margin-bottom:12px;line-height:1.5">${p.bio}</div>` + DIMENSIONS.map(d => {
+    const w = p.weights[d] || 0;
+    const neg = w < 0;
+    const mag = Math.abs(w) / 1.5 * 100;
+    return `<div class="utility-row">
+      <div class="h"><span class="n">${d.charAt(0).toUpperCase()+d.slice(1)}</span><span class="v">${w>=0?'+':''}${w.toFixed(2)}</span></div>
+      <div class="bar ${neg?'neg':''}"><div style="height:100%;width:${Math.min(100,mag)}%;background:${neg?'var(--danger)':'var(--accent)'}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function updateSeatState(id, state, confidenceText, barPct){
+  const seat = document.querySelector(`.seat[data-id="${id}"]`);
+  if(!seat) return;
+  seat.classList.remove('speaking','spoken');
+  if(state) seat.classList.add(state);
+  if(confidenceText) $(`conf-${id}`);
+  const c = seat.querySelector(`[data-conf="${id}"]`);
+  const b = seat.querySelector(`[data-bar="${id}"]`);
+  if(confidenceText && c) c.textContent = confidenceText;
+  if(barPct != null && b) b.style.setProperty('--w', barPct+'%');
+}
+
+function setAllSeats(state){
+  PRINCIPALS.forEach(p => {
+    const seat = document.querySelector(`.seat[data-id="${p.id}"]`);
+    if(seat){ seat.classList.remove('speaking','spoken'); if(state) seat.classList.add(state); }
+  });
+}
+
+// ============ Deliberation engine ============
+let state = 'idle'; // idle | running | done
+let scenarioType = 'generic';
+let optionTotals = {}; // option.id -> weighted vote
+let principalVotes = {}; // principal.id -> preferred option.id
+let turnQueue = [];
+let turnIndex = 0;
+
+function pick(arr, key){ return arr[Math.floor(hash01(key) * arr.length) % arr.length]; }
+
+function buildPrincipalTurn(principal, round, scenario, topRanked){
+  const voice = principal.voice;
+  const openings = OPENINGS[voice];
+  const rationales = RATIONALES[voice];
+  const responses = RESPONSES[voice];
+  const closings = CLOSINGS[voice];
+  const key = scenario + '|' + principal.id + '|' + round;
+
+  // Preferred option
+  const pref = topRanked[0];
+  const sec = topRanked[1];
+
+  // Build the turn text
+  let text = '';
+  const open = pick(openings, key);
+  text += open;
+
+  if(round === 1){
+    // Opening position
+    const rat = rationales[pref.id] || rationales['act'] || 'I want to place my view on the record.';
+    text += rat + ' ';
+    // Add a secondary
+    if(sec && principal.id !== 'potus'){
+      const gapPct = Math.min(0.9, Math.abs(pref.u - sec.u));
+      if(gapPct < 0.25){
+        text += `I am not far from <em>${sec.name}</em> as a fallback — but my preference is clear.`;
+      }
+    }
+  } else if(round === 2){
+    // Response: react to strongest opposing principal
+    text = open + pick(responses, key);
+    text += ' ' + (rationales[pref.id] || '');
+  } else {
+    // Round 3: closing vote
+    text = open + `My vote is <em>${pref.name}</em>. ` + (rationales[pref.id] || '');
+  }
+  text += pick(closings, key + 'c');
+
+  return { principal, text, pref, sec, u: pref.u };
+}
+
+function renderOptions(scenario, totals){
+  const opts = SCENARIOS[scenario].options;
+  const max = Math.max(...Object.values(totals), 0.01);
+  const sorted = [...opts].sort((a,b) => (totals[b.id]||0) - (totals[a.id]||0));
+  const lead = sorted[0];
+  $('opt-body').innerHTML = sorted.map(o => {
+    const t = totals[o.id] || 0;
+    const pct = Math.max(0, t) / max * 100;
+    const isLead = o.id === lead.id && t > 0;
+    const votes = Object.entries(principalVotes).filter(([, v]) => v === o.id).map(([k]) => k);
+    return `<div class="opt ${isLead?'lead':''}">
+      <div class="h"><span class="n">${o.name}</span><span class="s ${isLead?'lead':''}">${t>=0?'+':''}${t.toFixed(1)}</span></div>
+      <div class="bar" style="--w:${pct}%"></div>
+      <div class="votes">${votes.length ? votes.map(v => `<span class="vn">${PRINCIPALS.find(p=>p.id===v).av}</span>`).join('') : '<span style="color:var(--ink-4);border:none;padding:0">—</span>'}</div>
+    </div>`;
+  }).join('');
+  $('opt-sub').textContent = `${Object.keys(principalVotes).length} principals voted · leader: ${lead.name}`;
+}
+
+function typewrite(element, text, speed=12){
+  return new Promise(resolve => {
+    element.innerHTML = '<span class="cursor"></span>';
+    const cursor = element.querySelector('.cursor');
+    let i = 0;
+    // Pre-parse text into tokens to handle HTML tags (em, b)
+    function tick(){
+      if(i >= text.length){ cursor.remove(); resolve(); return; }
+      // Check for a tag
+      if(text[i] === '<'){
+        const close = text.indexOf('>', i);
+        if(close !== -1){
+          const tag = text.slice(i, close+1);
+          element.insertBefore(document.createTextNode(''), cursor);
+          // Insert HTML by creating temp span
+          const tmp = document.createElement('span');
+          tmp.innerHTML = tag;
+          cursor.parentNode.insertBefore(tmp, cursor);
+          i = close+1;
+          setTimeout(tick, speed);
+          return;
+        }
+      }
+      // Emit a character
+      const char = text[i];
+      const textNode = document.createTextNode(char);
+      cursor.parentNode.insertBefore(textNode, cursor);
+      i++;
+      // Brief pause on punctuation
+      const d = /[.!?;]/.test(char) ? speed*14 : /[,—]/.test(char) ? speed*5 : speed;
+      setTimeout(tick, d);
+    }
+    tick();
+  });
+}
+
+function appendTurn(turn){
+  const container = $('transcript');
+  const empty = container.firstChild;
+  if(empty && empty.nodeType === 1 && empty.style && empty.style.textAlign === 'center') container.innerHTML = '';
+  const el = document.createElement('div');
+  el.className = 'turn';
+  const tagClass = turn.u > 0.2 ? 'pos' : turn.u < -0.2 ? 'neg' : 'neu';
+  const tagText = turn.u > 0.2 ? `+${turn.u.toFixed(2)} · supports action` : turn.u < -0.2 ? `${turn.u.toFixed(2)} · urges restraint` : `neutral · ${turn.u.toFixed(2)}`;
+  el.innerHTML = `<div class="avatar" style="background:${turn.principal.avbg};color:${turn.principal.color}">${turn.principal.av}</div>
+    <div class="body">
+      <div class="head"><span class="name">${turn.principal.role}</span><span class="tag ${tagClass}">${tagText}</span></div>
+      <div class="text"></div>
+    </div>`;
+  container.appendChild(el);
+  container.scrollTop = container.scrollHeight;
+  const textEl = el.querySelector('.text');
+  return typewrite(textEl, turn.text, 13);
+}
+
+async function runDeliberation(){
+  const text = $('scenario').value.trim();
+  if(!text){ $('status').textContent = 'Enter a scenario to convene.'; return; }
+
+  state = 'running';
+  $('btn-start').disabled = true;
+  $('btn-reset').disabled = false;
+  $('synthesis').classList.remove('on');
+  $('transcript').innerHTML = '';
+  optionTotals = {};
+  principalVotes = {};
+
+  scenarioType = detectScenario(text);
+  const scn = SCENARIOS[scenarioType];
+  $('status').textContent = `Convened · detected scenario: ${scn.title}`;
+  $('state').textContent = 'Active';
+  $('state').classList.add('active');
+
+  // Preload scoring for all principals
+  const principalRankings = {};
+  PRINCIPALS.forEach(p => { principalRankings[p.id] = rankOptions(p, scn.options); });
+
+  // Chair opens
+  await appendTurn({ principal: PRINCIPALS[0], text: scn.intro, pref: scn.options[0], u: 0 });
+
+  // Round 1: opening positions
+  $('round').textContent = 'Round 1';
+  $('round-lbl').textContent = 'opening positions';
+  for(const p of PRINCIPALS.slice(1)){
+    setAllSeats('spoken');
+    const seat = document.querySelector(`.seat[data-id="${p.id}"]`);
+    seat.classList.remove('spoken'); seat.classList.add('speaking');
+    const turn = buildPrincipalTurn(p, 1, scenarioType, principalRankings[p.id]);
+    updateSeatState(p.id, 'speaking', 'Speaking…', 60);
+    await appendTurn(turn);
+    principalVotes[p.id] = turn.pref.id;
+    optionTotals[turn.pref.id] = (optionTotals[turn.pref.id] || 0) + 1 * Math.max(0.5, 1 + turn.u);
+    updateSeatState(p.id, 'spoken', `R1: ${turn.pref.name.split('—')[0].trim()}`, 70);
+    renderOptions(scenarioType, optionTotals);
+  }
+
+  // Round 2: cross-table response
+  $('round').textContent = 'Round 2';
+  $('round-lbl').textContent = 'cross-table response';
+  // Randomize order slightly
+  const r2Order = [...PRINCIPALS.slice(1)];
+  for(const p of r2Order){
+    const seat = document.querySelector(`.seat[data-id="${p.id}"]`);
+    setAllSeats('spoken');
+    seat.classList.remove('spoken'); seat.classList.add('speaking');
+    updateSeatState(p.id, 'speaking', 'Speaking…', 80);
+    // Slight reranking with mild drift: principals can update preferences based on group
+    // Simulation: 15% chance of switching to second-choice if it's close
+    const rerank = principalRankings[p.id];
+    if(rerank.length > 1 && Math.abs(rerank[0].u - rerank[1].u) < 0.2 && Math.random() < 0.25){
+      [rerank[0], rerank[1]] = [rerank[1], rerank[0]];
+    }
+    const turn = buildPrincipalTurn(p, 2, scenarioType, rerank);
+    await appendTurn(turn);
+    const prev = principalVotes[p.id];
+    if(prev && prev !== turn.pref.id){ optionTotals[prev] = Math.max(0, (optionTotals[prev]||0) - 0.5); }
+    principalVotes[p.id] = turn.pref.id;
+    optionTotals[turn.pref.id] = (optionTotals[turn.pref.id] || 0) + 1.2;
+    updateSeatState(p.id, 'spoken', `R2: ${turn.pref.name.split('—')[0].trim()}`, 85);
+    renderOptions(scenarioType, optionTotals);
+  }
+
+  // Round 3: closing vote (including POTUS synthesis last)
+  $('round').textContent = 'Round 3';
+  $('round-lbl').textContent = 'closing vote';
+  for(const p of PRINCIPALS.slice(1)){
+    const seat = document.querySelector(`.seat[data-id="${p.id}"]`);
+    setAllSeats('spoken');
+    seat.classList.remove('spoken'); seat.classList.add('speaking');
+    updateSeatState(p.id, 'speaking', 'Voting…', 90);
+    const turn = buildPrincipalTurn(p, 3, scenarioType, principalRankings[p.id]);
+    await appendTurn(turn);
+    principalVotes[p.id] = turn.pref.id;
+    optionTotals[turn.pref.id] = (optionTotals[turn.pref.id] || 0) + 1.5;
+    updateSeatState(p.id, 'spoken', `Vote: ${turn.pref.name.split('—')[0].trim()}`, 100);
+    renderOptions(scenarioType, optionTotals);
+  }
+
+  // POTUS synthesis
+  const potus = PRINCIPALS[0];
+  const seat = document.querySelector(`.seat[data-id="${potus.id}"]`);
+  setAllSeats('spoken');
+  seat.classList.remove('spoken'); seat.classList.add('speaking');
+  // POTUS picks weighted leader
+  const sorted = [...scn.options].sort((a,b) => (optionTotals[b.id]||0) - (optionTotals[a.id]||0));
+  const winner = sorted[0];
+  const potusRank = principalRankings[potus.id];
+  // POTUS ranking with winner forced to top
+  const potusOrdered = [winner, ...potusRank.filter(o => o.id !== winner.id)];
+  const turn = buildPrincipalTurn(potus, 3, scenarioType, potusOrdered);
+  updateSeatState(potus.id, 'speaking', 'Deciding…', 100);
+  await appendTurn(turn);
+  principalVotes[potus.id] = winner.id;
+  optionTotals[winner.id] = (optionTotals[winner.id] || 0) + 2.5;
+  updateSeatState(potus.id, 'spoken', `POTUS: ${winner.name.split('—')[0].trim()}`, 100);
+  renderOptions(scenarioType, optionTotals);
+
+  // Final synthesis
+  $('round').textContent = 'Concluded';
+  $('round-lbl').textContent = 'decision recorded';
+  $('state').textContent = 'Decided';
+  $('state').classList.remove('active');
+  setAllSeats('spoken');
+
+  const synVotes = Object.values(principalVotes).filter(v => v === winner.id).length;
+  $('syn-title').innerHTML = `Decision: <i>${winner.name}</i>`;
+  $('syn-body').innerHTML = `${scn.title}. The committee deliberated in three rounds and converged on <b>${winner.name.toLowerCase()}</b>. Final vote: ${synVotes} of ${PRINCIPALS.length} principals, with POTUS concurring. Lead dissenting principals maintained positions consistent with their utility weights on ${
+    (() => {
+      const diss = Object.entries(principalVotes).filter(([,v]) => v!==winner.id).map(([k])=>PRINCIPALS.find(p=>p.id===k).role).slice(0,3);
+      return diss.length ? diss.join(', ') : 'no dissenters';
+    })()
+  }.`;
+  $('syn-rec').textContent = winner.name + ' — proceed with standard operational sequence and LOAC review as prescribed.';
+  $('synthesis').classList.add('on');
+  $('btn-start').disabled = false;
+  state = 'done';
+}
+
+// ============ UI wiring ============
+$('scenario').addEventListener('input', e => { $('char-count').textContent = e.target.value.length + ' chars'; });
+document.querySelectorAll('.presets button').forEach(b => b.addEventListener('click', () => {
+  const presets = {
+    tk:'Should the United States authorize a targeted killing of Abdul Khaliq al-Houthi, commander of Houthi Strategic Missile Forces, with delivery via MQ-9 Reaper from Al Dhafra AB, in the next 72 hours? Consider PID sufficiency, legal pathway, coalition notification, and Iranian retaliation posture.',
+    hormuz:"Iran has closed the Strait of Hormuz for the third consecutive day. Two commercial tankers have been seized, and IRGCN fast-attack craft are harassing a U.S. CSG transit corridor. What is the appropriate U.S. response in the next 48 hours?",
+    fordow:"Iran has expelled IAEA inspectors and enrichment at Fordow has reached 90% U-235. Nuclear breakout is assessed as 2–3 weeks. Should POTUS authorize a MOP strike on Fordow by B-2, pursue covert sabotage, continue sanctions pressure, or open a back-channel deal through Oman?",
+    signal:"The Atlantic has published a classified Signal chat transcript showing NSC Principals coordinating active strike planning on a commercial messaging app. Cabinet-level officials discussed F-18 launch timing and weapons loadouts. What is the appropriate institutional response?",
+  };
+  $('scenario').value = presets[b.dataset.preset];
+  $('char-count').textContent = $('scenario').value.length + ' chars';
+}));
+$('btn-start').addEventListener('click', runDeliberation);
+$('btn-reset').addEventListener('click', () => {
+  state = 'idle';
+  $('btn-start').disabled = false;
+  $('btn-reset').disabled = true;
+  $('status').textContent = 'Idle · awaiting scenario';
+  $('round').textContent = 'Round —';
+  $('round-lbl').textContent = 'awaiting convening';
+  $('state').textContent = 'Standby';
+  $('state').classList.remove('active');
+  $('transcript').innerHTML = `<div style="color:var(--ink-4);font-family:var(--mono);font-size:12px;text-align:center;padding:60px 20px;line-height:1.6">Deliberation transcript will appear here once principals are convened.<br>Each round runs opening positions → cross-table responses → closing votes.</div>`;
+  $('synthesis').classList.remove('on');
+  $('opt-body').innerHTML = `<div style="font-family:var(--mono);font-size:11px;color:var(--ink-4);line-height:1.6">Live vote tally will update after each round based on each principal's stated position.</div>`;
+  $('opt-sub').textContent = 'no tally yet';
+  setAllSeats('');
+  PRINCIPALS.forEach(p => updateSeatState(p.id, '', 'Standby', 50));
+});
+
+// Initial state
+showUtility('cjcs');
+</script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command - Maritime Tracking</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#003544",
+                        "on-secondary-container": "#002e3b",
+                        "surface-container": "#1a202c",
+                        "primary": "#98cbff",
+                        "outline": "#88919d",
+                        "tertiary-fixed": "#ffdea8",
+                        "surface": "#0d131f",
+                        "primary-fixed": "#cfe5ff",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-surface-variant": "#bec7d4",
+                        "surface-container-low": "#161c27",
+                        "background": "#0d131f",
+                        "tertiary": "#ffba20",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary-container": "#00375a",
+                        "surface-dim": "#0d131f",
+                        "secondary-fixed": "#b8eaff",
+                        "on-tertiary": "#412d00",
+                        "on-primary-fixed": "#001d33",
+                        "inverse-primary": "#00629d",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#cc9200",
+                        "surface-container-highest": "#2f3542",
+                        "surface-container-high": "#242a36",
+                        "secondary-container": "#1a9dc1",
+                        "surface-container-lowest": "#080e1a",
+                        "secondary": "#67d4f9",
+                        "inverse-surface": "#dde2f3",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#98cbff",
+                        "primary-container": "#00a3ff",
+                        "inverse-on-surface": "#2a303d",
+                        "on-tertiary-fixed": "#271900",
+                        "on-surface": "#dde2f3",
+                        "on-tertiary-container": "#463000",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-tint": "#98cbff",
+                        "on-background": "#dde2f3",
+                        "on-primary": "#003354",
+                        "outline-variant": "#3f4852",
+                        "surface-variant": "#2f3542",
+                        "on-error": "#690005",
+                        "surface-bright": "#333946",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "container-padding": "24px",
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "grid-columns": "12"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Space Grotesk"],
+                        "display-hero": ["Instrument Serif"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#06090E] text-on-background min-h-screen overflow-x-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors rounded">
+<span class="material-symbols-outlined text-[20px]">wifi</span>
+</button>
+<button class="p-2 text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors rounded">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</button>
+<button class="p-2 text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors rounded">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a serious intelligence operator in a dimly lit, high-tech command center. Their face is partially illuminated by the cold blue glow of multiple monitor screens reflecting tactical data. The aesthetic is gritty, cinematic, and emphasizes a tense, high-stakes atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKECaI2o66h3y9OFS-BRqFS8EcEBrC39RpDqTKA0iuZZP824_CBKA7jUP2j0WLGK_Z4l7ws2pGHMCTe78Bw-3Encwvke5gieY7ePiPz9iZInlMSSQ4Fa9WF8ubK-TIUggbjfvVpZgo7SP9x5iFIgHqFgfO9u46M-DW4r1nPUDu8coaw2wXN3RDsVDt6Bpu9swI6CxUe0Svt2W_9eStcEA7SdAuAEMxTQ1IyWyEWwCrLR-Vfn2Lq2jdAAQNbUKfgTxRvYtgHPofII0"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Web) -->
+<nav class="hidden md:flex fixed left-0 top-14 bottom-0 w-20 z-40 flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10">
+<div class="flex flex-col items-center mb-8 gap-1">
+<div class="w-10 h-10 bg-surface-container rounded flex items-center justify-center border border-outline-variant/50">
+<span class="material-symbols-outlined text-primary">public</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">STRATCOM</span>
+</div>
+<div class="flex flex-col w-full gap-2">
+<!-- Inactive -->
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">public</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Orbital Theater</span>
+</button>
+<!-- Active -->
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">satellite_alt</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Asset Tracking</span>
+</button>
+<!-- Inactive -->
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">radar</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Signal Intel</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">warning</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Threat Matrix</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">terminal</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Comm Link</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col w-full gap-2">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">description</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">System Logs</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-mono text-[10px] tracking-tight text-center px-1">Settings</span>
+</button>
+</div>
+</nav>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg border border-sky-500/30 w-[90%] max-w-[600px] shadow-[0_0_20px_rgba(0,163,255,0.2)]">
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+<span class="font-mono text-[9px] font-bold mt-1">DEPLOY</span>
+</button>
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 flex flex-col items-center">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold mt-1">SCAN</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+<span class="font-mono text-[9px] font-bold mt-1">ANALYZE</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+<span class="font-mono text-[9px] font-bold mt-1">ABORT</span>
+</button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-14 md:pl-20 min-h-screen p-container-padding pb-24 md:pb-container-padding">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter h-full">
+<!-- Left Column: VTS Dashboard (3 cols) -->
+<div class="md:col-span-3 flex flex-col gap-stack-md">
+<!-- Sector Header -->
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant/30 p-4 rounded-DEFAULT">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-label-caps text-label-caps text-primary uppercase">Sector Status</h2>
+<span class="px-2 py-0.5 bg-error/20 border border-error text-error font-data-sm text-[10px] rounded-sm">CRITICAL</span>
+</div>
+<div class="font-data-lg text-data-lg text-on-surface">PERSIAN GULF</div>
+<div class="font-data-sm text-data-sm text-on-surface-variant mt-1">LAT: 26.56° N | LON: 56.28° E</div>
+</div>
+<!-- AIS Target List -->
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant/30 rounded-DEFAULT flex-1 overflow-hidden flex flex-col">
+<div class="p-3 border-b border-outline-variant/30 flex items-center justify-between">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">Active AIS Targets (IRGCN)</h3>
+<span class="material-symbols-outlined text-[16px] text-tertiary">warning</span>
+</div>
+<div class="p-2 flex-1 overflow-y-auto space-y-2">
+<!-- Target Row -->
+<div class="p-2 border border-tertiary/30 bg-tertiary/5 rounded-sm flex justify-between items-center group hover:bg-tertiary/10 transition-colors">
+<div>
+<div class="font-data-sm text-data-sm text-tertiary font-medium">FAC-77A</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant mt-0.5">SPD: 42kts | HDG: 185°</div>
+</div>
+<div class="text-right">
+<div class="font-data-sm text-[10px] text-on-surface-variant">RNG: 4.2nm</div>
+<span class="inline-block mt-1 w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(255,186,32,0.8)]"></span>
+</div>
+</div>
+<!-- Target Row -->
+<div class="p-2 border border-outline-variant/30 bg-surface-container-high rounded-sm flex justify-between items-center group hover:bg-white/5 transition-colors">
+<div>
+<div class="font-data-sm text-data-sm text-on-surface font-medium">M/V SHADOW-9</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant mt-0.5">SPD: 12kts | HDG: 045°</div>
+</div>
+<div class="text-right">
+<div class="font-data-sm text-[10px] text-on-surface-variant">RNG: 12.8nm</div>
+<span class="inline-block mt-1 w-2 h-2 rounded-full bg-primary/50"></span>
+</div>
+</div>
+<!-- Target Row -->
+<div class="p-2 border border-error/30 bg-error/5 rounded-sm flex justify-between items-center group hover:bg-error/10 transition-colors">
+<div>
+<div class="font-data-sm text-data-sm text-error font-medium">UKN-INTERCEPT</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant mt-0.5">SPD: 55kts | HDG: 210°</div>
+</div>
+<div class="text-right">
+<div class="font-data-sm text-[10px] text-on-surface-variant">RNG: 1.5nm</div>
+<span class="inline-block mt-1 w-2 h-2 rounded-full bg-error shadow-[0_0_8px_rgba(255,180,171,0.8)] animate-pulse"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Column: Radar Map & Gauge (6 cols) -->
+<div class="md:col-span-6 flex flex-col gap-stack-md">
+<!-- Central Radar Map -->
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant/30 rounded-DEFAULT relative h-[614px] md:h-auto md:flex-1 overflow-hidden group">
+<!-- Map Background Image -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-screen bg-cover bg-center" data-alt="A highly stylized, dark-mode satellite map visualization of a coastal strait, rendered in deep indigo and slate tones. Neon cyan and amber data vectors overlay the dark terrain, representing ship movements. The visual style is reminiscent of a high-tech military radar display, dense with analytical geometry and subtle glowing grid lines." data-location="Strait of Hormuz" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACSiTdTRfmugeduyFkpGhf98o7v3q4vUYzdOPowOzB1jccV8OIlh9GnQAM0kYQ--u-Wtg_Takvfox1szQFxtP2PZ-11XUVnoLknpan_oRt3kTm5jS0sXiJ-9VGgMK1wP5mBmL1waCj-GObOnAsJ5ZYhmJmZ0iCu43TsDid-MhZ92Bl3Ly6x1DuNcXay2mY_Qdq8bh9HnvT0UJNXV9iCxt8vu2USTZw0laLGRPX_3UX3mSiSIU_58mr6hd-KrkbITjsPm8-4Y2UomY');"></div>
+<!-- Radar Overlay Elements -->
+<div class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+<div class="w-full h-full max-w-md max-h-md border border-primary/20 rounded-full relative animate-[spin_60s_linear_infinite]">
+<div class="absolute top-0 bottom-1/2 left-1/2 w-px bg-gradient-to-t from-primary/50 to-transparent"></div>
+<div class="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,rgba(0,163,255,0.1)_90deg,transparent_90deg)] rounded-full"></div>
+</div>
+</div>
+<!-- HUD Overlays -->
+<div class="absolute top-4 left-4 z-20 flex flex-col gap-1">
+<span class="font-data-sm text-[10px] text-primary bg-background/80 px-2 py-1 border border-primary/30 rounded-sm">ZOOM: 14.5x</span>
+<span class="font-data-sm text-[10px] text-tertiary bg-background/80 px-2 py-1 border border-tertiary/30 rounded-sm">MODE: ACTIVE TRACK</span>
+</div>
+<div class="absolute bottom-4 right-4 z-20">
+<button class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-4 py-2 rounded-sm border border-primary hover:bg-primary-container/80 transition-colors shadow-[0_0_10px_rgba(0,163,255,0.3)]">
+                            ENGAGE VECTORS
+                        </button>
+</div>
+</div>
+<!-- Chokepoint Stability Index -->
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant/30 p-4 rounded-DEFAULT">
+<div class="flex justify-between items-end mb-3">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">Chokepoint Stability Index</h3>
+<span class="font-data-lg text-data-lg text-tertiary">78%</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-primary w-1/3"></div>
+<div class="h-full bg-tertiary w-1/3 shadow-[0_0_8px_rgba(255,186,32,0.5)]"></div>
+<div class="h-full bg-error w-[12%] shadow-[0_0_8px_rgba(255,180,171,0.5)] relative">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+<div class="flex justify-between mt-2 font-data-sm text-[10px] text-on-surface-variant">
+<span>STABLE</span>
+<span>CONGESTED</span>
+<span class="text-error">HOSTILE</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Analyst Notes & SIGINT (3 cols) -->
+<div class="md:col-span-3 flex flex-col gap-stack-md">
+<!-- SIGINT Correlator -->
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant/30 rounded-DEFAULT flex-1 flex flex-col">
+<div class="p-3 border-b border-outline-variant/30 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">radar</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">SIGINT Intercepts</h3>
+</div>
+<div class="p-4 flex-1 overflow-y-auto space-y-4">
+<!-- Note 1 -->
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+<span class="font-data-sm text-[10px] text-on-surface-variant">TS/SCI // 14:42Z</span>
+</div>
+<p class="font-body-base text-[13px] text-on-surface leading-relaxed">
+                                Unencrypted VHF chatter intercepted near Qeshm Island indicates preparation for unannounced naval drill. <span class="text-tertiary bg-tertiary/10 px-1 rounded">FAC-77A</span> cited in comms.
+                            </p>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-outline-variant/30"></div>
+<!-- Note 2 -->
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="font-data-sm text-[10px] text-on-surface-variant">SECRET // 13:15Z</span>
+</div>
+<p class="font-body-base text-[13px] text-on-surface leading-relaxed">
+                                Shadow fleet tanker <span class="text-primary bg-primary/10 px-1 rounded">M/V SHADOW-9</span> observed spoofing AIS data. True heading deviates 15° from broadcast vector. Recommend asset reallocation for visual confirm.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-surface-container-high border border-outline-variant/50 hover:bg-white/5 transition-colors p-3 rounded-DEFAULT flex flex-col items-center justify-center gap-2 group">
+<span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">share_location</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">BROADCAST</span>
+</button>
+<button class="bg-surface-container-high border border-outline-variant/50 hover:bg-white/5 transition-colors p-3 rounded-DEFAULT flex flex-col items-center justify-center gap-2 group">
+<span class="material-symbols-outlined text-on-surface group-hover:text-error transition-colors">policy</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">ESCALATE</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Aether Command: Hormuz Oil Flow Analytics & Blockade Simulator -->

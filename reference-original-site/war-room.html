@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>War Room · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D12;--bg-1:#0E131A;--surface:#141A24;--surface-2:#1A2131;--surface-3:#222A3B;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--warm-border:rgba(255,177,134,.28);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--us:#6DD9FF;--ir:#FF7A8A;--ht:#FFB186;--hz:#FF9BB0;--il:#7DDBB0;--ksa:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 10% -5%,rgba(109,217,255,.05),transparent 55%),radial-gradient(ellipse at 95% 110%,rgba(255,122,138,.04),transparent 55%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(10,13,18,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:1440px;margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 8px rgba(109,217,255,.5)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.bar button{background:transparent;border:1px solid var(--border-2);color:var(--ink-3);font-family:var(--ui);font-size:12px;padding:4px 10px;border-radius:var(--r-sm);cursor:pointer;transition:.15s}
+.bar button:hover{color:var(--accent);border-color:var(--accent)}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:28px clamp(14px,2.5vw,32px) 80px}
+.hdr{padding-bottom:26px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:end;gap:28px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.hdr .lt{max-width:720px}
+.hdr .eye{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-bottom:12px}
+.hdr h1{font-family:var(--display);font-size:clamp(40px,5.5vw,60px);font-weight:400;margin:0 0 10px;letter-spacing:-.02em;line-height:1}
+.hdr h1 i{font-style:italic;color:var(--accent)}
+.hdr p{color:var(--ink-2);font-size:15.5px;margin:0;max-width:620px;line-height:1.6}
+.hdr .rt{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px}
+.pill{border:1px solid var(--border);padding:5px 10px;color:var(--ink-3);border-radius:100px;background:var(--surface)}
+.pill.a{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+.pill.w{border-color:var(--warm-border);color:var(--warm);background:var(--warm-soft)}
+.metrics{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:20px}
+@media(max-width:1100px){.metrics{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:600px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metrics .c{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.metrics .lbl{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-bottom:6px}
+.metrics .v{font-family:var(--display);font-size:22px;font-weight:400;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.metrics .tr{height:3px;background:var(--border);margin-top:8px;position:relative;overflow:hidden;border-radius:2px}
+.metrics .tr::before{content:"";position:absolute;left:0;top:0;bottom:0;background:var(--accent);width:var(--w,50%);transition:width .5s;border-radius:2px}
+.metrics .tr.a::before{background:var(--warm)}.metrics .tr.r::before{background:var(--danger)}.metrics .tr.s::before{background:var(--success)}
+.grid{display:grid;grid-template-columns:380px 1fr 380px;gap:12px}
+@media(max-width:1200px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);display:flex;flex-direction:column;overflow:hidden}
+.panel h3{font-family:var(--ui);font-size:13.5px;font-weight:500;color:var(--ink);margin:0;padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;letter-spacing:-.005em}
+.panel h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10.5px;font-weight:400}
+.panel .body{padding:14px 18px 18px;flex:1;overflow:auto}
+.domain{margin-bottom:16px}
+.domain .d-h{font-family:var(--ui);font-size:12px;color:var(--ink-3);margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;font-weight:500}
+.domain .d-h .ico{font-family:var(--mono);font-size:10px;color:var(--ink-4);font-weight:400}
+.act{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);padding:11px 14px;margin-bottom:6px;cursor:pointer;color:var(--ink-2);transition:.15s;font-family:var(--ui);font-size:13px;line-height:1.4;border-radius:var(--r-sm);position:relative}
+.act:hover{border-color:var(--border-2);background:var(--surface-3)}
+.act.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.act.sel::before{content:"✓";position:absolute;top:7px;right:12px;color:var(--accent);font-family:var(--mono);font-size:12px;font-weight:600}
+.act .cost{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:4px;display:flex;gap:12px}
+.act .cost b{color:var(--accent);font-weight:500}
+.act.dis{opacity:.4;cursor:not-allowed;pointer-events:none}
+.commit{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.commit .row{display:flex;justify-content:space-between;padding:3px 0}
+.commit .row b{color:var(--ink-2);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 14px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:13px;font-weight:500;cursor:pointer;transition:.15s;border-radius:var(--r-sm);margin-top:10px}
+.btn:hover{background:var(--accent-bright)}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--border-2)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-row{display:flex;gap:6px;margin-top:6px}
+.btn-row .btn{margin-top:0;flex:1}
+.log{max-height:600px;overflow:auto;margin:0 -18px -18px;padding:0 18px 18px}
+.log::-webkit-scrollbar{width:6px}
+.log::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.entry{padding:10px 0;border-bottom:1px dashed var(--border);display:flex;gap:12px;align-items:start}
+.entry:first-child{padding-top:0}
+.entry .wk{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);width:44px;flex-shrink:0;padding-top:2px}
+.entry .avatar{width:22px;height:22px;flex-shrink:0;font-family:var(--mono);font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);margin-top:0}
+.entry .c{flex:1;min-width:0}
+.entry .who{font-family:var(--ui);font-size:11.5px;margin-bottom:3px;font-weight:500;letter-spacing:-.005em}
+.entry .msg{font-size:13px;color:var(--ink-2);line-height:1.45}
+.entry .msg b{color:var(--ink);font-weight:500}
+.entry .reason{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:5px;font-style:italic;line-height:1.4}
+.entry.sys .avatar{background:var(--ink-4);color:var(--bg)}.entry.sys .who{color:var(--ink-3)}
+.entry.us .avatar{background:var(--us);color:#06121a}.entry.us .who{color:var(--us)}
+.entry.ir .avatar{background:var(--ir);color:#fff}.entry.ir .who{color:var(--ir)}
+.entry.ht .avatar{background:var(--ht);color:#06121a}.entry.ht .who{color:var(--ht)}
+.entry.hz .avatar{background:var(--hz);color:#06121a}.entry.hz .who{color:var(--hz)}
+.entry.il .avatar{background:var(--il);color:#06121a}.entry.il .who{color:var(--il)}
+.entry.ksa .avatar{background:var(--ksa);color:#06121a}.entry.ksa .who{color:var(--ksa)}
+.actor{border:1px solid var(--border);background:var(--surface-2);margin-bottom:8px;padding:12px 14px;transition:.15s;border-radius:var(--r-sm)}
+.actor .h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.actor .h .n{font-family:var(--ui);font-size:13px;color:var(--ink);font-weight:500;letter-spacing:-.005em}
+.actor .h .cap{font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+.actor .u-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);padding:3px 0}
+.actor .u-row .v{color:var(--ink-2)}
+.actor-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:0}
+.actor-dot.ir{background:var(--ir)}.actor-dot.ht{background:var(--ht)}.actor-dot.hz{background:var(--hz)}
+.actor-dot.il{background:var(--il)}.actor-dot.ksa{background:var(--ksa)}.actor-dot.us{background:var(--us)}
+.end-scrim{position:fixed;inset:0;background:rgba(6,9,13,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.end-scrim.on{display:flex}
+.end{max-width:740px;width:100%;background:var(--surface);border:1px solid var(--border-2);padding:clamp(24px,3vw,40px);border-radius:var(--r-lg);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.end .eye{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:10px}
+.end h2{font-family:var(--display);font-size:40px;font-weight:400;margin:0 0 14px;letter-spacing:-.02em;line-height:1.05}
+.end h2 i{font-style:italic;color:var(--accent)}
+.end .verdict{font-size:15.5px;color:var(--ink-2);line-height:1.6;margin-bottom:24px;max-width:620px}
+.end .scores{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:20px}
+.end .scores .s{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px}
+.end .scores .lbl{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:6px}
+.end .scores .val{font-family:var(--display);font-size:22px;color:var(--ink);font-weight:400}
+.end .scores .val.g{color:var(--success)}.end .scores .val.a{color:var(--warm)}.end .scores .val.r{color:var(--danger)}
+.end .analog{border-left:2px solid var(--accent);background:var(--surface-2);padding:14px 18px;margin-bottom:10px;border-radius:0 var(--r-sm) var(--r-sm) 0}
+.end .analog h4{font-family:var(--ui);font-size:12px;color:var(--accent);margin:0 0 5px;font-weight:500}
+.end .analog p{margin:0;color:var(--ink-2);font-size:13.5px;line-height:1.5}
+.tut-scrim{position:fixed;inset:0;background:rgba(6,9,13,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px}
+.tut-scrim.off{display:none}
+.tut{max-width:680px;width:100%;background:var(--surface);border:1px solid var(--border-2);padding:clamp(24px,3vw,40px);border-radius:var(--r-lg);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tut .eye{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:10px}
+.tut h2{font-family:var(--display);font-size:36px;font-weight:400;margin:0 0 14px;letter-spacing:-.018em;line-height:1.05}
+.tut h2 i{font-style:italic;color:var(--accent)}
+.tut p{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin:0 0 10px}
+.tut ul{color:var(--ink-2);font-size:13.5px;line-height:1.6;padding-left:18px;margin:8px 0 14px}
+.tut ul li{margin-bottom:5px}
+.tut ul li b{color:var(--accent);font-weight:500}
+.ftr{margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--ink-4);line-height:1.7;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.ftr a{color:var(--ink-3);text-decoration:none}.ftr a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">War Room</span></div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <span>seed <span style="color:var(--ink-2)" id="b-seed">—</span></span><span class="sep">/</span>
+    <button id="b-share">Share run</button><button id="b-tut">Briefing</button><button id="b-reset">New game</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+<header class="hdr">
+  <div class="lt">
+    <div class="eye">Agent-based strategic simulator · 6 actors · Utility-driven AI</div>
+    <h1>The <i>war room</i></h1>
+    <p>You are the U.S. principal. Each week you commit actions across military, diplomatic, and covert domains. Five AI actors respond according to their utility functions and risk tolerance. Runs are seeded and shareable; endstates are scored against historical analogs.</p>
+  </div>
+  <div class="rt">
+    <span class="pill a">6-actor ABM</span><span class="pill a">Seeded RNG</span><span class="pill w">Shareable</span><span class="pill">10-week</span>
+  </div>
+</header>
+
+<div class="metrics" id="metrics">
+  <div class="c"><div class="lbl">Week</div><div class="v" id="m-wk">1 / 10</div><div class="tr a" style="--w:10%"></div></div>
+  <div class="c"><div class="lbl">Brent $/bbl</div><div class="v" id="m-oil">—</div><div class="tr a" id="m-oil-tr"></div></div>
+  <div class="c"><div class="lbl">Esc rung</div><div class="v" id="m-esc">—</div><div class="tr r" id="m-esc-tr"></div></div>
+  <div class="c"><div class="lbl">VLS %</div><div class="v" id="m-vls">—</div><div class="tr" id="m-vls-tr"></div></div>
+  <div class="c"><div class="lbl">Coalition</div><div class="v" id="m-coal">—</div><div class="tr s" id="m-coal-tr"></div></div>
+  <div class="c"><div class="lbl">Houthi cap</div><div class="v" id="m-hou">—</div><div class="tr r" id="m-hou-tr"></div></div>
+  <div class="c"><div class="lbl">Cum cost</div><div class="v" id="m-cost">—</div><div class="tr a" id="m-cost-tr"></div></div>
+  <div class="c"><div class="lbl">Civ cas</div><div class="v" id="m-cas">—</div><div class="tr r" id="m-cas-tr"></div></div>
+</div>
+
+<section class="grid">
+  <div class="panel">
+    <h3><span>US principal · Decisions</span><span class="sub" id="budget-lbl">BUDGET 2 / 2</span></h3>
+    <div class="body">
+      <div class="domain"><p class="d-h"><span>Military</span><span class="ico">Kinetic · Posture</span></p><div id="a-mil"></div></div>
+      <div class="domain"><p class="d-h"><span>Diplomatic</span><span class="ico">Coalition · Channels</span></p><div id="a-dip"></div></div>
+      <div class="domain"><p class="d-h"><span>Covert / Intelligence</span><span class="ico">HVT · Cyber · Financial</span></p><div id="a-cov"></div></div>
+      <div class="commit">
+        <div class="row"><span>Selected</span><span><b id="c-sel">0</b> actions</span></div>
+        <div class="row"><span>Est. weekly cost</span><span><b id="c-cost">$0.0B</b></span></div>
+        <div class="row"><span>Est. escalation Δ</span><span><b id="c-esc">+0.0</b></span></div>
+      </div>
+      <button class="btn" id="btn-commit">Commit &amp; advance week</button>
+      <div class="btn-row">
+        <button class="btn ghost" id="btn-step">Auto-step 1 wk</button>
+        <button class="btn ghost" id="btn-auto">Auto to endgame</button>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3><span>Event log</span><span class="sub">Campaign feed</span></h3>
+    <div class="body" style="padding-right:10px"><div class="log" id="log"></div></div>
+  </div>
+  <div class="panel">
+    <h3><span>Actor state · Utilities</span><span class="sub">Opponent model</span></h3>
+    <div class="body"><div id="actors"></div></div>
+  </div>
+</section>
+
+<footer class="ftr">
+  <div>War Room v2.0 — <a href="./index.html">Portfolio</a> · <a href="./intel-workbench.html">Intel Workbench</a> · <a href="https://github.com/Sacandaga/Coding-Practice">GitHub</a></div>
+  <div>Utility functions documented in source</div>
+</footer>
+</div>
+
+<div class="end-scrim" id="end-scrim"><div class="end">
+  <div class="eye" id="e-eye">END OF CAMPAIGN</div>
+  <h2 id="e-title">Strategic endstate</h2>
+  <p class="verdict" id="e-verdict"></p>
+  <div class="scores" id="e-scores"></div>
+  <div id="e-analogs"></div>
+  <div class="btn-row" style="margin-top:16px"><button class="btn" onclick="location.reload()">New campaign</button><button class="btn ghost" id="e-share">Share this run</button></div>
+</div></div>
+
+<div class="tut-scrim" id="tut-scrim"><div class="tut">
+  <div class="eye">Pre-game briefing · NSC principal</div>
+  <h2>Your charter, <i>as of Week 1</i></h2>
+  <p>Fifteen days into Operation Rough Rider, Houthi attacks have declined 72%, but Iranian posture is hardening. VLS inventory is strained. Your coalition is fragmenting. You have <b>10 weeks</b> to shape the endstate.</p>
+  <p style="color:var(--ink-3);font-size:13.5px">Each turn you may commit up to <b>2 actions</b> across military, diplomatic, and covert domains. Five AI actors respond:</p>
+  <ul>
+    <li><b>Iran</b> — utility peaks at deterrence without direct war; risk-averse on homeland, permissive via proxies.</li>
+    <li><b>Houthis</b> — utility trades attack tempo against regime survival; driven by Iranian resupply.</li>
+    <li><b>Hezbollah</b> — preservation-first; Lebanon exposure is a heavy negative weight.</li>
+    <li><b>Israel</b> — independent utility; may strike if Hezbollah mobilizes or if Iran enrichment accelerates.</li>
+    <li><b>Saudi Arabia</b> — oil-disruption and Houthi-proximity drive posture; rarely forward.</li>
+  </ul>
+  <p style="color:var(--ink-3);font-size:13.5px">Scoring combines final escalation rung, coalition cohesion, cumulative cost, civilian casualties, and Houthi degradation. Run is compared against three historical analogs. Shareable via seeded URL.</p>
+  <div class="btn-row" style="margin-top:16px"><button class="btn" id="btn-tut-close">Assume command</button></div>
+</div></div>
+
+<script>
+function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+function seedFromUrl(){const p=new URL(location.href),s=p.searchParams.get('s');return s&&/^[0-9a-f]+$/.test(s)?parseInt(s,16):null;}
+let SEED=seedFromUrl()||Math.floor(Math.random()*0xffffffff);
+let rng=mulberry32(SEED);
+function randn(mu=0,s=1){const u1=Math.max(1e-9,rng()),u2=rng();return mu+s*Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2);}
+function bernoulli(p){return rng()<p;}
+const STATE={week:1,maxWeek:10,oil:92,esc:7,vls:.41,coal:.62,hou:.60,ir:.85,hz:.70,il:.90,ksa:.55,cost:14.2,cas:280,usCas:12,hormuz:false,actions:[],ended:false};
+
+const ACTIONS=[
+  {id:'mil1',dom:'mil',name:'Sustained air campaign',cost:.9,esc:.4,fx:s=>{s.hou-=.12+randn(0,.03);s.vls-=.08;s.cas+=18;s.ir-=.01;}},
+  {id:'mil2',dom:'mil',name:'Precision strike · Iran proxy',cost:.6,esc:.7,fx:s=>{s.ir-=.04+randn(0,.015);s.vls-=.04;s.cas+=9;}},
+  {id:'mil3',dom:'mil',name:'Carrier surge · Hormuz escort',cost:.7,esc:.2,fx:s=>{s.coal+=.02;s.vls-=.02;s.oil-=randn(1.5,.5);}},
+  {id:'mil4',dom:'mil',name:'Defensive posture · VLS conserve',cost:.3,esc:-.2,fx:s=>{s.vls+=.03;s.hou+=.02;}},
+  {id:'dip1',dom:'dip',name:'Push Oman ceasefire framework',cost:.1,esc:-.4,fx:s=>{s.coal+=.04;if(bernoulli(.3))s.hou-=.06;}},
+  {id:'dip2',dom:'dip',name:'Sanctions tightening · IRGC-QF',cost:.1,esc:.2,fx:s=>{s.ir-=.015;s.coal-=.01;}},
+  {id:'dip3',dom:'dip',name:'Coalition consultations',cost:.1,esc:0,fx:s=>{s.coal+=.06;}},
+  {id:'dip4',dom:'dip',name:'Backchannel to Tehran',cost:.1,esc:-.3,fx:s=>{if(bernoulli(.4))s.esc-=.3;s.coal-=.01;}},
+  {id:'cov1',dom:'cov',name:'HVT targeting · IRONSMITH cell',cost:.2,esc:.4,fx:s=>{s.hou-=.06;s.ir-=.02;if(bernoulli(.25))s.cas+=5;}},
+  {id:'cov2',dom:'cov',name:'Cyber operation · Iran IADS C2',cost:.3,esc:.3,fx:s=>{s.ir-=.05+randn(0,.015);s.il+=.02;}},
+  {id:'cov3',dom:'cov',name:'Financial network disruption',cost:.2,esc:.1,fx:s=>{s.hou-=.03;s.ir-=.015;}},
+  {id:'cov4',dom:'cov',name:'Source network expansion',cost:.2,esc:0,fx:s=>{}},
+];
+
+const log=[];
+function rec(e){log.push({week:STATE.week,...e});}
+
+function turnIran(st,rec){
+  const opts=[
+    {k:'restraint',n:'Signal restraint · public diplomacy',fx:s=>{s.esc-=.2;s.coal+=.02;}},
+    {k:'proxy',n:'Direct Houthi resupply (Jiroft-2 drones)',fx:s=>{s.hou=Math.min(1,s.hou+.06);s.esc+=.2;}},
+    {k:'threat',n:'Hormuz closure threat (MOIS release)',fx:s=>{s.oil+=randn(4,1.5);s.esc+=.3;s.coal-=.02;}},
+    {k:'kinetic',n:'IRGC swarm attack on convoy',fx:s=>{s.usCas+=Math.max(0,Math.round(randn(6,2)));s.oil+=randn(7,2);s.esc+=.9;s.ir-=.03;}},
+    {k:'enrich',n:'Accelerate enrichment (Fordow)',fx:s=>{s.il-=.02;s.esc+=.25;}},
+  ];
+  const util=o=>{
+    let dmg=0,esc=0,px=0,str=0;
+    if(o.k==='kinetic'){dmg=.4;esc=.7;str=.3;}
+    if(o.k==='threat'){dmg=.05;esc=.3;str=.5;}
+    if(o.k==='proxy'){dmg=.05;esc=.15;px=.5;}
+    if(o.k==='enrich'){dmg=.02;esc=.2;str=.4;}
+    if(o.k==='restraint'){esc=-.2;str=.1;}
+    const ra=st.ir<.6?1.5:1,pxV=Math.max(0,1-st.hou)*.8+.3,tp=st.esc>8?-.5:0;
+    return -dmg*ra-esc*.6+px*pxV+str*.7+tp+randn(0,.12);
+  };
+  const pick=opts.map(o=>({...o,u:util(o)})).sort((a,b)=>b.u-a.u)[0];
+  pick.fx(st);
+  const reason=pick.k==='restraint'?'Preservation-first calibration.':pick.k==='proxy'?'Maintains strategic depth via Houthi reinforcement.':pick.k==='threat'?'Gray-zone signaling; avoids direct exposure.':pick.k==='kinetic'?'Hardliner faction ascendant.':'Nuclear program as leverage.';
+  rec({actor:'ir',name:'Iran / IRGC',msg:`Tehran: <b>${pick.n}</b>.`,reason:`EU ${pick.u.toFixed(2)} · ${reason}`});
+}
+function turnHouthis(st,rec){
+  if(st.hou<.18){rec({actor:'ht',name:'Houthis · Ansar Allah',msg:`Attack tempo collapses; no sorties this week.`,reason:`Capability below sustainment (${(st.hou*100).toFixed(0)}%).`});return;}
+  const opts=[
+    {k:'swarm',n:'Massed UAV/ASM swarm at Bab el-Mandeb',fx:s=>{s.usCas+=Math.max(0,Math.round(randn(4,2)));s.oil+=randn(2.5,1);s.hou-=.05;s.cas+=6;}},
+    {k:'standoff',n:'Standoff strike on Saudi infrastructure',fx:s=>{s.ksa+=.04;s.oil+=randn(3,1);s.hou-=.03;}},
+    {k:'reg',n:'Regenerate · move launchers, no attacks',fx:s=>{s.hou+=.03*(1-s.hou);}},
+    {k:'pol',n:'Public defiance / propaganda cycle',fx:s=>{s.hou+=.005;}},
+  ];
+  const util=o=>{
+    let own=0,atk=0;
+    if(o.k==='swarm'){own=.4;atk=.5;}if(o.k==='standoff'){own=.2;atk=.35;}if(o.k==='pol'){atk=.05;}
+    const sp=(1-st.hou)*1.2,is=st.ir*.3;
+    return -own*(.7+sp)+atk*(.8+is)+randn(0,.1);
+  };
+  const pick=opts.map(o=>({...o,u:util(o)})).sort((a,b)=>b.u-a.u)[0];
+  pick.fx(st);
+  rec({actor:'ht',name:'Houthis · Ansar Allah',msg:`<b>${pick.n}</b>.`,reason:`EU ${pick.u.toFixed(2)} · ${pick.k==='reg'?'Survival-weighted.':'Tempo maintained.'}`});
+}
+function turnHezbollah(st,rec){
+  const opts=[{k:'quiet',n:'Hold posture',fx:s=>{}},{k:'harass',n:'Limited harassment · LAF channels',fx:s=>{s.il-=.01;}},{k:'mob',n:'Full mobilization · Radwan staging',fx:s=>{s.il-=.04;s.esc+=.4;s.hz-=.02;}}];
+  const util=o=>{
+    let leb=0,own=0,sig=0;
+    if(o.k==='harass'){leb=.15;own=.05;sig=.2;}
+    if(o.k==='mob'){leb=.8;own=.3;sig=.5;}
+    if(o.k==='quiet'){sig=-.1;}
+    const ip=(st.ir>.75&&st.esc>7)?1.3:.7;
+    return -leb*1.5-own*.9+sig*ip+randn(0,.08);
+  };
+  const pick=opts.map(o=>({...o,u:util(o)})).sort((a,b)=>b.u-a.u)[0];
+  if(pick.k==='quiet')return;
+  pick.fx(st);
+  rec({actor:'hz',name:'Hezbollah',msg:`<b>${pick.n}</b>.`,reason:`EU ${pick.u.toFixed(2)} · Lebanon exposure weighted -1.5.`});
+}
+function turnIsrael(st,rec){
+  const opts=[{k:'mon',n:'Monitor-only posture',fx:s=>{}},{k:'ltd',n:'Limited air strike · Iran-linked',fx:s=>{s.ir-=.02;s.esc+=.3;s.il-=.01;}},{k:'deep',n:'Deep strike · Natanz/Fordow',fx:s=>{s.ir-=.08;s.esc+=1.2;s.il-=.04;s.oil+=randn(5,2);}},{k:'pre',n:'Preempt Hezbollah mobilization',fx:s=>{s.hz-=.12;s.esc+=.6;s.il-=.03;}}];
+  const util=o=>{
+    let d=0,id=0,hd=0,us=0;
+    if(o.k==='ltd'){d=.1;id=.2;us=.3;}if(o.k==='deep'){d=.4;id=.7;us=-.4;}if(o.k==='pre'){d=.3;hd=.6;us=-.2;}
+    const ht=st.hz<.65?0:(st.hz>.75?1:.4),et=st.ir>.82?1:0;
+    return -d*.9+id*(.6+et*.6)+hd*ht+us*.3+randn(0,.1);
+  };
+  const pick=opts.map(o=>({...o,u:util(o)})).sort((a,b)=>b.u-a.u)[0];
+  if(pick.k==='mon')return;
+  pick.fx(st);
+  rec({actor:'il',name:'Israel · IDF',msg:`<b>${pick.n}</b>.`,reason:`EU ${pick.u.toFixed(2)} · Independent action.`});
+}
+function turnSaudi(st,rec){
+  const opts=[{k:'q',n:'Quiet posture · intel-sharing',fx:s=>{}},{k:'rr',n:'Accelerate Yanbu reroute · SPR signal',fx:s=>{s.oil-=randn(2,.7);s.coal+=.02;}},{k:'ad',n:'Reinforce Patriot/THAAD at Aramco',fx:s=>{s.ksa-=.04;s.coal+=.02;}},{k:'st',n:'Strikes on Houthi launchers',fx:s=>{s.hou-=.04;s.esc+=.25;s.ksa+=.03;s.cas+=6;}}];
+  const util=o=>{
+    let ex=0,oh=0,ca=0,kd=0;
+    if(o.k==='rr'){oh=.5;ca=.2;}if(o.k==='ad'){ex=-.3;ca=.2;}if(o.k==='st'){ex=.4;kd=.3;}
+    const hp=st.hou>.55?.8:.3,oc=st.oil>100?1:.5;
+    return -ex*.9+oh*oc+ca*.6+kd*hp*.4+randn(0,.08);
+  };
+  const pick=opts.map(o=>({...o,u:util(o)})).sort((a,b)=>b.u-a.u)[0];
+  if(pick.k==='q')return;
+  pick.fx(st);
+  rec({actor:'ksa',name:'Saudi Arabia · MODA',msg:`<b>${pick.n}</b>.`,reason:`EU ${pick.u.toFixed(2)} · Oil-disruption weighted.`});
+}
+function bgTick(st){
+  st.oil+=(92-st.oil)*.05+randn(0,.8);
+  st.coal=Math.max(0,st.coal-.008);
+  st.hou+=.008*(1-st.hou);
+  st.ir=Math.min(1,st.ir+.004);
+  st.vls=Math.min(1,st.vls+.02);
+  st.esc+=(5-st.esc)*.04;
+  st.cost+=.15;
+  if(st.oil>120)st.hormuz=true;
+}
+function clamp(s){['hou','ir','hz','il','ksa','vls','coal'].forEach(k=>s[k]=Math.max(0,Math.min(1,s[k])));s.esc=Math.max(1,Math.min(10,s.esc));s.oil=Math.max(70,s.oil);}
+
+const $=id=>document.getElementById(id);
+function renderActions(){
+  const g={mil:$('a-mil'),dip:$('a-dip'),cov:$('a-cov')};
+  g.mil.innerHTML='';g.dip.innerHTML='';g.cov.innerHTML='';
+  ACTIONS.forEach(a=>{
+    const el=document.createElement('button');
+    el.className='act'+(STATE.actions.includes(a.id)?' sel':'');
+    if(STATE.actions.length>=2&&!STATE.actions.includes(a.id))el.classList.add('dis');
+    el.innerHTML=`<div>${a.name}</div><div class="cost"><span>Cost <b>$${a.cost.toFixed(1)}B</b></span><span>ΔEsc <b>${a.esc>=0?'+':''}${a.esc.toFixed(1)}</b></span></div>`;
+    el.addEventListener('click',()=>{const i=STATE.actions.indexOf(a.id);if(i>=0)STATE.actions.splice(i,1);else if(STATE.actions.length<2)STATE.actions.push(a.id);renderActions();updateCommit();});
+    g[a.dom].appendChild(el);
+  });
+}
+function updateCommit(){
+  const sel=STATE.actions.map(id=>ACTIONS.find(a=>a.id===id));
+  $('c-sel').textContent=sel.length;
+  $('c-cost').textContent='$'+sel.reduce((s,a)=>s+a.cost,0).toFixed(1)+'B';
+  const esc=sel.reduce((s,a)=>s+a.esc,0);
+  $('c-esc').textContent=(esc>=0?'+':'')+esc.toFixed(1);
+  $('budget-lbl').textContent=`BUDGET ${sel.length} / 2`;
+}
+function renderMetrics(){
+  $('m-wk').textContent=`${STATE.week} / ${STATE.maxWeek}`;
+  $('m-oil').textContent='$'+STATE.oil.toFixed(1);
+  $('m-esc').textContent=STATE.esc.toFixed(1);
+  $('m-vls').textContent=(STATE.vls*100).toFixed(0)+'%';
+  $('m-coal').textContent=STATE.coal.toFixed(2);
+  $('m-hou').textContent=(STATE.hou*100).toFixed(0)+'%';
+  $('m-cost').textContent='$'+STATE.cost.toFixed(1)+'B';
+  $('m-cas').textContent=Math.round(STATE.cas);
+  document.querySelector('#metrics .c:first-child .tr').style.setProperty('--w',(STATE.week/STATE.maxWeek*100)+'%');
+  $('m-oil-tr').style.setProperty('--w',Math.min(100,(STATE.oil-70)/70*100)+'%');
+  $('m-esc-tr').style.setProperty('--w',(STATE.esc/10*100)+'%');
+  $('m-vls-tr').style.setProperty('--w',STATE.vls*100+'%');
+  $('m-coal-tr').style.setProperty('--w',STATE.coal*100+'%');
+  $('m-hou-tr').style.setProperty('--w',STATE.hou*100+'%');
+  $('m-cost-tr').style.setProperty('--w',Math.min(100,STATE.cost/60*100)+'%');
+  $('m-cas-tr').style.setProperty('--w',Math.min(100,STATE.cas/1500*100)+'%');
+}
+const AV={sys:'S',us:'US',ir:'IR',ht:'HT',hz:'HZ',il:'IL',ksa:'KS'};
+function renderLog(){
+  $('log').innerHTML=[...log].reverse().map(e=>`<div class="entry ${e.actor}"><div class="wk">W${e.week}</div><div class="avatar">${AV[e.actor]||'?'}</div><div class="c"><div class="who">${e.name}</div><div class="msg">${e.msg}</div>${e.reason?`<div class="reason">${e.reason}</div>`:''}</div></div>`).join('');
+}
+function renderActors(){
+  const cards=[
+    {k:'ir',n:'Iran / IRGC',cap:STATE.ir,rows:[['Own damage','−0.9 weight'],['Proxy success',Math.max(0,1-STATE.hou).toFixed(2)],['Posture',STATE.ir<.6?'Hardliner cautious':'Preservation-first']]},
+    {k:'ht',n:'Houthis',cap:STATE.hou,rows:[['Survival pressure',(1-STATE.hou).toFixed(2)],['Iran resupply',STATE.ir.toFixed(2)],['Posture',STATE.hou<.3?'Regenerating':STATE.hou<.6?'Limited':'Active']]},
+    {k:'hz',n:'Hezbollah',cap:STATE.hz,rows:[['Lebanon exposure','−1.5 weight'],['Iran signal',STATE.ir>.8?'Strong':'Moderate'],['Posture',STATE.hz<.6?'Degraded':'Intact']]},
+    {k:'il',n:'Israel · IDF',cap:STATE.il,rows:[['Hezbollah trigger',STATE.hz>.75?'Armed':'Dormant'],['Enrichment trigger',STATE.ir>.82?'Armed':'Below'],['US coord',STATE.coal>.6?'Consulted':'Independent']]},
+    {k:'ksa',n:'Saudi Arabia',cap:1-STATE.ksa,rows:[['Oil concern',STATE.oil>100?'Elevated':'Managed'],['Houthi pressure',STATE.hou>.55?'High':'Low'],['Posture','Defensive + hedge']]},
+  ];
+  $('actors').innerHTML=cards.map(c=>`<div class="actor"><div class="h"><div class="n"><span class="actor-dot ${c.k}"></span>${c.n}</div><div class="cap">CAP ${(c.cap*100).toFixed(0)}%</div></div>${c.rows.map(r=>`<div class="u-row"><span>${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}</div>`).join('');
+}
+function commitTurn(auto=false){
+  if(STATE.ended)return;
+  if(!auto&&STATE.actions.length===0) rec({actor:'sys',name:'NSC staffer',msg:`<b>Week ${STATE.week} · no US action.</b> Baseline ops.`,reason:'Player passed.'});
+  for(const id of STATE.actions){
+    const a=ACTIONS.find(x=>x.id===id);if(!a)continue;
+    a.fx(STATE);STATE.cost+=a.cost;STATE.esc+=a.esc;
+    rec({actor:'us',name:'US · principal',msg:`<b>${a.name}</b>.`,reason:`Cost $${a.cost.toFixed(1)}B · ΔEsc ${a.esc>=0?'+':''}${a.esc.toFixed(1)}.`});
+  }
+  clamp(STATE);
+  turnIran(STATE,rec);clamp(STATE);
+  turnHouthis(STATE,rec);clamp(STATE);
+  turnHezbollah(STATE,rec);clamp(STATE);
+  turnIsrael(STATE,rec);clamp(STATE);
+  turnSaudi(STATE,rec);clamp(STATE);
+  bgTick(STATE);clamp(STATE);
+  STATE.actions=[];STATE.week++;
+  if(STATE.week>STATE.maxWeek||STATE.esc>=9.8||(STATE.oil>140&&STATE.hormuz)||STATE.coal<.2||STATE.vls<.05||STATE.usCas>200) return endGame();
+  renderMetrics();renderActions();updateCommit();renderLog();renderActors();
+}
+function autoTurn(){
+  const picks=[];
+  if(STATE.esc>7&&STATE.vls>.2)picks.push('mil1');
+  else if(STATE.hou>.5)picks.push('mil2');
+  else picks.push('mil4');
+  if(STATE.esc>7.5)picks.push('dip1');
+  else if(STATE.ir>.8)picks.push('cov2');
+  else picks.push('dip3');
+  STATE.actions=picks;commitTurn(true);
+}
+function autoAll(){while(!STATE.ended&&STATE.week<=STATE.maxWeek)autoTurn();}
+function endGame(){
+  STATE.ended=true;
+  const es=Math.round(Math.max(0,Math.min(100,100-(STATE.esc-1)/9*100)));
+  const cs=Math.round(STATE.coal*100);
+  const xs=Math.round(Math.max(0,100-(STATE.cost-10)/60*100));
+  const as=Math.round(Math.max(0,100-STATE.cas/2000*100));
+  const hs=Math.round((1-STATE.hou)*100);
+  const total=Math.round(es*.25+cs*.2+xs*.2+as*.2+hs*.15);
+  const vc=total>=70?{l:'GREEN · success',c:'g'}:total>=45?{l:'AMBER · mixed',c:'a'}:{l:'RED · reversal',c:'r'};
+  $('e-eye').textContent=`END OF CAMPAIGN · WEEK ${Math.min(STATE.week-1,STATE.maxWeek)} · ${vc.l}`;
+  $('e-title').innerHTML=total>=70?'The <i>campaign</i> holds.':total>=45?'A <i>costly</i> draw.':'The <i>initiative</i> was lost.';
+  const oilS=STATE.oil>115?'oil markets pricing Hormuz closure':STATE.oil>100?'elevated but bounded oil':'oil markets stabilized';
+  const coalS=STATE.coal>.7?'coalition reinforced':STATE.coal>.5?'coalition intact but strained':STATE.coal>.3?'coalition fragmented':'coalition collapsed';
+  const iranS=STATE.ir<.7?'Iran proxy network degraded':STATE.ir>.9?'Iran posture hardened':'Iran capability near baseline';
+  const houS=STATE.hou<.3?'Houthis below sustainment threshold':STATE.hou<.5?'Houthi capability degraded':'Houthi capability resilient';
+  const pfx=vc.c==='g'?'Operation Rough Rider concludes with strategic gains consolidated.':vc.c==='a'?'Operation Rough Rider produced mixed outcomes — tactical wins without decisive strategic shift.':'Operation Rough Rider is terminated under adverse conditions.';
+  $('e-verdict').textContent=`${pfx} Endstate: ${oilS}; ${coalS}; ${iranS}; ${houS}. Cumulative cost $${STATE.cost.toFixed(1)}B against ${Math.round(STATE.cas)} civilian casualties and ${STATE.usCas} US service members killed.`;
+  $('e-scores').innerHTML=`<div class="s"><div class="lbl">Composite</div><div class="val ${vc.c}">${total} / 100</div></div><div class="s"><div class="lbl">Escalation</div><div class="val">${es} · Rung ${STATE.esc.toFixed(1)}</div></div><div class="s"><div class="lbl">Coalition</div><div class="val">${cs} · ${STATE.coal.toFixed(2)}</div></div><div class="s"><div class="lbl">Cost</div><div class="val">${xs} · $${STATE.cost.toFixed(1)}B</div></div><div class="s"><div class="lbl">Casualties</div><div class="val">${as} · ${Math.round(STATE.cas)} civ</div></div><div class="s"><div class="lbl">Houthi degrade</div><div class="val">${hs} · ${((1-STATE.hou)*100).toFixed(0)}%</div></div>`;
+  const lib=[
+    {name:'Operation Praying Mantis · 1988',note:'Single-day U.S. naval engagement with Iran. Limited, contained, escalation-controlled. A "green" analog.',fit:total>=70?3:1},
+    {name:'Operation Rough Rider · 2024 (baseline)',note:'Moderate multi-week campaign against Houthi capability. Tactical attrition without decisive political outcome.',fit:total>=45&&total<70?3:1},
+    {name:'Iran–Iraq Tanker War · 1984–1988',note:'Four-year attritional Gulf campaign with oil markets disrupted repeatedly. Strategic goals unmet.',fit:total<45||STATE.oil>115?3:1},
+    {name:'Operation Desert Fox · 1998',note:'Short precision air campaign against Iraqi WMD. Tactical effects without political settlement.',fit:STATE.esc<6&&STATE.cost<20?3:1},
+    {name:'Lebanon · 1982–1984',note:'US deployment bounded by unfavorable utility calculus; withdrawal after Beirut bombing.',fit:STATE.coal<.3||STATE.usCas>50?3:1},
+  ];
+  lib.sort((a,b)=>b.fit-a.fit);
+  $('e-analogs').innerHTML=lib.slice(0,2).map(a=>`<div class="analog"><h4>${a.name}</h4><p>${a.note}</p></div>`).join('');
+  $('end-scrim').classList.add('on');
+}
+function shareLink(){const url=new URL(location.href);url.searchParams.set('s',SEED.toString(16));navigator.clipboard?.writeText(url.toString());return url.toString();}
+rec({actor:'sys',name:'NSC staffer',msg:`Campaign begins. T+15 days into Operation Rough Rider. VLS ${(STATE.vls*100).toFixed(0)}%. Coalition cohesion ${STATE.coal.toFixed(2)}. Esc rung ${STATE.esc.toFixed(1)}.`,reason:`Seeded run ${SEED.toString(16).slice(0,8)}.`});
+$('b-seed').textContent=SEED.toString(16).slice(0,8);
+renderActions();renderMetrics();renderLog();renderActors();updateCommit();
+$('btn-commit').addEventListener('click',()=>commitTurn(false));
+$('btn-step').addEventListener('click',autoTurn);
+$('btn-auto').addEventListener('click',autoAll);
+$('b-reset').addEventListener('click',()=>{const url=new URL(location.href);url.searchParams.delete('s');location.href=url.toString();});
+$('b-share').addEventListener('click',()=>{shareLink();$('b-share').textContent='Copied ✓';setTimeout(()=>$('b-share').textContent='Share run',1500);});
+$('e-share')?.addEventListener('click',()=>{shareLink();$('e-share').textContent='Copied ✓';});
+$('b-tut').addEventListener('click',()=>$('tut-scrim').classList.remove('off'));
+$('btn-tut-close').addEventListener('click',()=>$('tut-scrim').classList.add('off'));
+if(location.search.includes('s='))$('tut-scrim').classList.add('off');
+</script>
+</body>
+</html>

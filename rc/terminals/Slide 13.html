@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER COMMAND - War Game Simulation</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-primary": "#00629d",
+                        "primary-fixed": "#cfe5ff",
+                        "on-surface-variant": "#bec7d4",
+                        "on-surface": "#dde2f3",
+                        "tertiary": "#ffba20",
+                        "tertiary-container": "#cc9200",
+                        "on-background": "#dde2f3",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#003544",
+                        "outline": "#88919d",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "background": "#0d131f",
+                        "primary-fixed-dim": "#98cbff",
+                        "inverse-surface": "#dde2f3",
+                        "inverse-on-surface": "#2a303d",
+                        "on-primary-container": "#00375a",
+                        "surface": "#0d131f",
+                        "surface-tint": "#98cbff",
+                        "primary-container": "#00a3ff",
+                        "surface-bright": "#333946",
+                        "secondary-container": "#1a9dc1",
+                        "surface-container-high": "#242a36",
+                        "on-tertiary-container": "#463000",
+                        "on-primary-fixed": "#001d33",
+                        "outline-variant": "#3f4852",
+                        "surface-variant": "#2f3542",
+                        "surface-dim": "#0d131f",
+                        "on-secondary-container": "#002e3b",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "on-tertiary-fixed": "#271900",
+                        "surface-container-highest": "#2f3542",
+                        "error-container": "#93000a",
+                        "secondary": "#67d4f9",
+                        "on-tertiary": "#412d00",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "surface-container": "#1a202c",
+                        "secondary-fixed": "#b8eaff",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#ffdea8",
+                        "surface-container-lowest": "#080e1a",
+                        "surface-container-low": "#161c27",
+                        "on-primary": "#003354",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed": "#001f28",
+                        "primary": "#98cbff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "grid-columns": "12",
+                        "container-padding": "24px",
+                        "stack-md": "16px",
+                        "unit": "4px",
+                        "gutter": "16px"
+                    },
+                    fontFamily: {
+                        "data-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "display-hero": ["Instrument Serif"],
+                        "body-base": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Space Grotesk"]
+                    },
+                    fontSize: {
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glow-primary { box-shadow: 0 0 15px rgba(0, 163, 255, 0.3); }
+        .glow-error { box-shadow: 0 0 15px rgba(255, 180, 171, 0.3); }
+        .glow-tertiary { box-shadow: 0 0 15px rgba(255, 186, 32, 0.3); }
+        .bg-grid-pattern { background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px; }
+        
+        /* Custom Scrollbar for dense data panels */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f4852; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #88919d; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP APP BAR -->
+<header class="bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)] fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<!-- Center Search/Nav space holder -->
+<div class="hidden md:flex flex-1 mx-8 items-center justify-end">
+<!-- Search bar on right as per JSON -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 text-[18px]">search</span>
+<input class="w-full bg-[#0d131f] border border-white/10 rounded-sm py-1 pl-8 pr-2 font-mono uppercase tracking-widest text-xs text-sky-500 focus:outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 transition-all placeholder:text-slate-600" placeholder="QUERY DATABANKS..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">wifi</span></button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">schedule</span></button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">lock</span></button>
+</div>
+<div class="w-8 h-8 rounded-sm overflow-hidden border border-white/20">
+<img alt="Operator Profile" class="w-full h-full object-cover grayscale opacity-80" data-alt="A highly detailed close-up portrait of a tactical operator in dimly lit, high-contrast cool blue lighting. The operator wears dark, specialized gear, blending into a sleek, technological background. The mood is intense, serious, and focused, reflecting a high-stakes command center environment. The image is rendered with photorealistic clarity and minimal noise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3OyOvStoikC8dZTn1M4v1HRKYlOr87FhRvXbJdKhUOYhuuqzKliK39aK1BPNZSY5Ff_zlJjq_4frXJ2h2DvGydrr0-rbzuHKoZ6TRtpECKAcorqTrGFOMKtW1DkQl3bgTuzLjV-LRaSaSdWjKGP_mlWSSWU95duSb5AotwCp9-SxUANMpNuA-Tgn2Z0FIcY8R0nhlUrium6UDapa4qV20xlOCYICqjdL3vEhfM0XCN5Yf6QnN_OMCnRi5g8SJWT2XyFrAHaILipY"/>
+</div>
+</div>
+</header>
+<!-- SIDE NAV BAR (WEB) -->
+<nav class="hidden md:flex bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10 fixed left-0 top-14 bottom-0 w-20 z-40 flex-col items-center py-4 justify-between">
+<div class="flex flex-col items-center w-full gap-2">
+<!-- Header/Logo area within nav -->
+<div class="mb-6 flex flex-col items-center">
+<span class="material-symbols-outlined text-sky-500 text-3xl mb-1">radar</span>
+<span class="font-data-sm text-[8px] text-slate-500 tracking-tighter">STRATCOM</span>
+</div>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="Orbital Theater">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">public</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="Asset Tracking">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">satellite_alt</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="Signal Intel">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">radar</span>
+</button>
+<!-- ACTIVE TAB: Threat Matrix (Simulation maps to this) -->
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full group" title="Threat Matrix">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform" style="font-variation-settings: 'FILL' 1;">warning</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="Comm Link">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">terminal</span>
+</button>
+</div>
+<div class="flex flex-col items-center w-full gap-2">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="System Logs">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">description</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" title="Settings">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">settings</span>
+</button>
+</div>
+</nav>
+<!-- BOTTOM NAV BAR (MOBILE) -->
+<nav class="md:hidden bg-slate-900/40 backdrop-blur-lg border border-sky-500/30 w-[95vw] fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-4 sm:space-x-8 py-2 px-4 shadow-[0_0_20px_rgba(0,163,255,0.2)]">
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</button>
+<!-- ACTIVE -->
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</button>
+</nav>
+<!-- MAIN CANVAS -->
+<main class="pt-14 md:ml-20 pb-24 min-h-screen flex flex-col bg-grid-pattern relative">
+<!-- Ambient Background Glows -->
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-error/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="p-container-padding flex-1 flex flex-col gap-gutter max-w-[1600px] mx-auto w-full relative z-10">
+<!-- Header & Scenario Manager -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 mb-2 border-b border-outline-variant/30 pb-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-1 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[32px]">sports_esports</span>
+                        WAR GAME: PREDICTIVE ANALYTICS
+                    </h1>
+<p class="font-data-sm text-data-sm text-on-surface-variant uppercase tracking-widest">Simulation ID: WG-77X-OMEGA | Status: <span class="text-tertiary glow-tertiary">AWAITING EXECUTION</span></p>
+</div>
+<!-- Scenario Selectors -->
+<div class="flex flex-wrap gap-3">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-outline">THEATER OF OPS</label>
+<button class="bg-surface-container border border-outline-variant px-3 py-1.5 flex items-center gap-8 hover:border-primary/50 transition-colors">
+<span class="font-data-sm text-data-sm text-on-surface">INDO-PACIFIC SEC-4</span>
+<span class="material-symbols-outlined text-[16px] text-outline">arrow_drop_down</span>
+</button>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-outline">THREAT VECTOR</label>
+<button class="bg-surface-container border border-outline-variant px-3 py-1.5 flex items-center gap-8 hover:border-primary/50 transition-colors">
+<span class="font-data-sm text-data-sm text-on-surface text-error">ASYMMETRIC/CYBER</span>
+<span class="material-symbols-outlined text-[16px] text-outline">arrow_drop_down</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter flex-1">
+<!-- Center: Heat Map (Col Span 8) -->
+<div class="lg:col-span-8 bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/40 flex flex-col relative overflow-hidden group min-h-[500px]">
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/50 z-10 pointer-events-none"></div>
+<!-- Map Background -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-luminosity">
+<img class="w-full h-full object-cover" data-alt="A highly detailed, stylized topographical map visualization interface. The map features dark, monochromatic landmasses against a deep navy sea, overlaid with glowing neon cyan and crimson tactical grid lines, concentric radar rings, and sparse glowing data nodes. The aesthetic is strictly militaristic, cold, and analytic, resembling a high-tech command center satellite feed in 'dark mode'." data-location="South China Sea" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXcM7yBgbLvofHopqZf7xujtc9qw7xMlYGnfn2KAoe6PdCXpk-4uTvuaI0kVpoFQSloGAn-yac_HJOfdkXnnvsyhtDh67cWAIB_ykzqSvSVHRIoFivZ3hVjZB1Gm2KsyQJ_kg1wpekGQ_TsF3FA_JSnO3MTzZFbiIZUq5NuJQwOctGEKFODipuDZ66C4rScW9GrhMF-BPj2wAV3SiH5LJRund-Yo7lQ0qHgq1h7urLcNBmK2Cu60WLZRg7TWSoGOVpYX_WmzjAC-E"/>
+</div>
+<!-- Map Overlay UI -->
+<div class="relative z-20 p-4 flex justify-between items-start border-b border-outline-variant/30 bg-surface/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">map</span>
+<h2 class="font-label-caps text-label-caps text-on-surface tracking-widest">TACTICAL HEAT MAP</h2>
+</div>
+<div class="flex gap-2">
+<span class="bg-primary/10 border border-primary text-primary font-data-sm text-[10px] px-2 py-0.5 rounded-sm">LIVE FEED</span>
+<span class="bg-error/10 border border-error text-error font-data-sm text-[10px] px-2 py-0.5 rounded-sm animate-pulse">HOT ZONE</span>
+</div>
+</div>
+<!-- Projected Success Overlay -->
+<div class="absolute top-20 right-6 z-20 bg-surface-container/90 border border-outline-variant p-4 backdrop-blur-md w-64 shadow-lg shadow-black/50">
+<h3 class="font-label-caps text-label-caps text-outline mb-2">PROBABILITY OF SUCCESS</h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-display-hero text-[48px] text-primary leading-none">62.4</span>
+<span class="font-data-sm text-data-sm text-primary">%</span>
+</div>
+<div class="w-full h-1 bg-surface-variant relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary w-[62.4%] glow-primary"></div>
+</div>
+<div class="mt-3 flex flex-col gap-1">
+<div class="flex justify-between font-data-sm text-[10px] text-on-surface-variant">
+<span>CASUALTY EST:</span>
+<span class="text-tertiary">MODERATE</span>
+</div>
+<div class="flex justify-between font-data-sm text-[10px] text-on-surface-variant">
+<span>DURATION:</span>
+<span>14.2 HRS</span>
+</div>
+</div>
+</div>
+<!-- Tactical Nodes (Absolute positioned on map) -->
+<div class="absolute top-1/2 left-1/3 z-20 transform -translate-x-1/2 -translate-y-1/2">
+<div class="relative">
+<div class="w-4 h-4 bg-error rounded-full glow-error animate-ping absolute inset-0 opacity-75"></div>
+<div class="w-4 h-4 bg-error border border-white rounded-full relative z-10"></div>
+<div class="absolute top-6 left-1/2 -translate-x-1/2 w-max bg-background/90 border border-error/50 px-2 py-1 font-data-sm text-[10px] text-error">
+                                TGT-ALPHA-9
+                            </div>
+</div>
+</div>
+<div class="absolute bottom-1/3 right-1/3 z-20">
+<div class="relative">
+<div class="w-3 h-3 bg-primary border border-white rounded-none relative z-10 rotate-45 glow-primary"></div>
+<div class="absolute top-5 left-1/2 -translate-x-1/2 w-max bg-background/90 border border-primary/50 px-2 py-1 font-data-sm text-[10px] text-primary">
+                                ALLY-STRIKE-GRP
+                            </div>
+</div>
+</div>
+</div>
+<!-- Right: AI Decision Trees (Col Span 4) -->
+<div class="lg:col-span-4 bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/40 flex flex-col max-h-[600px]">
+<div class="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">account_tree</span>
+<h2 class="font-label-caps text-label-caps text-on-surface tracking-widest">AI BRANCH ANALYSIS</h2>
+</div>
+<span class="font-data-sm text-[10px] text-outline">v2.4.1</span>
+</div>
+<div class="p-4 flex-1 overflow-y-auto flex flex-col gap-4">
+<!-- Decision Node 1 -->
+<div class="border-l-2 border-primary pl-3 relative">
+<div class="absolute -left-[5px] top-1.5 w-2 h-2 bg-primary rounded-full glow-primary"></div>
+<h4 class="font-data-sm text-data-sm text-on-surface mb-1">NODE: INITIAL ENGAGEMENT</h4>
+<div class="bg-surface-container border border-outline-variant/30 p-2 text-[11px] font-data-sm text-on-surface-variant mb-2">
+                                If Hostile asset breaches perimeter [Sector 4], immediate kinetic response required.
+                            </div>
+<!-- Branches -->
+<div class="flex flex-col gap-2 mt-2 pl-2 border-l border-outline-variant/30 border-dashed">
+<div class="flex items-center justify-between hover:bg-white/5 p-1 transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30">
+<span class="font-data-sm text-[10px] text-primary">BRANCH A: Precision Strike</span>
+<span class="font-data-sm text-[10px] text-outline bg-surface px-1">Prob: 78%</span>
+</div>
+<div class="flex items-center justify-between hover:bg-white/5 p-1 transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30">
+<span class="font-data-sm text-[10px] text-tertiary">BRANCH B: Electronic Warfare</span>
+<span class="font-data-sm text-[10px] text-outline bg-surface px-1">Prob: 42%</span>
+</div>
+</div>
+</div>
+<!-- Decision Node 2 (Escalation) -->
+<div class="border-l-2 border-error pl-3 relative mt-2 opacity-80">
+<div class="absolute -left-[5px] top-1.5 w-2 h-2 bg-error rounded-full"></div>
+<h4 class="font-data-sm text-data-sm text-on-surface mb-1">NODE: ESCALATION RESPONSE</h4>
+<div class="bg-surface-container border border-error/30 p-2 text-[11px] font-data-sm text-error/80 mb-2">
+                                Hostile retaliates. Escalation ladder moves to Tier 3.
+                            </div>
+<!-- Escalation Rungs -->
+<div class="flex items-end gap-1 h-12 mt-2">
+<div class="w-4 bg-error/20 border border-error/50 h-1/4"></div>
+<div class="w-4 bg-error/40 border border-error/50 h-2/4"></div>
+<div class="w-4 bg-error border border-error h-3/4 glow-error"></div>
+<div class="w-4 bg-surface-variant border border-outline-variant/30 h-full"></div>
+<div class="w-4 bg-surface-variant border border-outline-variant/30 h-full"></div>
+</div>
+<span class="font-data-sm text-[9px] text-outline mt-1 block">THREAT INTENSITY</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- TIMELINE SCRUBBER & ACTION BAR (Fixed Bottom Content) -->
+<div class="fixed bottom-0 left-0 w-full md:left-20 md:w-[calc(100%-5rem)] bg-surface-container-highest/95 backdrop-blur-xl border-t border-outline-variant/50 p-4 flex flex-col md:flex-row items-center justify-between gap-4 z-40 mb-16 md:mb-0">
+<!-- Scrubber Controls -->
+<div class="flex items-center gap-4 flex-1 w-full">
+<button class="w-10 h-10 rounded-full border border-primary/50 text-primary flex items-center justify-center hover:bg-primary/10 hover:shadow-[0_0_10px_rgba(0,163,255,0.2)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex justify-between font-data-sm text-[10px] text-outline">
+<span>T-00:00:00</span>
+<span class="text-primary">T+04:32:18 (CURRENT)</span>
+<span>T+24:00:00</span>
+</div>
+<!-- Custom Range Track Visual -->
+<div class="relative w-full h-2 bg-surface-variant border border-outline-variant/30 overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary/20 w-full"></div>
+<div class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary w-[35%]"></div>
+<!-- Playhead -->
+<div class="absolute top-0 left-[35%] w-[2px] h-full bg-white shadow-[0_0_8px_#fff]"></div>
+</div>
+<!-- Timeline Ticks -->
+<div class="flex justify-between px-1">
+<div class="h-1 w-px bg-outline-variant/50"></div>
+<div class="h-1 w-px bg-outline-variant/50"></div>
+<div class="h-1 w-px bg-outline-variant/50"></div>
+<div class="h-1 w-px bg-outline-variant/50"></div>
+<div class="h-1 w-px bg-outline-variant/50"></div>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="bg-primary hover:bg-primary/90 text-on-primary font-label-caps px-8 py-3 w-full md:w-auto flex items-center justify-center gap-2 transition-all glow-primary border border-white/20">
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+            RUN SIMULATION
+        </button>
+</div>
+</body></html>
+
+<!-- Aether Command: Advanced Threat Matrix -->

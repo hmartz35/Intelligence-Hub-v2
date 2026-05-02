@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Impact Report - STRATCOM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#1a202c",
+                      "on-secondary": "#003544",
+                      "inverse-on-surface": "#2a303d",
+                      "error-container": "#93000a",
+                      "outline-variant": "#3f4852",
+                      "on-tertiary-fixed-variant": "#5e4200",
+                      "secondary-fixed": "#b8eaff",
+                      "on-primary-container": "#00375a",
+                      "on-primary-fixed": "#001d33",
+                      "tertiary": "#ffba20",
+                      "secondary": "#67d4f9",
+                      "tertiary-fixed-dim": "#ffba20",
+                      "surface-tint": "#98cbff",
+                      "on-tertiary-container": "#463000",
+                      "on-primary": "#003354",
+                      "primary-fixed-dim": "#98cbff",
+                      "surface-dim": "#0d131f",
+                      "surface-container-lowest": "#080e1a",
+                      "primary": "#98cbff",
+                      "tertiary-fixed": "#ffdea8",
+                      "secondary-fixed-dim": "#67d4f9",
+                      "primary-fixed": "#cfe5ff",
+                      "inverse-surface": "#dde2f3",
+                      "surface-bright": "#333946",
+                      "inverse-primary": "#00629d",
+                      "on-background": "#dde2f3",
+                      "primary-container": "#00a3ff",
+                      "surface-container-high": "#242a36",
+                      "on-tertiary": "#412d00",
+                      "on-surface-variant": "#bec7d4",
+                      "outline": "#88919d",
+                      "on-secondary-container": "#002e3b",
+                      "error": "#ffb4ab",
+                      "on-secondary-fixed": "#001f28",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "background": "#0d131f",
+                      "surface-variant": "#2f3542",
+                      "secondary-container": "#1a9dc1",
+                      "on-secondary-fixed-variant": "#004d61",
+                      "on-primary-fixed-variant": "#004a77",
+                      "surface-container-highest": "#2f3542",
+                      "tertiary-container": "#cc9200",
+                      "on-tertiary-fixed": "#271900",
+                      "surface-container-low": "#161c27",
+                      "surface": "#0d131f",
+                      "on-surface": "#dde2f3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "stack-sm": "8px",
+                      "container-padding": "24px",
+                      "grid-columns": "12",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "data-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "display-hero": [
+                              "Instrument Serif"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "data-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Space Grotesk"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "data-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-hero": [
+                              "72px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #06090E; /* Deepest obsidian from spec */
+            color: #dde2f3;
+        }
+        /* Custom scrollbar for tactical feel */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d131f; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a202c; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00a3ff; 
+        }
+      </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full h-12 flex justify-between items-center px-6 z-50 bg-[#06090E]/90 backdrop-blur-md border-b border-[#1A202C] shadow-[0_2px_10px_rgba(0,163,255,0.05)]">
+<div class="flex items-center gap-8">
+<span class="font-black text-lg tracking-tighter text-[#00A3FF]">AETHER COMMAND</span>
+<div class="hidden md:flex gap-6 font-mono text-[10px] tracking-widest uppercase">
+<a class="text-slate-500 hover:text-[#00A3FF] transition-all duration-200 active:opacity-70" href="#">LIVE FEED</a>
+<a class="text-slate-500 hover:text-[#00A3FF] transition-all duration-200 active:opacity-70" href="#">SENSORS</a>
+<a class="text-[#00A3FF] border-b-2 border-[#00A3FF] pb-1 hover:text-[#00A3FF] transition-all duration-200 active:opacity-70" href="#">ALERTS</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="font-data-sm text-data-sm text-[#00A3FF]">SYSTEM READY</span>
+<div class="flex gap-4 text-slate-500">
+<button class="hover:text-[#00A3FF] transition-all duration-200"><span class="material-symbols-outlined text-[18px]">settings</span></button>
+<button class="hover:text-[#00A3FF] transition-all duration-200"><span class="material-symbols-outlined text-[18px]">notifications</span></button>
+<button class="hover:text-[#00A3FF] transition-all duration-200"><span class="material-symbols-outlined text-[18px]">account_circle</span></button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="hidden md:flex fixed left-0 top-12 h-[calc(100vh-48px)] flex-col z-40 bg-[#06090E]/95 backdrop-blur-2xl border-r border-[#1A202C] w-64">
+<div class="p-6 border-b border-[#1A202C] mb-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-[#1A202C] overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">STRATCOM</h2>
+<p class="font-data-sm text-data-sm text-outline">HORZ-SEC-04</p>
+</div>
+</div>
+<button class="mt-6 w-full bg-[#00A3FF] text-black font-label-caps text-label-caps py-2 hover:bg-[#00A3FF]/90 transition-colors">
+                DEPLOY ASSET
+            </button>
+</div>
+<nav class="flex-1 font-mono text-[11px] leading-none uppercase">
+<a class="text-slate-500 py-4 px-6 flex items-center gap-4 border-l-4 border-transparent hover:bg-slate-800/40 hover:text-white transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">public</span>
+                Theater
+            </a>
+<a class="bg-[#00A3FF]/10 text-[#00A3FF] border-l-4 border-[#00A3FF] py-4 px-6 flex items-center gap-4 hover:bg-slate-800/40 hover:text-white transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">biotech</span>
+                Intelligence
+            </a>
+<a class="text-slate-500 py-4 px-6 flex items-center gap-4 border-l-4 border-transparent hover:bg-slate-800/40 hover:text-white transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+                Matrices
+            </a>
+<a class="text-slate-500 py-4 px-6 flex items-center gap-4 border-l-4 border-transparent hover:bg-slate-800/40 hover:text-white transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">analytics</span>
+                Modeling
+            </a>
+<a class="text-slate-500 py-4 px-6 flex items-center gap-4 border-l-4 border-transparent hover:bg-slate-800/40 hover:text-white transition-colors active:translate-x-1 duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                Archive
+            </a>
+</nav>
+<div class="mt-auto border-t border-[#1A202C] p-4 font-mono text-[11px] leading-none uppercase">
+<a class="text-slate-500 py-3 px-2 flex items-center gap-4 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">radar</span>
+                Status
+            </a>
+<a class="text-slate-500 py-3 px-2 flex items-center gap-4 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">logout</span>
+                Log out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-12 md:pl-64 min-h-screen">
+<div class="p-container-padding max-w-[1600px] mx-auto space-y-stack-lg">
+<!-- Report Header -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-surface-container-high pb-stack-md">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-error/15 text-error border border-error px-2 py-1 font-data-sm text-data-sm uppercase tracking-widest rounded-sm">CRITICAL</span>
+<span class="font-data-sm text-data-sm text-outline">REPORT ID: SC-8922-OMEGA</span>
+</div>
+<h1 class="font-display-hero text-display-hero text-on-surface">THEATER IMPACT</h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-2xl mt-2">
+                        Comprehensive analysis of global socio-economic degradation resulting from simulated full-scale conflict scenario Alpha-7. Data reflects Day +45 projections.
+                    </p>
+</div>
+<div class="flex gap-4">
+<button class="border border-primary-container text-primary-container px-4 py-2 font-label-caps text-label-caps hover:bg-primary-container/10 transition-colors uppercase">
+                        Export RAW
+                    </button>
+<button class="bg-primary-container text-surface-container-lowest px-4 py-2 font-label-caps text-label-caps hover:opacity-90 transition-opacity uppercase">
+                        Update Models
+                    </button>
+</div>
+</header>
+<!-- Bento Grid: High Level Metrics -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Macro Economic Impact -->
+<article class="col-span-1 md:col-span-8 bg-surface-container/80 backdrop-blur-[12px] border border-surface-container-high rounded-DEFAULT p-6 flex flex-col relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent pointer-events-none"></div>
+<header class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container-high relative z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface">GLOBAL ENERGY MARKET</h3>
+<span class="material-symbols-outlined text-outline">monitoring</span>
+</header>
+<div class="grid grid-cols-2 gap-8 flex-1 relative z-10">
+<!-- Before State -->
+<div class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-outline uppercase tracking-widest">T-0 Baseline</h4>
+<div class="space-y-2">
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Brent Crude (BBL)</span>
+<span class="font-data-lg text-data-lg text-secondary">$78.40</span>
+</div>
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Daily Output (Mbd)</span>
+<span class="font-data-lg text-data-lg text-on-surface">99.2</span>
+</div>
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Strategic Reserve (%)</span>
+<span class="font-data-lg text-data-lg text-on-surface">85%</span>
+</div>
+</div>
+</div>
+<!-- After State -->
+<div class="space-y-4 relative">
+<div class="absolute -left-4 top-0 bottom-0 w-px bg-surface-container-high"></div>
+<h4 class="font-label-caps text-label-caps text-error uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                                T+45 Projection
+                            </h4>
+<div class="space-y-2">
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Brent Crude (BBL)</span>
+<span class="font-data-lg text-data-lg text-error shadow-[0_0_8px_rgba(255,180,171,0.3)]">$214.50</span>
+</div>
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Daily Output (Mbd)</span>
+<span class="font-data-lg text-data-lg text-error">62.8</span>
+</div>
+<div class="flex justify-between items-baseline border-b border-surface-container-high/50 pb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Strategic Reserve (%)</span>
+<span class="font-data-lg text-data-lg text-tertiary">31%</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Supply Chain Disruption Index -->
+<article class="col-span-1 md:col-span-4 bg-surface-container/80 backdrop-blur-[12px] border border-surface-container-high rounded-DEFAULT p-6 flex flex-col">
+<header class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container-high">
+<h3 class="font-label-caps text-label-caps text-on-surface uppercase">SUPPLY CHAIN INDEX</h3>
+<span class="bg-error/15 text-error border border-error px-2 py-0.5 font-data-sm text-[10px] rounded-sm">SEVERE</span>
+</header>
+<div class="flex-1 flex flex-col justify-center items-center text-center">
+<div class="relative w-32 h-32 flex items-center justify-center mb-4">
+<!-- Abstract ring visual -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="#1a202c" stroke-width="4"></circle>
+<circle class="drop-shadow-[0_0_4px_rgba(255,180,171,0.8)]" cx="50" cy="50" fill="none" r="45" stroke="#ffb4ab" stroke-dasharray="283" stroke-dashoffset="60" stroke-width="4"></circle>
+</svg>
+<span class="font-display-hero text-[48px] leading-none text-error">82<span class="text-data-lg">%</span></span>
+</div>
+<p class="font-data-sm text-data-sm text-outline max-w-[200px]">
+                            Disruption across major maritime chokepoints.
+                        </p>
+</div>
+</article>
+</section>
+<!-- Detailed Regional Stability Matrix -->
+<section class="bg-surface-container/80 backdrop-blur-[12px] border border-surface-container-high rounded-DEFAULT p-6">
+<header class="flex justify-between items-center mb-6 pb-4 border-b border-surface-container-high">
+<h3 class="font-headline-md text-headline-md text-on-surface">REGIONAL STABILITY MATRIX</h3>
+<div class="flex gap-2 font-data-sm text-[10px]">
+<span class="px-2 py-1 bg-surface-container-high border border-outline-variant text-on-surface-variant">VIEW: ESCALATION</span>
+</div>
+</header>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-data-sm text-data-sm">
+<thead class="text-outline uppercase border-b border-surface-container-high">
+<tr>
+<th class="pb-3 font-normal">Region / Sector</th>
+<th class="pb-3 font-normal">Pre-Conflict Index</th>
+<th class="pb-3 font-normal">T+45 Proj.</th>
+<th class="pb-3 font-normal">Delta</th>
+<th class="pb-3 font-normal">Primary Vector</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/50">
+<tr class="hover:bg-surface-bright/20 transition-colors">
+<td class="py-3 text-on-surface">Eastern Europe</td>
+<td class="py-3 text-on-surface-variant">0.68</td>
+<td class="py-3 text-error">0.12</td>
+<td class="py-3 text-error">-0.56</td>
+<td class="py-3 text-outline">Kinetic Engagement</td>
+</tr>
+<tr class="hover:bg-surface-bright/20 transition-colors">
+<td class="py-3 text-on-surface">Indo-Pacific</td>
+<td class="py-3 text-on-surface-variant">0.74</td>
+<td class="py-3 text-tertiary">0.41</td>
+<td class="py-3 text-tertiary">-0.33</td>
+<td class="py-3 text-outline">Naval Blockade</td>
+</tr>
+<tr class="hover:bg-surface-bright/20 transition-colors">
+<td class="py-3 text-on-surface">MENA</td>
+<td class="py-3 text-on-surface-variant">0.45</td>
+<td class="py-3 text-error">0.18</td>
+<td class="py-3 text-error">-0.27</td>
+<td class="py-3 text-outline">Resource Denial</td>
+</tr>
+<tr class="hover:bg-surface-bright/20 transition-colors">
+<td class="py-3 text-on-surface">North Atlantic</td>
+<td class="py-3 text-on-surface-variant">0.88</td>
+<td class="py-3 text-secondary">0.72</td>
+<td class="py-3 text-secondary">-0.16</td>
+<td class="py-3 text-outline">Cyber Disruption</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command - Threat Matrix</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;family=Instrument+Serif:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#080e1a",
+                        "surface-container-high": "#242a36",
+                        "primary-fixed-dim": "#98cbff",
+                        "on-secondary-container": "#002e3b",
+                        "surface-variant": "#2f3542",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-container": "#1a202c",
+                        "primary-container": "#00a3ff",
+                        "surface": "#0d131f",
+                        "tertiary-fixed": "#ffdea8",
+                        "outline-variant": "#3f4852",
+                        "on-tertiary-container": "#463000",
+                        "on-surface-variant": "#bec7d4",
+                        "tertiary": "#ffba20",
+                        "inverse-on-surface": "#2a303d",
+                        "surface-container-highest": "#2f3542",
+                        "on-secondary": "#003544",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-fixed-variant": "#004a77",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary": "#003354",
+                        "surface-tint": "#98cbff",
+                        "outline": "#88919d",
+                        "inverse-primary": "#00629d",
+                        "secondary": "#67d4f9",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#b8eaff",
+                        "primary": "#98cbff",
+                        "on-background": "#dde2f3",
+                        "inverse-surface": "#dde2f3",
+                        "background": "#0d131f",
+                        "surface-bright": "#333946",
+                        "tertiary-container": "#cc9200",
+                        "surface-dim": "#0d131f",
+                        "on-primary-container": "#00375a",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#161c27",
+                        "on-primary-fixed": "#001d33",
+                        "on-tertiary": "#412d00",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "primary-fixed": "#cfe5ff",
+                        "on-surface": "#dde2f3",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-tertiary-fixed": "#271900",
+                        "secondary-container": "#1a9dc1"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "grid-columns": "12",
+                        "container-padding": "24px"
+                    },
+                    fontFamily: {
+                        "body-base": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-hero": ["Instrument Serif"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #06090E;
+            color: #dde2f3;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 163, 255, 0.05) 0%, transparent 60%);
+        }
+        
+        .glass-panel {
+            background-color: rgba(36, 42, 54, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glow-active {
+            box-shadow: 0 0 15px rgba(0, 163, 255, 0.2);
+        }
+        
+        .glow-danger {
+            box-shadow: 0 0 20px rgba(255, 180, 171, 0.3);
+            border-color: rgba(255, 180, 171, 0.5);
+        }
+        
+        .scan-line {
+            background: linear-gradient(to bottom, transparent, rgba(0, 163, 255, 0.5), transparent);
+            height: 2px;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            opacity: 0.5;
+        }
+
+        /* Radar Grid */
+        .radar-bg {
+            background-image: 
+                radial-gradient(circle at center, transparent 0%, transparent 19%, rgba(0, 163, 255, 0.2) 20%, transparent 21%),
+                radial-gradient(circle at center, transparent 0%, transparent 39%, rgba(0, 163, 255, 0.2) 40%, transparent 41%),
+                radial-gradient(circle at center, transparent 0%, transparent 59%, rgba(0, 163, 255, 0.2) 60%, transparent 61%),
+                radial-gradient(circle at center, transparent 0%, transparent 79%, rgba(0, 163, 255, 0.2) 80%, transparent 81%);
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+<body class="font-body-base text-body-base bg-background text-on-background h-screen flex overflow-hidden">
+<!-- TopAppBar (Web) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)] hidden md:flex">
+<div class="flex items-center space-x-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex-1 flex justify-end mr-6">
+<div class="glass-panel flex items-center px-3 py-1 rounded-sm w-64 border border-outline-variant focus-within:ring-1 focus-within:ring-primary-container focus-within:border-primary-container">
+<input class="bg-transparent border-none text-on-surface text-data-sm focus:ring-0 w-full p-0 placeholder-on-surface-variant font-data-sm" placeholder="Search..." type="text"/>
+<span class="material-symbols-outlined text-outline-variant text-sm ml-2" data-icon="search">search</span>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-sm" data-icon="wifi">
+<span class="material-symbols-outlined">wifi</span>
+</button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-sm" data-icon="schedule">
+<span class="material-symbols-outlined">schedule</span>
+</button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-sm" data-icon="lock">
+<span class="material-symbols-outlined">lock</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="A close-up headshot of a stern military operator in a dimly lit command center. The lighting is cool and blue-tinted, reflecting off a high-tech console. The background is slightly out of focus, showing glowing screens and dark slate panels in a tactical dark mode aesthetic. The mood is intense, focused, and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZnbsn2gHK63iwTNN53tOki0UuGQfIA2V_cBrYh2Kd0VEAna2Nvi1tQ_VZmpRwtPwT2VpiW-Yd2k4HSJsOzVryWjcDjvmVjdQofLtSjkb6y_lX5cW06K3VNeZ5YdYheBU5J5kcJHfvbqoixZJoq8kSvZgYyWDDLBtNxpg6ooWN1Af-D9THwrSR6b4wluoys3epGUmRXtSZ5mvd7vo6hOdTaByh2-4-HkzvPaOtvYuJjrA2eRMvjIiRKwBuSnpCqNLuz5poxBc5Ww0"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Web) -->
+<nav class="fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10 hidden md:flex">
+<div class="flex-1 flex flex-col items-center space-y-2 w-full mt-stack-md">
+<!-- Orbital Theater -->
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="public">public</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute bottom-1 transition-opacity">Orbital Theater</span>
+</a>
+<!-- Asset Tracking -->
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="satellite_alt">satellite_alt</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute bottom-1 transition-opacity">Asset Tracking</span>
+</a>
+<!-- Signal Intel -->
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="radar">radar</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute bottom-1 transition-opacity">Signal Intel</span>
+</a>
+<!-- Threat Matrix (Active) -->
+<a class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full relative" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="warning" data-weight="fill" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-mono text-[10px] tracking-tight absolute bottom-1">Threat Matrix</span>
+<div class="absolute inset-0 ring-1 ring-sky-500/50 pointer-events-none"></div>
+</a>
+<!-- Comm Link -->
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="terminal">terminal</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute bottom-1 transition-opacity">Comm Link</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col items-center space-y-2 w-full mb-stack-md">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-20 mt-0 md:mt-14 p-container-padding h-full overflow-y-auto relative z-10">
+<!-- Persistent NASA Background Image (Bleeding through glass) -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-20">
+<img alt="Earth from space" class="w-full h-full object-cover mix-blend-screen" data-alt="A breathtaking view of Earth from low Earth orbit, taken from a satellite or space station. The curvature of the planet is visible, glowing with city lights across dark continents. The atmosphere forms a thin blue halo against the deep black void of space. The scene is majestic, high-tech, and fitting for a global command center backdrop, with deep indigo and obsidian tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfcrbbN7exd7GIp9dkcxMISC-99DsLmMEz017hH87czoOo2duE8sjX5a4Jynj2N1hHS2tMTsYkJSQe0TMsQjq3oXuy_KozjAQUDeY3CNk5cMpk6nudUORBUTByxlGlUHL5ubEd8lb4-bXqSre7KiZtGtP6tXLapE4NOBHvl0UHMc3i55l8aixKbG_2U_yOdPgPOfqVjrd1cNPa_Vj6q9VU3iwi7xZQ1Oj34vYmHFZPYtJYQtXnIGOM8Go1VIBJezOK2KIBKZfP8z0"/>
+</div>
+<div class="relative z-10 flex flex-col h-full gap-gutter">
+<!-- Header Section -->
+<div class="flex justify-between items-end border-b border-white/10 pb-stack-sm mb-stack-sm">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+                        THREAT MATRIX
+                    </h1>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-1 uppercase tracking-widest">Sector 7-G Assessment • Active Contacts: 04</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary-container text-surface-container-lowest font-label-caps text-label-caps px-4 py-2 rounded-none hover:bg-primary transition-colors border border-primary-container uppercase">
+                        INITIATE PROTOCOL
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1 h-full min-h-[600px]">
+<!-- Radar Plot (Spans 8 columns) -->
+<div class="md:col-span-8 glass-panel rounded-lg flex flex-col relative overflow-hidden glow-active">
+<div class="border-b border-white/10 p-3 bg-surface-container-highest/50 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Orbital Theater Scan</span>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-data-sm text-[10px] text-primary">SCANNING</span>
+</div>
+</div>
+<div class="flex-1 relative radar-bg flex items-center justify-center p-8">
+<!-- Crosshairs -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+<div class="w-full h-[1px] bg-primary"></div>
+<div class="h-full w-[1px] bg-primary absolute"></div>
+</div>
+<!-- Center Command Point -->
+<div class="absolute h-4 w-4 bg-primary rounded-full shadow-[0_0_10px_rgba(0,163,255,1)] z-20"></div>
+<!-- Contacts -->
+<!-- Contact 1: High Threat -->
+<div class="absolute top-[20%] left-[30%] flex flex-col items-center z-30 group cursor-crosshair">
+<div class="h-3 w-3 bg-error rounded-sm glow-danger mb-1 border border-error-container"></div>
+<div class="glass-panel p-2 hidden group-hover:block absolute top-4 whitespace-nowrap z-50 border-error">
+<p class="font-data-sm text-[10px] text-error font-bold uppercase">TRG-Alpha-9</p>
+<p class="font-data-sm text-[9px] text-on-surface-variant">Class: Unknown</p>
+<p class="font-data-sm text-[9px] text-on-surface-variant">Vel: 14.5 km/s</p>
+</div>
+</div>
+<!-- Contact 2: Low Threat -->
+<div class="absolute top-[60%] left-[70%] flex flex-col items-center z-30 group cursor-crosshair">
+<div class="h-2 w-2 bg-secondary rounded-sm mb-1 border border-secondary-fixed"></div>
+</div>
+<!-- Contact 3: Med Threat -->
+<div class="absolute top-[75%] left-[25%] flex flex-col items-center z-30 group cursor-crosshair">
+<div class="h-2.5 w-2.5 bg-tertiary rounded-sm mb-1 border border-tertiary-fixed shadow-[0_0_8px_rgba(255,186,32,0.5)]"></div>
+</div>
+</div>
+</div>
+<!-- Right Side Panels (Spans 4 columns) -->
+<div class="md:col-span-4 flex flex-col gap-gutter h-full">
+<!-- Threat List -->
+<div class="glass-panel rounded-lg flex flex-col flex-1 border border-error/30 glow-danger">
+<div class="border-b border-white/10 p-3 bg-error-container/20 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-error uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="list_alt">list_alt</span>
+                                Active Threats
+                            </span>
+</div>
+<div class="p-3 flex flex-col gap-2 overflow-y-auto">
+<!-- Threat Item High -->
+<div class="border border-error/50 bg-error-container/10 p-2 rounded-sm flex justify-between items-center relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="pl-2">
+<p class="font-data-sm text-data-sm text-error font-bold">TRG-Alpha-9</p>
+<p class="font-data-sm text-[10px] text-on-surface-variant">T-Minus to Impact</p>
+</div>
+<div class="text-right">
+<span class="bg-error/20 text-error font-data-sm text-[10px] px-1 py-0.5 border border-error uppercase">High</span>
+<p class="font-data-lg text-data-lg text-on-surface mt-1">00:04:22</p>
+</div>
+</div>
+<!-- Threat Item Med -->
+<div class="border border-tertiary/30 bg-tertiary-container/5 p-2 rounded-sm flex justify-between items-center relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-tertiary"></div>
+<div class="pl-2">
+<p class="font-data-sm text-data-sm text-tertiary font-bold">OBJ-Beta-2</p>
+<p class="font-data-sm text-[10px] text-on-surface-variant">T-Minus to Impact</p>
+</div>
+<div class="text-right">
+<span class="bg-tertiary/20 text-tertiary font-data-sm text-[10px] px-1 py-0.5 border border-tertiary uppercase">Med</span>
+<p class="font-data-lg text-data-lg text-on-surface mt-1">00:15:40</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Countermeasure Readiness -->
+<div class="glass-panel rounded-lg flex flex-col">
+<div class="border-b border-white/10 p-3 bg-surface-container-highest/50">
+<span class="font-label-caps text-label-caps text-on-surface uppercase tracking-widest">Countermeasure Readiness</span>
+</div>
+<div class="p-4 flex flex-col gap-4">
+<!-- EW Status -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-[10px] text-on-surface-variant uppercase">Electronic Warfare (EW)</span>
+<span class="font-data-sm text-[10px] text-primary">94%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest border border-outline-variant rounded-sm overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 94%;"></div>
+</div>
+</div>
+<!-- Kinetic Status -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-[10px] text-on-surface-variant uppercase">Kinetic Interceptors</span>
+<span class="font-data-sm text-[10px] text-tertiary">42%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest border border-outline-variant rounded-sm overflow-hidden flex">
+<div class="h-full bg-tertiary" style="width: 42%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg border border-sky-500/30 shadow-[0_0_20px_rgba(0,163,255,0.2)] md:hidden w-[95%]">
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300 transition-colors">
+<span class="material-symbols-outlined text-sm mb-1" data-icon="play_circle">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300 transition-colors">
+<span class="material-symbols-outlined text-sm mb-1" data-icon="wifi_tethering">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</button>
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 flex flex-col items-center">
+<span class="material-symbols-outlined text-sm mb-1" data-icon="insights" data-weight="fill" style="font-variation-settings: 'FILL' 1;">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center hover:border-sky-400 hover:text-sky-300 transition-colors">
+<span class="material-symbols-outlined text-sm mb-1" data-icon="cancel">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</button>
+</nav>
+</body></html>
+
+<!-- Aether Command: Comm Link & System Logs -->

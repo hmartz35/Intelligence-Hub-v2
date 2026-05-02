@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command - Executive Briefing Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#0d131f",
+                        "background": "#0d131f",
+                        "tertiary": "#ffba20",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary-container": "#00375a",
+                        "on-tertiary": "#412d00",
+                        "on-primary-fixed": "#001d33",
+                        "secondary-fixed": "#b8eaff",
+                        "primary-fixed": "#cfe5ff",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-surface-variant": "#bec7d4",
+                        "surface-container-low": "#161c27",
+                        "tertiary-fixed": "#ffdea8",
+                        "surface": "#0d131f",
+                        "on-secondary": "#003544",
+                        "on-secondary-container": "#002e3b",
+                        "outline": "#88919d",
+                        "surface-container": "#1a202c",
+                        "primary": "#98cbff",
+                        "on-error": "#690005",
+                        "surface-bright": "#333946",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-tint": "#98cbff",
+                        "on-background": "#dde2f3",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-variant": "#2f3542",
+                        "on-primary": "#003354",
+                        "outline-variant": "#3f4852",
+                        "primary-container": "#00a3ff",
+                        "inverse-on-surface": "#2a303d",
+                        "on-tertiary-fixed": "#271900",
+                        "on-surface": "#dde2f3",
+                        "on-tertiary-container": "#463000",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#cc9200",
+                        "surface-container-highest": "#2f3542",
+                        "surface-container-high": "#242a36",
+                        "secondary-container": "#1a9dc1",
+                        "inverse-primary": "#00629d",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface-container-lowest": "#080e1a",
+                        "secondary": "#67d4f9",
+                        "inverse-surface": "#dde2f3",
+                        "error-container": "#93000a"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "grid-columns": "12",
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "container-padding": "24px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "label-caps": ["Space Grotesk"],
+                        "display-hero": ["Instrument Serif"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "data-sm": ["12px", { lineHeight: "1.4", fontWeight: "400" }],
+                        "data-lg": ["20px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "label-caps": ["11px", { lineHeight: "1.2", letterSpacing: "0.1em", fontWeight: "700" }],
+                        "display-hero": ["72px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "500" }],
+                        "body-base": ["16px", { lineHeight: "1.6", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(26, 32, 44, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow {
+            box-shadow: 0 0 8px rgba(0, 163, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base text-body-base overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-4 text-sky-500 font-mono uppercase tracking-widest text-xs">
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-DEFAULT"><span class="material-symbols-outlined" data-icon="wifi">wifi</span></button>
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-DEFAULT"><span class="material-symbols-outlined" data-icon="schedule">schedule</span></button>
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded-DEFAULT"><span class="material-symbols-outlined" data-icon="lock">lock</span></button>
+<img alt="Operator Profile" class="w-8 h-8 rounded-full border border-sky-500/30" data-alt="A portrait of a male operative in a dark, tactical command center. The lighting is low-key, illuminated primarily by the soft blue glow of high-tech monitors reflecting on his face. He looks focused and serious, embodying a military or intelligence officer style. The background is a blur of screens and metallic surfaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA-2RtLWdG-gIix18XStN0bavgQjD6jzyuNDCA4b431ummIQdD6AkC--qNMfpQx1s7UYjxAw1ggeneAZeTTg0K0k6Zcx63w10pQfl3e0KUsusEBHBqP8oqcaeh5euKsv8yr_A_U6pdA_HB-9-XeqtkU9gcptlpQhMHJaifeWLXWqmIznvTfBkm4KlkIBXOHhVvMWeUzGu1I_Y1AhYbqcWsphcPnrvIFqd0GoqWqH9CS2a8QxvfjDr4MNzy27FvRPVHG0Ke1fIuc88"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10 hidden md:flex">
+<div class="mb-8 flex flex-col items-center">
+<img alt="System Logo" class="w-10 h-10 rounded-full border border-sky-500 mb-2" data-alt="A highly stylized, glowing blue geometric insignia, resembling a futuristic military or intelligence agency emblem. It sits against a pitch-black background, emitting a subtle neon aura. The design is sharp, minimalist, and conveys authority and advanced technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiIWQ0memIMIpPnPmr111IsI2hKLXIwngRhv32MhKoa5XSB8bpeO_U-XKBgqlKtheCJZ09_aEFlokpWjEjkw26kZ_spqSqQGC4W5sV0AY5Z6PyRRHhfZ_vqPnTz9L5DtJBfZYBoIXFR9Wy_rqo19S8AFBbiIbyquIehyycFOwHPq5K7kBysly9T7kXg_QeH45s3qroGFoRkjK0kO-mOLC7YgEwYidVO_pAnjt6MmtatDXddGCSyEsMikjK6EDAeiQamAMgYuzvSSE"/>
+<span class="font-label-caps text-label-caps text-sky-500 text-center uppercase">STRATCOM</span>
+<span class="font-data-sm text-[8px] text-slate-500 text-center uppercase">Sector 7-G</span>
+</div>
+<div class="flex-1 flex flex-col w-full gap-2 font-mono text-[10px] tracking-tight">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="public">public</span>Orbital Theater</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="satellite_alt">satellite_alt</span>Asset Tracking</button>
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full"><span class="material-symbols-outlined mb-1" data-icon="radar">radar</span>Signal Intel</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="warning">warning</span>Threat Matrix</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="terminal">terminal</span>Comm Link</button>
+</div>
+<div class="mt-auto w-full flex flex-col gap-2 font-mono text-[10px] tracking-tight">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="description">description</span>System Logs</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all"><span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>Settings</button>
+</div>
+</nav>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg rounded-none border border-sky-500/30 w-[600px] shadow-[0_0_20px_rgba(0,163,255,0.2)] md:hidden">
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 font-mono text-[9px] font-bold flex flex-col items-center"><span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>DEPLOY</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 font-mono text-[9px] font-bold flex flex-col items-center"><span class="material-symbols-outlined" data-icon="wifi_tethering">wifi_tethering</span>SCAN</button>
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 font-mono text-[9px] font-bold flex flex-col items-center"><span class="material-symbols-outlined" data-icon="insights">insights</span>ANALYZE</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 font-mono text-[9px] font-bold flex flex-col items-center"><span class="material-symbols-outlined" data-icon="cancel">cancel</span>ABORT</button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-0 md:ml-20 mt-14 p-container-padding h-[calc(100vh-3.5rem)] overflow-y-auto">
+<div class="grid grid-cols-12 gap-gutter h-full">
+<!-- Sidebar: Report Templates & Audit Log -->
+<aside class="col-span-12 lg:col-span-3 flex flex-col gap-gutter">
+<!-- Templates -->
+<div class="glass-panel rounded-DEFAULT p-4 flex-1">
+<h2 class="font-label-caps text-label-caps text-primary mb-4 border-b border-white/10 pb-2 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">folder_open</span> Report Templates
+                    </h2>
+<ul class="space-y-2 font-data-sm text-data-sm">
+<li>
+<button class="w-full text-left px-3 py-2 border border-sky-500/30 bg-sky-500/10 text-sky-400 neon-glow rounded-sm transition-all flex items-center justify-between">
+                                Tactical Assessment <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+</button>
+</li>
+<li>
+<button class="w-full text-left px-3 py-2 border border-white/5 hover:border-sky-500/30 hover:bg-white/5 text-on-surface-variant rounded-sm transition-all">
+                                Strategic Horizon
+                            </button>
+</li>
+<li>
+<button class="w-full text-left px-3 py-2 border border-white/5 hover:border-sky-500/30 hover:bg-white/5 text-on-surface-variant rounded-sm transition-all">
+                                Resource Projection
+                            </button>
+</li>
+</ul>
+</div>
+<!-- Distribution Panel -->
+<div class="glass-panel rounded-DEFAULT p-4">
+<h2 class="font-label-caps text-label-caps text-primary mb-4 border-b border-white/10 pb-2 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">share</span> Distribution
+                    </h2>
+<div class="space-y-3 font-data-sm text-data-sm">
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="form-checkbox bg-surface-dim border-outline text-primary-container focus:ring-primary-container rounded-sm" type="checkbox"/>
+<span class="text-on-surface">Secure Uplink (Alpha)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="form-checkbox bg-surface-dim border-outline text-primary-container focus:ring-primary-container rounded-sm" type="checkbox"/>
+<span class="text-on-surface">Theater Command</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="form-checkbox bg-surface-dim border-outline text-primary-container focus:ring-primary-container rounded-sm" type="checkbox"/>
+<span class="text-on-surface-variant">Pentagon Direct</span>
+</label>
+<button class="w-full mt-4 bg-primary-container text-surface-lowest font-label-caps text-label-caps py-2 uppercase hover:bg-primary transition-colors">
+                            INITIATE EXPORT
+                        </button>
+</div>
+</div>
+<!-- Audit Log -->
+<div class="glass-panel rounded-DEFAULT p-4 h-48 overflow-hidden flex flex-col">
+<h2 class="font-label-caps text-label-caps text-outline-variant mb-2 border-b border-white/5 pb-2 uppercase flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">history</span> Audit Log
+                    </h2>
+<div class="flex-1 overflow-y-auto space-y-2 font-data-sm text-[10px] text-on-surface-variant">
+<div class="flex gap-2">
+<span class="text-tertiary">14:02:45Z</span>
+<span>Hormuz simulator data refreshed.</span>
+</div>
+<div class="flex gap-2">
+<span class="text-primary-container">14:01:12Z</span>
+<span>User 'Operator_1' initiated draft.</span>
+</div>
+<div class="flex gap-2">
+<span class="text-error">13:58:00Z</span>
+<span>Naval blockade alert received.</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Editor Area -->
+<section class="col-span-12 lg:col-span-9 glass-panel rounded-DEFAULT p-6 flex flex-col border-t-4 border-t-error">
+<!-- Document Header -->
+<div class="flex justify-between items-start border-b border-white/10 pb-4 mb-6">
+<div>
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-error/20 border border-error text-error font-data-sm text-data-sm uppercase mb-2">
+<span class="material-symbols-outlined text-[14px]">warning</span> TOP SECRET // EYES ONLY
+                        </div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Hormuz Oil Flow Stability Assessment</h1>
+<p class="font-data-sm text-data-sm text-primary mt-1">Scenario: Maritime Blockade Matrix Delta-9</p>
+</div>
+<div class="text-right font-data-sm text-[10px] text-outline">
+<div>REF: TR-892-X</div>
+<div>DATE: 2024-10-24T14:05Z</div>
+</div>
+</div>
+<!-- Editor Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto pr-4 space-y-6 text-on-surface-variant">
+<!-- Executive Summary -->
+<div>
+<h3 class="font-label-caps text-label-caps text-primary uppercase mb-2 flex items-center gap-2">
+<span class="w-2 h-2 bg-primary inline-block"></span> Executive Summary
+                        </h3>
+<textarea class="w-full bg-surface-dim border border-outline-variant text-on-surface font-body-base p-3 focus:border-primary-container focus:ring-1 focus:ring-primary-container/50 min-h-[100px] resize-y" placeholder="Enter executive summary...">Recent intelligence indicates a 78% probability of a partial maritime blockade in the Strait of Hormuz within the next 48 hours. This disruption threatens approximately 20% of global oil consumption, immediately impacting regional stability and global energy markets.</textarea>
+</div>
+<!-- Strategic Impact Matrix -->
+<div>
+<h3 class="font-label-caps text-label-caps text-tertiary uppercase mb-2 flex items-center gap-2">
+<span class="w-2 h-2 bg-tertiary inline-block"></span> Strategic Impact Matrix
+                        </h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Price Projections -->
+<div class="border border-white/10 p-3 bg-surface-container-low">
+<div class="font-data-sm text-[10px] text-outline uppercase mb-2">Price Projections (72h)</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="font-body-base">Brent Crude</span>
+<span class="font-data-lg text-error">+$14.50</span>
+</div>
+<div class="w-full bg-surface-highest h-1">
+<div class="bg-error h-1 w-3/4"></div>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-body-base">WTI Index</span>
+<span class="font-data-lg text-tertiary">+$11.20</span>
+</div>
+<div class="w-full bg-surface-highest h-1">
+<div class="bg-tertiary h-1 w-2/3"></div>
+</div>
+</div>
+</div>
+<!-- Disruption Levels -->
+<div class="border border-white/10 p-3 bg-surface-container-low">
+<div class="font-data-sm text-[10px] text-outline uppercase mb-2">Supply Chain Disruption</div>
+<ul class="space-y-2 font-data-sm text-data-sm">
+<li class="flex justify-between"><span>VLCC Transit Rate:</span> <span class="text-error">-65%</span></li>
+<li class="flex justify-between"><span>Insurance Premiums:</span> <span class="text-tertiary">+300%</span></li>
+<li class="flex justify-between"><span>Alternative Routes:</span> <span class="text-primary">Cap. 15%</span></li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Recommended Actions -->
+<div>
+<h3 class="font-label-caps text-label-caps text-secondary uppercase mb-2 flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary inline-block"></span> Recommended Actions
+                        </h3>
+<div class="border border-white/10 overflow-hidden">
+<table class="w-full text-left font-data-sm text-data-sm">
+<thead class="bg-surface-container border-b border-white/10 text-outline">
+<tr>
+<th class="p-2 font-normal">Scenario</th>
+<th class="p-2 font-normal">Posture</th>
+<th class="p-2 font-normal">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-2 text-primary">Best Case (Diplomatic Res.)</td>
+<td class="p-2 text-tertiary">DEFCON 4</td>
+<td class="p-2">Maintain current naval patrols; prepare SPR release.</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-2 text-error">Most Likely (Partial Blockade)</td>
+<td class="p-2 text-error">DEFCON 3</td>
+<td class="p-2">Initiate Operation Sentinel; escort critical tankers.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
+
+<!-- Aether Command: Orbital Mechanics Sandbox -->

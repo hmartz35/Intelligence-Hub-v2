@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command - Regional Escalation Ladder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#b8eaff",
+                        "inverse-primary": "#00629d",
+                        "on-tertiary": "#412d00",
+                        "surface-dim": "#0d131f",
+                        "on-tertiary-fixed": "#271900",
+                        "on-primary": "#003354",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#98cbff",
+                        "on-surface": "#dde2f3",
+                        "inverse-on-surface": "#2a303d",
+                        "surface-variant": "#2f3542",
+                        "secondary-container": "#1a9dc1",
+                        "on-tertiary-container": "#463000",
+                        "on-surface-variant": "#bec7d4",
+                        "outline-variant": "#3f4852",
+                        "surface-tint": "#98cbff",
+                        "surface-container-lowest": "#080e1a",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "surface-bright": "#333946",
+                        "on-secondary-container": "#002e3b",
+                        "on-primary-fixed-variant": "#004a77",
+                        "tertiary-fixed": "#ffdea8",
+                        "surface-container-high": "#242a36",
+                        "surface-container": "#1a202c",
+                        "primary-fixed": "#cfe5ff",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#161c27",
+                        "outline": "#88919d",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "inverse-surface": "#dde2f3",
+                        "surface-container-highest": "#2f3542",
+                        "secondary": "#67d4f9",
+                        "primary": "#98cbff",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#001f28",
+                        "tertiary-container": "#cc9200",
+                        "tertiary": "#ffba20",
+                        "primary-container": "#00a3ff",
+                        "on-background": "#dde2f3",
+                        "background": "#0d131f",
+                        "on-primary-fixed": "#001d33",
+                        "surface": "#0d131f",
+                        "on-secondary": "#003544",
+                        "on-primary-container": "#00375a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "container-padding": "24px",
+                        "grid-columns": "12"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "display-hero": ["Instrument Serif"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Inter"],
+                        "data-lg": ["JetBrains Mono"],
+                        "data-sm": ["JetBrains Mono"],
+                        "body-base": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Instrument+Serif&amp;family=Space+Grotesk:wght@700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base antialiased min-h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared Component: TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_20px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-stack-md">
+<span class="text-xl font-black tracking-tighter text-sky-500">STRATOS_COMMAND</span>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="flex items-center gap-stack-sm">
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500 hover:text-slate-300 hover:bg-white/5 hover:text-sky-300 transition-all duration-150 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">notifications_active</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500 hover:text-slate-300 hover:bg-white/5 hover:text-sky-300 transition-all duration-150 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">settings_input_component</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500 hover:text-slate-300 hover:bg-white/5 hover:text-sky-300 transition-all duration-150 cursor-pointer active:opacity-70">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+</div>
+<button class="px-4 py-1.5 rounded-sm bg-primary-container text-on-primary-container font-label-caps text-label-caps uppercase border border-primary-container hover:bg-primary/90 transition-colors">
+                SIGNAL_LOCK
+            </button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden ml-2">
+<img alt="Operator Profile Avatar" class="w-full h-full object-cover" data-alt="A close-up, high-contrast portrait of a male operator in a dimly lit command center. The lighting is cold and tactical, casting sharp shadows on his face. The background is a blurred expanse of glowing screens and data streams in deep blues and slate grays, embodying a high-stakes, modern tactical environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu1wafqnKmyvRvfu-HX2bbLGwN7jAsAsf-6u8tkFLAqDP8IWdJMbpfyxJTj3xlaMl3ErSe407y7AuP4hmZsb8ov0l9rU2Y68fhz5M7DtkTzRIyuMlbw0rx2mG7a3ok2FI0MPOO38RcvoPSe6SODORwKOKfi9bXsXSW5ugm3hepBtWTwzO3GMHwGrC15lBUbU9nVAFUtodSvNLRfepCqjwJl0laqC0bK8mCXtgwEZd1Wj2izApUEe1Iwx5yk0tVZWjzz-467lmz8xc"/>
+</div>
+</div>
+</header>
+<!-- Shared Component: SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-64 flex flex-col pt-16 pb-6 z-40 bg-slate-950/80 backdrop-blur-2xl border-r border-white/10 shadow-[flat]">
+<div class="px-4 mb-stack-lg mt-stack-md flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-sm bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">hub</span>
+</div>
+<div>
+<h2 class="text-primary font-data-sm text-data-sm uppercase tracking-widest leading-tight font-bold">HQ_ALPHA</h2>
+<div class="text-on-surface-variant font-data-sm text-[10px] uppercase tracking-widest flex items-center gap-1 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                    09:00Z | ACTIVE
+                </div>
+</div>
+</div>
+<div class="px-4 mb-stack-md">
+<button class="w-full py-2 bg-primary-container/10 border border-primary-container/30 text-primary hover:bg-primary-container/20 hover:border-primary-container transition-colors font-label-caps text-label-caps flex items-center justify-center gap-2 rounded-sm active:translate-x-1 duration-200">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                NEW_OP
+            </button>
+</div>
+<ul class="flex-1 flex flex-col gap-1 px-2">
+<li>
+<!-- Active State -->
+<a class="bg-sky-500/10 text-sky-400 border-l-2 border-sky-500 flex items-center px-4 py-3 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">public</span>
+                    Theater
+                </a>
+</li>
+<li>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">visibility</span>
+                    Intelligence
+                </a>
+</li>
+<li>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">grid_view</span>
+                    Matrices
+                </a>
+</li>
+<li>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">query_stats</span>
+                    Modeling
+                </a>
+</li>
+<li>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">folder_managed</span>
+                    Archive
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-2 border-t border-outline-variant/30 pt-stack-sm">
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">help</span>
+                Help
+            </a>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 font-mono tracking-widest text-[10px] uppercase hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[18px]">logout</span>
+                Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 mt-14 p-container-padding h-[calc(100vh-56px)] overflow-y-auto bg-background relative">
+<!-- Background Grid Pattern -->
+<div class="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(to_right,#88919d_1px,transparent_1px),linear-gradient(to_bottom,#88919d_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+<div class="max-w-7xl mx-auto relative z-10">
+<!-- Header -->
+<header class="mb-stack-lg flex justify-between items-end border-b border-outline-variant/50 pb-stack-sm">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-1">USA-IRAN ESCALATION LADDER</h1>
+<p class="font-data-sm text-data-sm text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">monitoring</span>
+                        THEATER: CENTCOM | TEMP: CRITICAL | MODEL: AETHER_V4
+                    </p>
+</div>
+<div class="flex gap-4">
+<div class="text-right">
+<div class="font-label-caps text-label-caps text-on-surface-variant">THEATER STABILITY INDEX</div>
+<div class="font-data-lg text-headline-md text-error tracking-widest shadow-[0_0_15px_rgba(255,180,171,0.2)]">34.2%</div>
+</div>
+</div>
+</header>
+<!-- Escalation Ladder Visualization Container -->
+<div class="grid grid-cols-12 gap-gutter relative h-[800px] bg-surface/50 backdrop-blur-md border border-outline-variant/30 rounded-lg p-stack-md overflow-hidden">
+<!-- Center Vertical Line -->
+<div class="absolute left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant/50 -translate-x-1/2">
+<div class="w-full h-1/4 bg-gradient-to-t from-transparent to-error absolute top-0"></div>
+</div>
+<!-- Zone Backgrounds (Absolute) -->
+<div class="absolute inset-0 z-0 flex flex-col pointer-events-none">
+<div class="flex-1 border-b border-error/20 bg-error-container/5 relative">
+<span class="absolute top-4 left-4 font-data-sm text-data-sm text-error uppercase tracking-widest opacity-50">Active Hostilities (L4)</span>
+</div>
+<div class="flex-1 border-b border-tertiary/20 bg-tertiary-container/5 relative">
+<span class="absolute top-4 left-4 font-data-sm text-data-sm text-tertiary uppercase tracking-widest opacity-50">Crisis (L3)</span>
+</div>
+<div class="flex-1 border-b border-secondary/20 bg-secondary-container/5 relative">
+<span class="absolute top-4 left-4 font-data-sm text-data-sm text-secondary uppercase tracking-widest opacity-50">Elevated (L2)</span>
+</div>
+<div class="flex-1 relative bg-primary-container/5">
+<span class="absolute top-4 left-4 font-data-sm text-data-sm text-primary uppercase tracking-widest opacity-50">Stable (L1)</span>
+</div>
+</div>
+<!-- Nodes and Cards Container (Z-index above backgrounds) -->
+<div class="col-span-12 relative z-10 h-full">
+<!-- Node 1: Active Hostilities (Top) -->
+<div class="absolute top-[10%] left-0 w-full flex items-center justify-center">
+<div class="w-[45%] flex justify-end pr-8">
+<!-- Detail Card -->
+<div class="bg-surface-container border border-error bg-opacity-80 backdrop-blur-xl p-4 rounded-sm shadow-[0_0_20px_rgba(255,180,171,0.15)] w-full max-w-md relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="font-data-sm text-data-sm text-error uppercase tracking-widest">Drone Intercept</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant">T-MINUS 12H</div>
+</div>
+<h3 class="font-headline-md text-body-base text-on-background mb-3">Strait of Hormuz Engagement</h3>
+<div class="grid grid-cols-2 gap-2 mb-3 border-t border-outline-variant/50 pt-2">
+<div>
+<span class="block font-label-caps text-[9px] text-outline">IMPACT SCORE</span>
+<span class="font-data-sm text-error">+8.4</span>
+</div>
+<div>
+<span class="block font-label-caps text-[9px] text-outline">ACTOR</span>
+<span class="font-data-sm text-on-surface">IRGC-N</span>
+</div>
+</div>
+<div class="bg-surface-container-high border border-outline-variant/50 p-2 rounded-sm">
+<span class="block font-label-caps text-[9px] text-tertiary mb-1">PREDICTIVE NEXT STEP (78% CONF)</span>
+<p class="font-data-sm text-[11px] text-on-surface-variant leading-relaxed">Symmetric retaliation against uncrewed naval assets in Gulf of Oman. Escalation to L4.5 highly probable.</p>
+</div>
+</div>
+</div>
+<!-- Node Dot -->
+<div class="w-4 h-4 rounded-full bg-background border-2 border-error absolute left-1/2 -translate-x-1/2 shadow-[0_0_10px_rgba(255,180,171,0.8)] z-20 flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></div>
+</div>
+<div class="w-[45%] pl-8">
+<!-- Connector Line Optional -->
+</div>
+</div>
+<!-- Node 2: Crisis (Middle) -->
+<div class="absolute top-[40%] left-0 w-full flex items-center justify-center">
+<div class="w-[45%] pr-8"></div>
+<!-- Node Dot -->
+<div class="w-4 h-4 rounded-full bg-background border-2 border-tertiary absolute left-1/2 -translate-x-1/2 shadow-[0_0_10px_rgba(255,186,32,0.5)] z-20"></div>
+<div class="w-[45%] flex justify-start pl-8">
+<!-- Detail Card -->
+<div class="bg-surface-container border border-tertiary/50 bg-opacity-80 backdrop-blur-xl p-4 rounded-sm w-full max-w-md relative opacity-90 hover:opacity-100 transition-opacity">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="font-data-sm text-data-sm text-tertiary uppercase tracking-widest">Cyber Strike</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant">T-MINUS 48H</div>
+</div>
+<h3 class="font-headline-md text-body-base text-on-background mb-3">Critical Infra Degraded</h3>
+<div class="grid grid-cols-2 gap-2 border-t border-outline-variant/50 pt-2">
+<div>
+<span class="block font-label-caps text-[9px] text-outline">IMPACT SCORE</span>
+<span class="font-data-sm text-tertiary">+5.1</span>
+</div>
+<div>
+<span class="block font-label-caps text-[9px] text-outline">VECTOR</span>
+<span class="font-data-sm text-on-surface">APT-33</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Node 3: Elevated (Bottom) -->
+<div class="absolute top-[70%] left-0 w-full flex items-center justify-center">
+<div class="w-[45%] flex justify-end pr-8">
+<!-- Detail Card -->
+<div class="bg-surface-container border border-secondary/50 bg-opacity-80 backdrop-blur-xl p-4 rounded-sm w-full max-w-md relative opacity-70 hover:opacity-100 transition-opacity">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="font-data-sm text-data-sm text-secondary uppercase tracking-widest">Tanker Seizure</div>
+<div class="font-data-sm text-[10px] text-on-surface-variant">T-MINUS 14D</div>
+</div>
+<h3 class="font-headline-md text-body-base text-on-background mb-3">Commercial Vessel Detained</h3>
+<div class="grid grid-cols-2 gap-2 border-t border-outline-variant/50 pt-2">
+<div>
+<span class="block font-label-caps text-[9px] text-outline">IMPACT SCORE</span>
+<span class="font-data-sm text-secondary">+2.8</span>
+</div>
+<div>
+<span class="block font-label-caps text-[9px] text-outline">STATUS</span>
+<span class="font-data-sm text-on-surface">RESOLVED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Node Dot -->
+<div class="w-3 h-3 rounded-full bg-surface border-2 border-secondary absolute left-1/2 -translate-x-1/2 z-20"></div>
+<div class="w-[45%] pl-8"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Aether Command: Spectrum Dominance Terminal -->

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Signal Intelligence - Aether Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#080e1a",
+                        "surface-container-high": "#242a36",
+                        "primary-fixed-dim": "#98cbff",
+                        "on-secondary-container": "#002e3b",
+                        "surface-variant": "#2f3542",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-container": "#1a202c",
+                        "primary-container": "#00a3ff",
+                        "surface": "#0d131f",
+                        "tertiary-fixed": "#ffdea8",
+                        "outline-variant": "#3f4852",
+                        "on-tertiary-container": "#463000",
+                        "on-surface-variant": "#bec7d4",
+                        "tertiary": "#ffba20",
+                        "inverse-on-surface": "#2a303d",
+                        "surface-container-highest": "#2f3542",
+                        "on-secondary": "#003544",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-fixed-variant": "#004a77",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary": "#003354",
+                        "surface-tint": "#98cbff",
+                        "outline": "#88919d",
+                        "inverse-primary": "#00629d",
+                        "secondary": "#67d4f9",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#b8eaff",
+                        "primary": "#98cbff",
+                        "on-background": "#dde2f3",
+                        "inverse-surface": "#dde2f3",
+                        "background": "#0d131f",
+                        "surface-bright": "#333946",
+                        "tertiary-container": "#cc9200",
+                        "surface-dim": "#0d131f",
+                        "on-primary-container": "#00375a",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#161c27",
+                        "on-primary-fixed": "#001d33",
+                        "on-tertiary": "#412d00",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "primary-fixed": "#cfe5ff",
+                        "on-surface": "#dde2f3",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-tertiary-fixed": "#271900",
+                        "secondary-container": "#1a9dc1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "grid-columns": "12",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-hero": ["Instrument Serif"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "data-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "data-lg": ["20px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(36, 42, 54, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow {
+            text-shadow: 0 0 8px rgba(0, 163, 255, 0.6);
+        }
+        .neon-border {
+            box-shadow: 0 0 15px rgba(0, 163, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface h-screen overflow-hidden flex flex-col font-body-base">
+<!-- TopAppBar -->
+<div class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<button class="text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded">
+<span class="material-symbols-outlined text-xl">wifi</span>
+</button>
+<button class="text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded">
+<span class="material-symbols-outlined text-xl">schedule</span>
+</button>
+<button class="text-sky-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-2 rounded">
+<span class="material-symbols-outlined text-xl">lock</span>
+</button>
+</div>
+<img alt="Operator Profile" class="w-8 h-8 rounded-full border border-sky-500/50" data-alt="A highly detailed close-up portrait of a tactical operator in dark environment, lit by glowing blue screens. High contrast, sharp focus, cinematic lighting. The aesthetic is tactical dark mode with glassmorphic UI elements overlaying the scene." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVRilqtAuX6MpAQW-GjnxUD3gwDD0IpkEjpw4r8S4ahSteNhKjMmKQfdo28ybs0kBg6x54sdKkgrMsFjUUVkdgNu2sTG58pULt-c61ufjOn-sXxXTgphZTJjZkPSWILWFfYKeQOaXeqJCIiAQemds6EN-PdjIEA3gTEOXDy4KHypAv6PoRYRDVtu7AyORNgIXUrXEKh9pihoePwETQ0HuD2tygv5SOjE9AfpK8Eh6oGuL9wG3tbn_MbfdwpqQEdA__hhYHAU6RFgs"/>
+</div>
+</div>
+<div class="flex flex-1 pt-14">
+<!-- SideNavBar -->
+<div class="fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10">
+<div class="mb-8 flex flex-col items-center">
+<span class="font-bold text-sky-500 text-xs text-center mb-1">STRATCOM</span>
+<span class="text-[10px] text-slate-500 text-center font-mono tracking-tight">Sector 7-G</span>
+</div>
+<nav class="flex-1 w-full flex flex-col gap-2">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">public</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Orbital Theater</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">satellite_alt</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Asset Tracking</span>
+</button>
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full active">
+<span class="material-symbols-outlined mb-1">radar</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Signal Intel</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">warning</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Threat Matrix</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">terminal</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Comm Link</span>
+</button>
+</nav>
+<div class="mt-auto w-full flex flex-col gap-2">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">description</span>
+<span class="font-mono text-[10px] tracking-tight text-center">System Logs</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Settings</span>
+</button>
+<button class="mt-4 px-2 py-1 bg-sky-500 text-black font-bold font-mono text-[9px] rounded-none hover:bg-sky-400 transition-colors w-[90%]">
+                    INITIATE PROTOCOL
+                </button>
+</div>
+</div>
+<!-- Main Canvas -->
+<main class="ml-20 flex-1 p-gutter bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80')] bg-cover bg-center bg-no-repeat relative">
+<div class="absolute inset-0 bg-surface-container-lowest/80 backdrop-blur-sm z-0"></div>
+<div class="relative z-10 h-full grid grid-cols-12 gap-gutter grid-rows-6">
+<!-- Left Panel: Active Emitters -->
+<div class="col-span-3 row-span-5 glass-panel rounded-lg flex flex-col overflow-hidden">
+<div class="p-4 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<h2 class="font-label-caps text-primary text-label-caps tracking-widest">ACTIVE EMITTERS</h2>
+<span class="material-symbols-outlined text-outline text-sm">filter_list</span>
+</div>
+<div class="flex-1 p-4 space-y-4 overflow-y-auto">
+<!-- Emitter Card 1 -->
+<div class="border border-outline-variant p-3 rounded bg-surface/50 hover:border-primary/50 transition-colors cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 px-2 py-0.5 bg-error/20 border-l border-b border-error/50 text-error font-data-sm text-[10px]">CRITICAL</div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-sm text-on-surface font-data-sm">SIG-X992</span>
+<span class="font-data-sm text-secondary font-data-sm">14.2 GHz</span>
+</div>
+<div class="text-xs text-on-surface-variant mb-2">FHSS Classification</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 85%"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-outline">
+<span>Strength: 85dBm</span>
+<span>Dist: 4.2km</span>
+</div>
+</div>
+<!-- Emitter Card 2 -->
+<div class="border border-primary/50 p-3 rounded bg-primary/5 neon-border transition-colors cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 px-2 py-0.5 bg-primary/20 border-l border-b border-primary/50 text-primary font-data-sm text-[10px] neon-glow">ACTIVE</div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-sm text-on-surface font-data-sm">UHF-BETA</span>
+<span class="font-data-sm text-secondary font-data-sm">450 MHz</span>
+</div>
+<div class="text-xs text-on-surface-variant mb-2">Encrypted Burst</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 62%"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-outline">
+<span>Strength: -62dBm</span>
+<span>Dist: 12.8km</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Panel: Spectrogram & Waterfall -->
+<div class="col-span-6 row-span-5 flex flex-col gap-gutter">
+<!-- Spectrogram -->
+<div class="glass-panel rounded-lg flex-1 border-primary/30 relative overflow-hidden">
+<div class="absolute top-4 left-4 z-10 flex gap-2">
+<span class="px-2 py-1 bg-surface-container border border-outline-variant text-primary font-data-sm text-[10px]">FREQ: 100-500 MHz</span>
+<span class="px-2 py-1 bg-surface-container border border-outline-variant text-secondary font-data-sm text-[10px]">SPAN: 50 MHz</span>
+</div>
+<div class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_49%,rgba(0,163,255,0.1)_50%,transparent_51%)] bg-[length:100%_40px]"></div>
+<div class="w-full h-full flex items-end justify-between px-8 pb-8 pt-16">
+<!-- Simulated Spectrogram Bars -->
+<div class="w-4 bg-gradient-to-t from-primary/20 to-primary h-[30%] neon-border"></div>
+<div class="w-4 bg-gradient-to-t from-secondary/20 to-secondary h-[45%]"></div>
+<div class="w-4 bg-gradient-to-t from-error/20 to-error h-[80%] neon-border"></div>
+<div class="w-4 bg-gradient-to-t from-primary/20 to-primary h-[20%]"></div>
+<div class="w-4 bg-gradient-to-t from-secondary/20 to-secondary h-[60%]"></div>
+<div class="w-4 bg-gradient-to-t from-primary/20 to-primary h-[40%]"></div>
+<div class="w-4 bg-gradient-to-t from-error/20 to-error h-[90%] neon-border"></div>
+</div>
+</div>
+<!-- Waterfall -->
+<div class="glass-panel rounded-lg flex-1 relative overflow-hidden">
+<div class="absolute top-2 left-4 text-outline font-data-sm text-[10px] z-10">TIME HISTORY</div>
+<div class="w-full h-full bg-[linear-gradient(90deg,rgba(0,163,255,0.05)_1px,transparent_1px)] bg-[length:20px_100%] flex flex-col">
+<!-- Simulated Waterfall Rows -->
+<div class="flex-1 w-full bg-[linear-gradient(90deg,transparent_20%,rgba(0,163,255,0.8)_22%,rgba(0,163,255,0.8)_25%,transparent_27%,transparent_70%,rgba(255,180,171,0.9)_72%,rgba(255,180,171,0.9)_75%,transparent_77%)] opacity-100"></div>
+<div class="flex-1 w-full bg-[linear-gradient(90deg,transparent_20%,rgba(0,163,255,0.6)_22%,rgba(0,163,255,0.6)_25%,transparent_27%,transparent_70%,rgba(255,180,171,0.7)_72%,rgba(255,180,171,0.7)_75%,transparent_77%)] opacity-80"></div>
+<div class="flex-1 w-full bg-[linear-gradient(90deg,transparent_20%,rgba(0,163,255,0.4)_22%,rgba(0,163,255,0.4)_25%,transparent_27%,transparent_70%,rgba(255,180,171,0.5)_72%,rgba(255,180,171,0.5)_75%,transparent_77%)] opacity-60"></div>
+<div class="flex-1 w-full bg-[linear-gradient(90deg,transparent_20%,rgba(0,163,255,0.2)_22%,rgba(0,163,255,0.2)_25%,transparent_27%,transparent_70%,rgba(255,180,171,0.3)_72%,rgba(255,180,171,0.3)_75%,transparent_77%)] opacity-40"></div>
+<div class="flex-1 w-full bg-[linear-gradient(90deg,transparent_20%,rgba(0,163,255,0.1)_22%,rgba(0,163,255,0.1)_25%,transparent_27%,transparent_70%,rgba(255,180,171,0.1)_72%,rgba(255,180,171,0.1)_75%,transparent_77%)] opacity-20"></div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Map & Intel -->
+<div class="col-span-3 row-span-5 glass-panel rounded-lg flex flex-col overflow-hidden">
+<div class="h-1/2 border-b border-white/10 relative">
+<img alt="Tactical Map" class="w-full h-full object-cover opacity-60 mix-blend-screen" data-alt="A highly stylized, dark mode tactical map interface showing a topographic terrain grid with glowing blue nodes and connecting lines. Elements of glassmorphism overlay the map, displaying simulated radar sweeps and targeting reticles. The visual style is cyber-military." data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF_LQKDHa8klYUgkb1qvHn5f-nTu3A6befxVmUuyCUczdskWgxSW-23alcOXkZOTCIW7A66MvHTP8b5UkbMSmn_FPz6paZPB7M_PaOlRiABefxUfpi89nLR12Njb11WYDmFcA0b2zyWl-kiBHY57eyPzNnXmmW1axEGXncJAB1o96N-3kZYNxt7dvxswtCG-sznOF4kD_ttc331B2QE7UOT8FDs3h9blkLLgPY9Z0_9nlrqB-lbY5I4oYVNWURURWezEKZAKVpGM8"/>
+<div class="absolute inset-0 border-[1.5px] border-primary/50 m-4 rounded pointer-events-none"></div>
+<div class="absolute top-1/2 left-1/2 w-4 h-4 border-2 border-error rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_10px_rgba(255,180,171,0.8)] animate-pulse"></div>
+</div>
+<div class="flex-1 p-4 flex flex-col gap-4 bg-surface-container-lowest/50">
+<h3 class="font-label-caps text-secondary text-label-caps tracking-widest border-b border-white/10 pb-2">TARGET TELEMETRY</h3>
+<div class="space-y-2">
+<div class="flex justify-between items-center border border-outline-variant p-2 rounded bg-surface/30">
+<span class="font-data-sm text-outline text-[10px]">LAT/LONG</span>
+<span class="font-data-sm text-primary text-[12px] neon-glow">34.0522° N, 118.2437° W</span>
+</div>
+<div class="flex justify-between items-center border border-outline-variant p-2 rounded bg-surface/30">
+<span class="font-data-sm text-outline text-[10px]">ELEVATION</span>
+<span class="font-data-sm text-on-surface text-[12px]">8,420 FT</span>
+</div>
+<div class="flex justify-between items-center border border-outline-variant p-2 rounded bg-surface/30">
+<span class="font-data-sm text-outline text-[10px]">HEADING</span>
+<span class="font-data-sm text-on-surface text-[12px]">214° SW</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Panel: Decryption Telemetry -->
+<div class="col-span-12 row-span-1 glass-panel rounded-lg flex items-center px-6 gap-8">
+<div class="flex-1">
+<div class="flex justify-between items-end mb-1">
+<span class="font-label-caps text-primary tracking-widest text-[10px]">DECRYPTION PROGRESS</span>
+<span class="font-data-sm text-primary text-xs">74%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-none border border-outline-variant p-[1px]">
+<div class="bg-primary h-full neon-border" style="width: 74%"></div>
+</div>
+</div>
+<div class="h-full w-px bg-white/10 mx-2"></div>
+<div class="flex gap-6">
+<div class="flex flex-col">
+<span class="font-data-sm text-outline text-[10px] mb-1">SNR</span>
+<span class="font-data-lg text-secondary">24.5 dB</span>
+</div>
+<div class="flex flex-col">
+<span class="font-data-sm text-outline text-[10px] mb-1">BER</span>
+<span class="font-data-lg text-error">1.2e-4</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
+
+<!-- Aether Command: Threat Matrix Assessment -->

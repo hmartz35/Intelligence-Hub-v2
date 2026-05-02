@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Geopolitical Intelligence Matrix</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#003544",
+                    "on-secondary-container": "#002e3b",
+                    "surface-container": "#1a202c",
+                    "primary": "#98cbff",
+                    "outline": "#88919d",
+                    "tertiary-fixed": "#ffdea8",
+                    "surface": "#0d131f",
+                    "primary-fixed": "#cfe5ff",
+                    "tertiary-fixed-dim": "#ffba20",
+                    "on-surface-variant": "#bec7d4",
+                    "surface-container-low": "#161c27",
+                    "background": "#0d131f",
+                    "tertiary": "#ffba20",
+                    "on-primary-fixed-variant": "#004a77",
+                    "on-primary-container": "#00375a",
+                    "surface-dim": "#0d131f",
+                    "secondary-fixed": "#b8eaff",
+                    "on-tertiary": "#412d00",
+                    "on-primary-fixed": "#001d33",
+                    "inverse-primary": "#00629d",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#cc9200",
+                    "surface-container-highest": "#2f3542",
+                    "surface-container-high": "#242a36",
+                    "secondary-container": "#1a9dc1",
+                    "surface-container-lowest": "#080e1a",
+                    "secondary": "#67d4f9",
+                    "inverse-surface": "#dde2f3",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#98cbff",
+                    "primary-container": "#00a3ff",
+                    "inverse-on-surface": "#2a303d",
+                    "on-tertiary-fixed": "#271900",
+                    "on-surface": "#dde2f3",
+                    "on-tertiary-container": "#463000",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "secondary-fixed-dim": "#67d4f9",
+                    "on-tertiary-fixed-variant": "#5e4200",
+                    "on-secondary-fixed": "#001f28",
+                    "surface-tint": "#98cbff",
+                    "on-background": "#dde2f3",
+                    "on-primary": "#003354",
+                    "outline-variant": "#3f4852",
+                    "surface-variant": "#2f3542",
+                    "on-error": "#690005",
+                    "surface-bright": "#333946",
+                    "on-error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "unit": "4px",
+                    "stack-md": "16px",
+                    "container-padding": "24px",
+                    "stack-sm": "8px",
+                    "gutter": "16px",
+                    "grid-columns": "12"
+            },
+            "fontFamily": {
+                    "label-caps": [
+                            "Space Grotesk"
+                    ],
+                    "display-hero": [
+                            "Instrument Serif"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "body-base": [
+                            "Inter"
+                    ],
+                    "data-sm": [
+                            "JetBrains Mono"
+                    ],
+                    "data-lg": [
+                            "JetBrains Mono"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-hero": [
+                            "72px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-base": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .data-grid-bg {
+            background-image: 
+                linear-gradient(rgba(26, 32, 44, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26, 32, 44, 0.5) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-base text-body-base overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-sky-500">public</span>
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-slate-500 hover:text-sky-300 transition-colors cursor-pointer text-sm">wifi</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-sky-300 transition-colors cursor-pointer text-sm">schedule</span>
+<span class="material-symbols-outlined text-slate-500 hover:text-sky-300 transition-colors cursor-pointer text-sm">lock</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-sky-500/30 overflow-hidden relative">
+<img class="w-full h-full object-cover grayscale opacity-80 mix-blend-screen" data-alt="A stark, high-contrast monochrome portrait of a military operator or intelligence analyst. The lighting is dramatic, emphasizing shadows and creating a serious, focused mood. The style is hyper-realistic and gritty, fitting for a dark tactical interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs-5AKvhc4V-Kx8xrVcpoHVO6cCFk15dMoCJLStuaIqK9kxRGbZ0im-csBA5RkdWb1hRIeiOqz3EobV_WjqVf_kUJcEh6h4Fxo6a-LRlOXtsAel9fuOQ36gXBvnEdutL4ogJ0OwtTE-qfXTBHsEXd9Us-uBsln5EmOZwVIRsP41WP5IjM803-54BDh4YGi3a13rLuZaC4Brx66-HRluC7xeE_susahmcxgzuPYMI6r8EYNwnpUvm52KnB5gOzwM4sTcdf7rIZtKRc"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10">
+<div class="w-10 h-10 mb-8 border border-white/10 rounded-DEFAULT flex items-center justify-center bg-surface-container-high">
+<span class="material-symbols-outlined text-sky-500 text-lg">radar</span>
+</div>
+<nav class="flex flex-col w-full gap-2 flex-grow">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">public</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute left-20 bg-[#06090E] border border-white/10 px-2 py-1 rounded-DEFAULT whitespace-nowrap z-50 pointer-events-none">Orbital Theater</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">satellite_alt</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute left-20 bg-[#06090E] border border-white/10 px-2 py-1 rounded-DEFAULT whitespace-nowrap z-50 pointer-events-none">Asset Tracking</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">radar</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute left-20 bg-[#06090E] border border-white/10 px-2 py-1 rounded-DEFAULT whitespace-nowrap z-50 pointer-events-none">Signal Intel</span>
+</a>
+<a class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full group relative" href="#">
+<span class="material-symbols-outlined mb-1">warning</span>
+<span class="absolute inset-0 bg-sky-500/10 blur-md -z-10"></span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute left-20 bg-sky-900 border border-sky-500 text-sky-300 px-2 py-1 rounded-DEFAULT whitespace-nowrap z-50 pointer-events-none shadow-[0_0_10px_rgba(0,163,255,0.3)]">Threat Matrix</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">terminal</span>
+<span class="font-mono text-[10px] tracking-tight opacity-0 group-hover:opacity-100 absolute left-20 bg-[#06090E] border border-white/10 px-2 py-1 rounded-DEFAULT whitespace-nowrap z-50 pointer-events-none">Comm Link</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col w-full gap-2">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-14 pl-20 w-full h-screen relative bg-surface data-grid-bg">
+<!-- Deep Background Map Layer -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-luminosity overflow-hidden flex items-center justify-center">
+<div class="w-[120vw] h-[1228px] bg-cover bg-center" data-alt="A highly detailed, dark-mode satellite view of the Earth, focused roughly on the Middle East and Asian landmasses. The image features deep blues and blacks for oceans, with glowing, abstract data nodes and vector networks overlaid to simulate global intelligence tracking. The lighting is low-key, evoking a cinematic war room environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCURTto4yaPwPtIX36NqSBYtHyeTw-CDcKscii1lqRu3n36O5-BF2zRyPo8NscLWrB39k_FeHZk3YBTZ0r0AzcJZyjwIlkqrFDYqPLT0s7f0LwTTRtjmwkVlHQKII9vktD9O2IxP4dnJMpJCwUnsGl4rQRSyLSnpC06Y5i3UzPjB0ONy5kB0Jsk-CgugadxZmT2UhOB1Gww8RNKdA6hUNKXCbZ5pQde4GzhkxBggPLcV1FY5drPRqAyMYlFsbvmWTw1NY7CeFE7064')"></div>
+</div>
+<!-- Central Targeting / Vector Layer -->
+<div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+<div class="w-96 h-96 rounded-full border border-primary/20 relative animate-[spin_60s_linear_infinite]">
+<div class="absolute top-0 left-1/2 w-[1px] h-4 bg-primary -translate-x-1/2"></div>
+<div class="absolute bottom-0 left-1/2 w-[1px] h-4 bg-primary -translate-x-1/2"></div>
+<div class="absolute left-0 top-1/2 h-[1px] w-4 bg-primary -translate-y-1/2"></div>
+<div class="absolute right-0 top-1/2 h-[1px] w-4 bg-primary -translate-y-1/2"></div>
+<div class="absolute inset-8 rounded-full border border-tertiary-fixed-dim/10 border-dashed"></div>
+</div>
+<!-- Center Node (Tehran) -->
+<div class="absolute w-2 h-2 bg-error rounded-full shadow-[0_0_15px_rgba(255,180,171,0.8)] z-10">
+<div class="absolute top-4 left-4 bg-surface-container/90 border border-outline-variant px-2 py-1 backdrop-blur-sm">
+<span class="font-data-sm text-data-sm text-on-surface whitespace-nowrap">THR : ACTIVE</span>
+</div>
+</div>
+<!-- Proxy Vectors -->
+<svg class="absolute inset-0 w-full h-full z-0 opacity-60">
+<path class="opacity-50" d="M50% 50% Q 40% 60%, 30% 65%" fill="none" stroke="var(--color-tertiary-fixed-dim)" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<circle cx="30%" cy="65%" fill="var(--color-tertiary-fixed-dim)" r="3"></circle>
+<path d="M50% 50% Q 60% 40%, 70% 35%" fill="none" stroke="var(--color-primary)" stroke-width="1.5"></path>
+<circle cx="70%" cy="35%" fill="var(--color-primary)" r="3"></circle>
+<circle class="animate-ping opacity-50" cx="70%" cy="35%" fill="none" r="8" stroke="var(--color-primary)" stroke-width="1"></circle>
+</svg>
+</div>
+<!-- Grid Layout -->
+<div class="relative z-10 w-full h-full p-container-padding grid grid-cols-12 gap-gutter grid-rows-[auto_1fr_auto]">
+<!-- Top Status Bar -->
+<div class="col-span-12 flex justify-between items-start">
+<div class="bg-surface-container/80 backdrop-blur-md border border-outline-variant px-4 py-2 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-error shadow-[0_0_8px_rgba(255,180,171,0.8)] animate-pulse"></div>
+<span class="font-label-caps text-label-caps text-on-surface tracking-widest">LIVE INTEL FEED : SECTOR 7-G</span>
+</div>
+<div class="font-data-sm text-data-sm text-on-surface-variant flex gap-4 bg-surface-container/50 px-3 py-1 border border-outline-variant/50 backdrop-blur-sm">
+<span>SYS.OP: STABLE</span>
+<span>NET: SECURE</span>
+<span class="text-tertiary-fixed-dim">LATENCY: 14ms</span>
+</div>
+</div>
+<!-- Left Panel: Friction Matrix -->
+<div class="col-span-3 row-start-2 bg-surface-container/70 backdrop-blur-xl border border-outline-variant flex flex-col overflow-hidden h-fit">
+<div class="px-4 py-3 border-b border-outline-variant/50 bg-surface-container-high/50 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-primary">REGIONAL FRICTION MATRIX</span>
+<span class="material-symbols-outlined text-outline text-[16px]">monitoring</span>
+</div>
+<div class="p-4 flex flex-col gap-stack-md">
+<div class="flex flex-col gap-unit">
+<div class="flex justify-between font-data-sm text-data-sm text-on-surface">
+<span>OSINT : THR</span>
+<span class="text-error">+8.4%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error w-[78%] shadow-[0_0_8px_rgba(255,180,171,0.5)]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-unit">
+<div class="flex justify-between font-data-sm text-data-sm text-on-surface">
+<span>OSINT : DXB</span>
+<span class="text-primary">-2.1%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%] shadow-[0_0_8px_rgba(152,203,255,0.5)]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-unit">
+<div class="flex justify-between font-data-sm text-data-sm text-on-surface">
+<span>OSINT : DOH</span>
+<span class="text-tertiary-fixed-dim">STBL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[55%]"></div>
+</div>
+</div>
+<div class="mt-2 border-t border-outline-variant/30 pt-3">
+<span class="font-data-sm text-[10px] text-outline uppercase">Sentiment Delta (24h)</span>
+<div class="h-16 w-full mt-2 border-b border-l border-outline-variant/50 relative">
+<!-- Fake chart line -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="drop-shadow-[0_0_4px_rgba(255,180,171,0.6)]" d="M0,80 L20,60 L40,75 L60,30 L80,45 L100,10" fill="none" stroke="var(--color-error)" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Cyber Disturbance -->
+<div class="col-span-3 col-start-10 row-start-2 bg-surface-container/70 backdrop-blur-xl border border-outline-variant flex flex-col h-fit">
+<div class="px-4 py-3 border-b border-outline-variant/50 bg-surface-container-high/50 flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-tertiary-fixed-dim">CYBER DISTURBANCE : HORMUZ</span>
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[16px] animate-pulse">warning</span>
+</div>
+<div class="p-4 flex flex-col gap-stack-sm">
+<!-- Infra Item 1 -->
+<div class="p-2 border border-outline-variant/40 bg-surface-container-low flex items-center justify-between group hover:border-tertiary-fixed-dim/50 transition-colors">
+<div class="flex items-center gap-2">
+<div class="w-1 h-6 bg-error shadow-[0_0_4px_rgba(255,180,171,0.5)]"></div>
+<div class="flex flex-col">
+<span class="font-data-sm text-[11px] text-on-surface">PORT.FACILITY.01</span>
+<span class="font-data-sm text-[9px] text-error">CRITICAL IMPACT</span>
+</div>
+</div>
+<span class="font-data-sm text-[10px] text-outline">04:12Z</span>
+</div>
+<!-- Infra Item 2 -->
+<div class="p-2 border border-outline-variant/40 bg-surface-container-low flex items-center justify-between group hover:border-tertiary-fixed-dim/50 transition-colors">
+<div class="flex items-center gap-2">
+<div class="w-1 h-6 bg-tertiary-fixed-dim"></div>
+<div class="flex flex-col">
+<span class="font-data-sm text-[11px] text-on-surface">GRID.SUBNET.A</span>
+<span class="font-data-sm text-[9px] text-tertiary-fixed-dim">ANOMALY DETECTED</span>
+</div>
+</div>
+<span class="font-data-sm text-[10px] text-outline">04:18Z</span>
+</div>
+<!-- Infra Item 3 -->
+<div class="p-2 border border-outline-variant/40 bg-surface-container-low flex items-center justify-between group hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-2">
+<div class="w-1 h-6 bg-primary"></div>
+<div class="flex flex-col">
+<span class="font-data-sm text-[11px] text-on-surface">COMM.SAT.LINK</span>
+<span class="font-data-sm text-[9px] text-primary">SECURE</span>
+</div>
+</div>
+<span class="font-data-sm text-[10px] text-outline">04:22Z</span>
+</div>
+</div>
+</div>
+<!-- Bottom Panel: Telemetry Stream -->
+<div class="col-span-6 col-start-4 row-start-3 bg-surface-container/60 backdrop-blur-md border border-outline-variant border-b-0 h-32 flex flex-col">
+<div class="px-4 py-1.5 border-b border-outline-variant/50 bg-surface-container-high/80 flex justify-between items-center">
+<span class="font-label-caps text-[9px] text-outline uppercase tracking-widest">SUPPLY CHAIN VECTOR STREAM</span>
+</div>
+<div class="flex-1 overflow-hidden p-2 font-data-sm text-[10px] text-on-surface-variant flex flex-col gap-1">
+<div class="grid grid-cols-4 gap-4 px-2 text-outline border-b border-outline-variant/20 pb-1">
+<span>ASSET ID</span>
+<span>ORIGIN</span>
+<span>DESTINATION</span>
+<span>STATUS</span>
+</div>
+<div class="grid grid-cols-4 gap-4 px-2 hover:bg-surface-bright/30 cursor-crosshair">
+<span class="text-primary">VLCC-77A</span>
+<span>BND.ABAS</span>
+<span>UNDISCLOSED</span>
+<span class="text-tertiary-fixed-dim">MONITORING</span>
+</div>
+<div class="grid grid-cols-4 gap-4 px-2 hover:bg-surface-bright/30 cursor-crosshair">
+<span class="text-primary">CX-902</span>
+<span>THR.INTL</span>
+<span>DAMASCUS</span>
+<span class="text-error">INTERCEPT REQ</span>
+</div>
+<div class="grid grid-cols-4 gap-4 px-2 hover:bg-surface-bright/30 cursor-crosshair opacity-50">
+<span>M-TRK-44</span>
+<span>KERMAN</span>
+<span>BORDER.W</span>
+<span>GHOSTED</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Aether Command: Hormuz GEOINT Lab -->

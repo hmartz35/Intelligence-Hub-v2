@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER COMMAND - Signal Intel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#004a77",
+                      "background": "#0d131f",
+                      "surface-container-highest": "#2f3542",
+                      "tertiary-container": "#cc9200",
+                      "on-error": "#690005",
+                      "outline": "#88919d",
+                      "tertiary-fixed": "#ffdea8",
+                      "secondary-fixed": "#b8eaff",
+                      "on-secondary-fixed-variant": "#004d61",
+                      "on-primary-fixed": "#001d33",
+                      "inverse-primary": "#00629d",
+                      "inverse-on-surface": "#2a303d",
+                      "surface-container-lowest": "#080e1a",
+                      "surface-dim": "#0d131f",
+                      "on-primary-container": "#00375a",
+                      "error": "#ffb4ab",
+                      "secondary": "#67d4f9",
+                      "inverse-surface": "#dde2f3",
+                      "surface-bright": "#333946",
+                      "tertiary": "#ffba20",
+                      "surface-container-high": "#242a36",
+                      "on-surface-variant": "#bec7d4",
+                      "on-secondary-container": "#002e3b",
+                      "surface-tint": "#98cbff",
+                      "on-secondary": "#003544",
+                      "on-error-container": "#ffdad6",
+                      "surface": "#0d131f",
+                      "on-tertiary-container": "#463000",
+                      "on-tertiary-fixed": "#271900",
+                      "primary-fixed-dim": "#98cbff",
+                      "error-container": "#93000a",
+                      "secondary-fixed-dim": "#67d4f9",
+                      "surface-variant": "#2f3542",
+                      "primary": "#98cbff",
+                      "on-tertiary": "#412d00",
+                      "tertiary-fixed-dim": "#ffba20",
+                      "primary-fixed": "#cfe5ff",
+                      "secondary-container": "#1a9dc1",
+                      "on-tertiary-fixed-variant": "#5e4200",
+                      "surface-container": "#1a202c",
+                      "on-background": "#dde2f3",
+                      "surface-container-low": "#161c27",
+                      "on-primary": "#003354",
+                      "primary-container": "#00a3ff",
+                      "on-surface": "#dde2f3",
+                      "outline-variant": "#3f4852",
+                      "on-secondary-fixed": "#001f28"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "grid-columns": "12",
+                      "container-padding": "24px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "gutter": "16px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "display-hero": [
+                              "Instrument Serif"
+                      ],
+                      "data-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Space Grotesk"
+                      ],
+                      "data-sm": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-hero": [
+                              "72px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "data-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #06090E;
+            color: #dde2f3;
+        }
+        
+        .glass-panel {
+            background: rgba(47, 53, 66, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cyber-border {
+            border: 1px solid rgba(0, 163, 255, 0.3);
+        }
+        
+        .glow-accent {
+            box-shadow: 0 0 15px rgba(0, 163, 255, 0.2);
+        }
+
+        /* Hide scrollbar for clean HUD look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(13, 19, 31, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(152, 203, 255, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(152, 203, 255, 0.6);
+        }
+      </style>
+</head>
+<body class="font-body-base text-body-base overflow-hidden h-screen w-screen relative">
+<!-- Global Map Background -->
+<div class="absolute inset-0 z-0 bg-cover bg-center opacity-30" data-alt="A high-resolution satellite view of Earth at night, rendered in a tactical dark mode aesthetic. Glowing city lights form networks across continents, primarily in shades of command blue and subtle amber. The oceans are deep obsidian, and the overall image has a digital, holographic quality, fitting for a sophisticated intelligence terminal." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBPxNg3dHZbiiXyHIu9NoAUllNBcGdpTPXZPI4BfU4As2lPv_Kbp-dmxvteTiuqLYFaybprYyxMv0eW4eUtIKVdYeJb91TVKDVYB2WBqc7W2hK3MCUfzPb8AGGk8dpaddroQ-ZESgUO9M5vn6LbL7lghmRua4ADbBa7OR5OfsYF3f1aCAow2EmuaNFj4uwU_-0X05qs12Ugb70rluyO67M7t27T1X6aM_2Z7B6jTdcbF7lvhILJzot5CuV1X6oSmMEeWnK9VnW63DA');"></div>
+<div class="absolute inset-0 z-0 bg-gradient-to-b from-[#06090E]/80 via-transparent to-[#06090E]/90"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)] hidden md:flex">
+<div class="flex items-center space-x-6">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<!-- Search & Actions -->
+<div class="flex items-center space-x-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-[#0d131f] border border-white/10 text-sky-500 font-data-sm text-data-sm rounded-none pl-9 pr-4 py-1.5 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition-all w-64 placeholder-slate-600" placeholder="QUERY COORDINATES..." type="text"/>
+<span class="absolute right-2 top-0 text-[8px] text-sky-500 font-mono hidden group-focus-within:block mt-2">ACTIVE</span>
+</div>
+<button class="text-slate-500 hover:text-sky-300 hover:bg-sky-500/10 p-2 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">wifi</span>
+</button>
+<button class="text-slate-500 hover:text-sky-300 hover:bg-sky-500/10 p-2 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</button>
+<button class="text-slate-500 hover:text-sky-300 hover:bg-sky-500/10 p-2 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+</button>
+<div class="h-8 w-8 rounded bg-surface-container-high border border-white/10 overflow-hidden ml-2">
+<img alt="Operator Profile" class="w-full h-full object-cover grayscale opacity-80" data-alt="A portrait of a male operator in tactical gear, rendered in a desaturated, high-contrast style. The image has a subtle scanline overlay, fitting the dark mode, intelligence terminal aesthetic. The lighting is harsh and dramatic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_kArwCVEgfU5FtKRCLy-COtkguBWZvAlKcSUg0F4eoMZ6d8zS52Ay4mbbW4PaQyVR5RtEWoOHeb03SA-WYdTUIp8y5Vls3INsoCVCDht7qwebq4BCmzqLDopK30VdymTh12kmOZSfIMvSmKVBibMU-xE06GLwCeh7G946WPCRWW1ZL-57n5aXOwzVRc8yYyeX_cJgjI9PE0t11UdRigLMnrzAuQRdW6LcwrH88OH9hxq1SZ2nS9cl9UL1UtJXOLo2dJ0iMdcR_HY"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Web) -->
+<nav class="fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10 hidden md:flex">
+<div class="flex-1 w-full mt-4 space-y-2">
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">public</span>
+<span class="font-label-caps text-label-caps text-center px-1 opacity-70 group-hover:opacity-100">Orbital Theater</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">satellite_alt</span>
+<span class="font-label-caps text-label-caps text-center px-1 opacity-70 group-hover:opacity-100">Asset Tracking</span>
+</button>
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full group relative glow-accent">
+<span class="material-symbols-outlined mb-1 text-sky-400 drop-shadow-[0_0_8px_rgba(0,163,255,0.8)]">radar</span>
+<span class="font-label-caps text-label-caps text-center px-1 text-sky-400">Signal Intel</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">warning</span>
+<span class="font-label-caps text-label-caps text-center px-1 opacity-70 group-hover:opacity-100">Threat Matrix</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">terminal</span>
+<span class="font-label-caps text-label-caps text-center px-1 opacity-70 group-hover:opacity-100">Comm Link</span>
+</button>
+</div>
+<div class="mt-auto w-full space-y-2 border-t border-white/10 pt-4">
+<button class="text-slate-600 flex flex-col items-center py-3 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined text-sm">description</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-3 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined text-sm">settings</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="absolute inset-0 z-10 pt-14 md:pl-20 pointer-events-none flex flex-col">
+<!-- Interactive layer must have pointer-events-auto -->
+<div class="flex-1 w-full h-full p-6 pointer-events-auto flex flex-col lg:flex-row gap-6">
+<!-- Left Sidebar: Simulation Parameters -->
+<aside class="w-full lg:w-80 flex flex-col gap-4">
+<div class="glass-panel p-4 flex flex-col gap-4 h-full">
+<div class="border-b border-white/10 pb-2 mb-2 flex justify-between items-center">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant">SIMULATION PARAMETERS</h2>
+<span class="material-symbols-outlined text-sky-500 text-sm animate-pulse">tune</span>
+</div>
+<!-- Timeline Control -->
+<div class="space-y-2">
+<label class="font-data-sm text-data-sm text-sky-400">PROJECTION HORIZON [YRS]</label>
+<div class="flex items-center gap-2">
+<span class="font-data-sm text-data-sm text-slate-500">NOW</span>
+<input class="w-full h-1 bg-surface-container-high rounded-none appearance-none cursor-pointer accent-primary-container" max="5" min="1" type="range" value="3"/>
+<span class="font-data-sm text-data-sm text-sky-500">+5</span>
+</div>
+<div class="flex justify-between text-[10px] font-mono text-slate-600 mt-1">
+<span>2024</span>
+<span class="text-sky-400 font-bold border-b border-sky-400">2027</span>
+<span>2029</span>
+</div>
+</div>
+<!-- Possibility Arrays -->
+<div class="space-y-3 mt-4 flex-1">
+<label class="font-data-sm text-data-sm text-sky-400">POSSIBILITY ARRAYS</label>
+<label class="flex items-center gap-3 p-2 border border-white/10 hover:border-sky-500/50 bg-surface-container-low cursor-pointer group transition-colors">
+<input checked="" class="form-checkbox h-4 w-4 text-primary-container rounded-none bg-transparent border-slate-600 focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-data-sm text-data-sm text-on-surface group-hover:text-sky-300 transition-colors">Resource Scarcity Vector</span>
+<span class="font-mono text-[9px] text-tertiary-fixed-dim">PROBABILITY: 68%</span>
+</div>
+</label>
+<label class="flex items-center gap-3 p-2 border border-white/10 hover:border-sky-500/50 bg-surface-container-low cursor-pointer group transition-colors">
+<input checked="" class="form-checkbox h-4 w-4 text-primary-container rounded-none bg-transparent border-slate-600 focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-data-sm text-data-sm text-on-surface group-hover:text-sky-300 transition-colors">Tech Proliferation Hubs</span>
+<span class="font-mono text-[9px] text-secondary">PROBABILITY: 82%</span>
+</div>
+</label>
+<label class="flex items-center gap-3 p-2 border border-white/10 hover:border-sky-500/50 bg-surface-container-low cursor-pointer group transition-colors">
+<input class="form-checkbox h-4 w-4 text-primary-container rounded-none bg-transparent border-slate-600 focus:ring-0 focus:ring-offset-0" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-data-sm text-data-sm text-slate-500 group-hover:text-sky-300 transition-colors">Climate Migration Routes</span>
+<span class="font-mono text-[9px] text-slate-600">PROBABILITY: 45%</span>
+</div>
+</label>
+</div>
+<button class="w-full bg-primary-container hover:bg-sky-400 text-[#000] font-label-caps text-label-caps py-3 transition-colors mt-auto flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+                        RECALCULATE MODEL
+                    </button>
+</div>
+</aside>
+<!-- Center/Right Area: Visualizations -->
+<div class="flex-1 flex flex-col gap-6">
+<!-- Heat Zones Map Overlay (Conceptual container over global background) -->
+<div class="flex-1 relative border border-white/10 glass-panel overflow-hidden">
+<div class="absolute top-4 left-4 font-label-caps text-label-caps text-sky-500 bg-black/50 px-2 py-1 border border-sky-500/30">
+                        GLOBAL HEAT ZONES [2027 PROJECTION]
+                    </div>
+<!-- Conceptual Heat Nodes -->
+<div class="absolute top-[30%] left-[60%] w-32 h-32 bg-secondary/20 rounded-full blur-xl mix-blend-screen animate-pulse"></div>
+<div class="absolute top-[35%] left-[62%] w-4 h-4 border border-secondary rounded-full flex items-center justify-center">
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+</div>
+<div class="absolute top-[45%] left-[20%] w-48 h-48 bg-tertiary-fixed-dim/10 rounded-full blur-2xl mix-blend-screen"></div>
+<!-- Overlay Grid Lines -->
+<div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+</div>
+<!-- Bottom Widgets Row -->
+<div class="h-64 grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Macro-Trend Indicators -->
+<div class="glass-panel p-4 flex flex-col col-span-1 lg:col-span-2">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant border-b border-white/10 pb-2 mb-4">MACRO-TREND INDICATORS</h3>
+<div class="flex-1 flex flex-col justify-around">
+<!-- Indicator 1 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-secondary">ECONOMIC FLUX</span>
+<span class="font-mono text-[10px] text-slate-400">+14.2%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1">
+<div class="bg-secondary h-full" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Indicator 2 -->
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-tertiary-fixed-dim">SUPPLY CHAIN STABILITY</span>
+<span class="font-mono text-[10px] text-error">-8.4%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1">
+<div class="bg-tertiary-fixed-dim h-full" style="width: 40%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Probability Distribution -->
+<div class="glass-panel p-4 flex flex-col">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant border-b border-white/10 pb-2 mb-4">PROBABILITY DIST.</h3>
+<div class="flex-1 flex items-end justify-between px-2 gap-1">
+<!-- Simulated Bar Chart -->
+<div class="w-full bg-gradient-to-t from-sky-500/50 to-transparent h-[20%] border-t border-sky-500"></div>
+<div class="w-full bg-gradient-to-t from-sky-500/50 to-transparent h-[40%] border-t border-sky-500"></div>
+<div class="w-full bg-gradient-to-t from-sky-500/50 to-transparent h-[85%] border-t border-sky-500 glow-accent"></div>
+<div class="w-full bg-gradient-to-t from-sky-500/50 to-transparent h-[60%] border-t border-sky-500"></div>
+<div class="w-full bg-gradient-to-t from-sky-500/50 to-transparent h-[30%] border-t border-sky-500"></div>
+</div>
+<div class="flex justify-between text-[8px] font-mono text-slate-500 mt-2">
+<span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Intelligence Feed Panel -->
+<aside class="w-full lg:w-72 glass-panel flex flex-col h-[400px] lg:h-auto absolute right-6 top-6 lg:static shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+<div class="bg-[#001d33] border-b border-sky-500/30 p-3 flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-sky-400 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                        LIVE INTEL FEED
+                    </h3>
+<span class="font-mono text-[9px] text-slate-400">T+ 00:14:22</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Feed Item -->
+<div class="border-l-2 border-tertiary-fixed-dim pl-3">
+<div class="flex justify-between mb-1">
+<span class="font-mono text-[9px] text-tertiary-fixed-dim">NODE_77A</span>
+<span class="font-mono text-[9px] text-slate-500">14:22:01 Z</span>
+</div>
+<p class="font-data-sm text-data-sm text-on-surface text-sm">Anomalous power surge detected in designated Sector 4. Probability of infrastructure stress: High.</p>
+</div>
+<!-- Feed Item -->
+<div class="border-l-2 border-secondary pl-3">
+<div class="flex justify-between mb-1">
+<span class="font-mono text-[9px] text-secondary">ORBITAL_SYS</span>
+<span class="font-mono text-[9px] text-slate-500">14:18:45 Z</span>
+</div>
+<p class="font-data-sm text-data-sm text-on-surface text-sm">Asset repositioning confirmed. Comms link established with secondary array.</p>
+</div>
+<!-- Feed Item -->
+<div class="border-l-2 border-slate-600 pl-3 opacity-60">
+<div class="flex justify-between mb-1">
+<span class="font-mono text-[9px] text-slate-400">SYS_ROUTINE</span>
+<span class="font-mono text-[9px] text-slate-500">14:10:00 Z</span>
+</div>
+<p class="font-data-sm text-data-sm text-on-surface text-sm">Hourly topological scan completed. No deviance from baseline.</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg rounded-none border border-sky-500/30 w-[600px] max-w-[95vw] shadow-[0_0_20px_rgba(0,163,255,0.2)] md:hidden">
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center group hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px] mb-1">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center group hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px] mb-1">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</button>
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 flex flex-col items-center">
+<span class="material-symbols-outlined text-[20px] mb-1">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</button>
+<button class="text-slate-400 px-4 py-1 flex flex-col items-center group hover:border-sky-400 hover:text-sky-300">
+<span class="material-symbols-outlined text-[20px] mb-1">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</button>
+</nav>
+</body></html>
+
+<!-- Aether Command: Possibility Array Terminal -->

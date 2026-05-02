@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Geopolitical Intelligence Matrix</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;family=Instrument+Serif&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#00a3ff",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dde2f3",
+                        "surface-variant": "#2f3542",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#98cbff",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "surface-bright": "#333946",
+                        "on-secondary-container": "#002e3b",
+                        "on-primary-fixed-variant": "#004a77",
+                        "surface-tint": "#98cbff",
+                        "surface-container": "#1a202c",
+                        "on-primary-container": "#00375a",
+                        "on-primary": "#003354",
+                        "tertiary-fixed": "#ffdea8",
+                        "tertiary-container": "#cc9200",
+                        "on-secondary-fixed": "#001f28",
+                        "secondary-container": "#1a9dc1",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#b8eaff",
+                        "primary-fixed-dim": "#98cbff",
+                        "outline-variant": "#3f4852",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-tertiary-container": "#463000",
+                        "surface-container-highest": "#2f3542",
+                        "surface-container-high": "#242a36",
+                        "primary-fixed": "#cfe5ff",
+                        "inverse-primary": "#00629d",
+                        "on-secondary": "#003544",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "background": "#0d131f",
+                        "surface-container-low": "#161c27",
+                        "on-surface-variant": "#bec7d4",
+                        "on-primary-fixed": "#001d33",
+                        "on-tertiary-fixed": "#271900",
+                        "on-background": "#dde2f3",
+                        "on-tertiary": "#412d00",
+                        "surface-dim": "#0d131f",
+                        "surface": "#0d131f",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-container-lowest": "#080e1a",
+                        "secondary": "#67d4f9",
+                        "on-surface": "#dde2f3",
+                        "inverse-on-surface": "#2a303d",
+                        "tertiary": "#ffba20",
+                        "error": "#ffb4ab",
+                        "outline": "#88919d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "container-padding": "24px",
+                        "gutter": "16px",
+                        "grid-columns": "12",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "display-hero": ["Instrument Serif"],
+                        "data-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "data-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "data-lg": ["20px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #06090E;
+            color: #dde2f3;
+        }
+        .glass-panel {
+            background-color: rgba(26, 32, 44, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow-blue {
+            box-shadow: 0 0 8px rgba(0, 163, 255, 0.4);
+        }
+        .neon-glow-red {
+            box-shadow: 0 0 8px rgba(147, 0, 10, 0.4);
+        }
+        .neon-glow-amber {
+            box-shadow: 0 0 8px rgba(255, 186, 32, 0.4);
+        }
+        .thin-border {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-line {
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent, rgba(0, 163, 255, 0.8), transparent);
+            box-shadow: 0 0 2px rgba(0, 163, 255, 0.8);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 163, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen overflow-hidden flex flex-col font-body-base text-body-base">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center space-x-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+<div class="h-4 w-px bg-white/20 mx-2"></div>
+<span class="font-data-sm text-data-sm text-sky-500 uppercase tracking-widest text-xs">GLOBAL INTEL MATRIX</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex space-x-4 font-mono uppercase tracking-widest text-xs">
+<button class="text-sky-400 font-bold border-b-2 border-sky-500 pb-1">OVERVIEW</button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors pb-1">THEATER</button>
+<button class="text-slate-500 hover:bg-sky-500/10 hover:text-sky-300 transition-colors pb-1">ASSETS</button>
+</div>
+<div class="flex space-x-3 text-sky-500">
+<span class="material-symbols-outlined hover:text-sky-300 cursor-pointer">wifi</span>
+<span class="material-symbols-outlined hover:text-sky-300 cursor-pointer">schedule</span>
+<span class="material-symbols-outlined hover:text-sky-300 cursor-pointer">lock</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-slate-800 border border-sky-500/30 overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-sky-500 text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex fixed left-0 top-14 bottom-0 w-20 z-40 flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10">
+<div class="mb-8 flex flex-col items-center">
+<div class="h-10 w-10 rounded bg-sky-900/30 border border-sky-500 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-sky-500">radar</span>
+</div>
+<span class="font-label-caps text-label-caps text-sky-500 text-[9px] text-center leading-tight">STRATCOM<br/>Sector 7-G</span>
+</div>
+<div class="flex-1 w-full flex flex-col space-y-2">
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">public</span>
+<span class="font-mono text-[9px] tracking-tight">Orbital Theater</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">satellite_alt</span>
+<span class="font-mono text-[9px] tracking-tight">Asset Tracking</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">radar</span>
+<span class="font-mono text-[9px] tracking-tight text-center px-1">Signal Intel</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1 text-error">warning</span>
+<span class="font-mono text-[9px] tracking-tight text-center px-1">Threat Matrix</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1">terminal</span>
+<span class="font-mono text-[9px] tracking-tight">Comm Link</span>
+</button>
+</div>
+<div class="w-full flex flex-col space-y-2 mt-auto">
+<button class="w-16 mx-auto bg-primary-container text-on-primary-container font-label-caps text-label-caps py-2 rounded-sm mb-4 text-[9px]">INIT</button>
+<button class="text-slate-600 flex flex-col items-center py-3 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1 text-sm">description</span>
+<span class="font-mono text-[8px] tracking-tight">System Logs</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center py-3 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined mb-1 text-sm">settings</span>
+<span class="font-mono text-[8px] tracking-tight">Settings</span>
+</button>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 mt-14 ml-0 md:ml-20 p-container-padding h-[calc(100vh-3.5rem)] overflow-y-auto">
+<div class="grid grid-cols-12 gap-gutter h-full pb-20 md:pb-0">
+<!-- Left Panel: HUMINT & OSINT Feeds (3 Cols) -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-gutter h-full">
+<!-- HUMINT Panel -->
+<div class="glass-panel flex-1 rounded-DEFAULT flex flex-col overflow-hidden">
+<div class="p-3 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm">person_search</span>
+<h2 class="font-label-caps text-label-caps text-on-surface">HUMINT FEED</h2>
+</div>
+<span class="font-data-sm text-[10px] text-tertiary-fixed-dim bg-tertiary-fixed-dim/10 px-1 py-0.5 border border-tertiary-fixed-dim/50 rounded-sm">LIVE</span>
+</div>
+<div class="p-3 flex-1 overflow-y-auto space-y-3">
+<div class="bg-surface-container-highest/40 p-2 border-l-2 border-tertiary-fixed-dim thin-border text-sm">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-sm text-[10px] text-tertiary-fixed-dim">SRC-Alpha-7</span>
+<span class="font-data-sm text-[10px] text-outline">14:02Z</span>
+</div>
+<p class="font-body-base text-[12px] text-on-surface-variant leading-tight">Unconfirmed troop movement reported near border sector 4. Awaiting satellite verification.</p>
+</div>
+<div class="bg-surface-container-highest/40 p-2 border-l-2 border-error thin-border text-sm">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-sm text-[10px] text-error">SRC-Omega-2</span>
+<span class="font-data-sm text-[10px] text-outline">13:45Z</span>
+</div>
+<p class="font-body-base text-[12px] text-on-surface-variant leading-tight">Key opposition leader detained in capital. High probability of civil unrest within 48 hours.</p>
+</div>
+<div class="bg-surface-container-highest/40 p-2 border-l-2 border-secondary thin-border text-sm opacity-70">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-sm text-[10px] text-secondary">SRC-Delta-9</span>
+<span class="font-data-sm text-[10px] text-outline">11:20Z</span>
+</div>
+<p class="font-body-base text-[12px] text-on-surface-variant leading-tight">Routine supply convoy intercepted. Cargo manifests falsified. Investigation ongoing.</p>
+</div>
+</div>
+</div>
+<!-- OSINT Panel -->
+<div class="glass-panel flex-1 rounded-DEFAULT flex flex-col overflow-hidden">
+<div class="p-3 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary-container text-sm">rss_feed</span>
+<h2 class="font-label-caps text-label-caps text-on-surface">OSINT SENTIMENT</h2>
+</div>
+</div>
+<div class="p-3 flex-1 flex flex-col justify-center space-y-4">
+<!-- Sentiment Bar -->
+<div>
+<div class="flex justify-between font-data-sm text-[10px] mb-1">
+<span class="text-on-surface-variant">Global Aggregation</span>
+<span class="text-error">Tense (68%)</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-primary-container w-[20%]"></div>
+<div class="h-full bg-tertiary-fixed-dim w-[12%]"></div>
+<div class="h-full bg-error w-[68%]"></div>
+</div>
+</div>
+<!-- Keywords -->
+<div class="space-y-2">
+<span class="font-data-sm text-[10px] text-outline block">Trending Keywords</span>
+<div class="flex flex-wrap gap-2">
+<span class="bg-error/10 border border-error/50 text-error font-data-sm text-[10px] px-1.5 py-0.5 rounded-sm">#Embargo</span>
+<span class="bg-error/10 border border-error/50 text-error font-data-sm text-[10px] px-1.5 py-0.5 rounded-sm">#Protest</span>
+<span class="bg-primary-container/10 border border-primary-container/50 text-primary-container font-data-sm text-[10px] px-1.5 py-0.5 rounded-sm">Treaty</span>
+<span class="bg-tertiary-fixed-dim/10 border border-tertiary-fixed-dim/50 text-tertiary-fixed-dim font-data-sm text-[10px] px-1.5 py-0.5 rounded-sm">Tariffs</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Central Map & Top Metrics (6 Cols) -->
+<div class="col-span-12 lg:col-span-6 flex flex-col gap-gutter h-full">
+<!-- Top Status Indicators -->
+<div class="flex space-x-4 h-16">
+<div class="glass-panel flex-1 rounded-DEFAULT flex items-center p-3 border-l-2 border-l-error">
+<div class="mr-3 text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-outline">GLOBAL DEFCON</div>
+<div class="font-data-lg text-data-lg text-error">LEVEL 3</div>
+</div>
+</div>
+<div class="glass-panel flex-1 rounded-DEFAULT flex items-center p-3 border-l-2 border-l-tertiary-fixed-dim">
+<div class="mr-3 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined">timeline</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-outline">STABILITY INDEX</div>
+<div class="font-data-lg text-data-lg text-tertiary-fixed-dim">42.8 ▼</div>
+</div>
+</div>
+</div>
+<!-- Main Map Visualization -->
+<div class="glass-panel flex-1 rounded-DEFAULT relative overflow-hidden flex flex-col">
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-screen bg-cover bg-center" data-alt="A dark, high-contrast topological world map rendered in deep blues and blacks, resembling a tactical military display. Glowing digital nodes and connecting lines represent global data traffic and strategic connection points. The lighting is low-key, illuminating specific geographic hot-spots with faint neon blue and amber glows, fitting a high-stakes intelligence dashboard aesthetic. The mood is analytical and tense." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADz62o3BKz9_pn8KuWy8FI7AT_Z4G013fuTrxM3tCg96FwGT61LNzg7PdXfx9X3nDGcPwRvraX5dh9zzZB9FJK2jJ2hPh9-EC7cCqe6RmpfyftRezmbLSaQq2iX1VobPHI3xL1AJ_XlHli9OWHO2hum3oiHh7U9KX4VLYq_PMg0psweHMQK8wuUsX6_cUNwqxvGeUqCU589RfxpLPPzMT5KofBxoYDbcz8TS_TUu1OrM2fOg9AIZ_7nFh1MeIuDw8Mxy5WCuEon4E');">
+</div>
+<!-- Map Overlays -->
+<div class="absolute inset-0 z-10 pointer-events-none">
+<!-- Crosshairs -->
+<div class="absolute top-1/2 left-1/2 w-[120%] h-px bg-primary-container/20 -translate-x-1/2 -translate-y-1/2"></div>
+<div class="absolute top-1/2 left-1/2 h-[120%] w-px bg-primary-container/20 -translate-x-1/2 -translate-y-1/2"></div>
+<!-- Tension Markers -->
+<div class="absolute top-[40%] left-[60%] flex items-center justify-center">
+<div class="absolute w-8 h-8 rounded-full border border-error/50 animate-ping"></div>
+<div class="w-2 h-2 rounded-full bg-error neon-glow-red"></div>
+<span class="ml-4 font-data-sm text-[10px] text-error bg-background/80 px-1 border border-error/30">Sector E-U</span>
+</div>
+<div class="absolute top-[30%] left-[20%] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim neon-glow-amber"></div>
+<span class="ml-4 font-data-sm text-[10px] text-tertiary-fixed-dim bg-background/80 px-1 border border-tertiary-fixed-dim/30">Sector N-A</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 z-20">
+<div class="font-data-sm text-data-sm text-primary-container bg-background/80 px-2 py-1 border border-primary-container/30">
+                            COORD: 34.0522° N, 118.2437° W
+                        </div>
+</div>
+<div class="absolute top-4 right-4 z-20 flex flex-col gap-2">
+<button class="w-8 h-8 bg-surface-container-high/80 border border-white/10 flex items-center justify-center text-on-surface hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+<button class="w-8 h-8 bg-surface-container-high/80 border border-white/10 flex items-center justify-center text-on-surface hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Panel: Strategic Assets & Escalation (3 Cols) -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-gutter h-full">
+<!-- Escalation Rungs -->
+<div class="glass-panel h-1/3 rounded-DEFAULT flex flex-col overflow-hidden">
+<div class="p-3 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-error text-sm">crisis_alert</span>
+<h2 class="font-label-caps text-label-caps text-on-surface">ESCALATION LADDER</h2>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col-reverse justify-end space-y-1 space-y-reverse">
+<!-- Rungs (Bottom up) -->
+<div class="w-full h-4 bg-error neon-glow-red border border-error"></div>
+<div class="w-full h-4 bg-error/60 border border-error"></div>
+<div class="w-full h-4 bg-tertiary-fixed-dim/40 border border-tertiary-fixed-dim"></div>
+<div class="w-full h-4 bg-surface-container-highest border border-white/10"></div>
+<div class="w-full h-4 bg-surface-container-highest border border-white/10"></div>
+<div class="mt-auto text-right font-data-sm text-[10px] text-error pt-2 border-t border-white/10">
+                            THRESHOLD CRITICAL
+                        </div>
+</div>
+</div>
+<!-- Strategic Assets -->
+<div class="glass-panel flex-1 rounded-DEFAULT flex flex-col overflow-hidden">
+<div class="p-3 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary-container text-sm">anchor</span>
+<h2 class="font-label-caps text-label-caps text-on-surface">ASSET DEPLOYMENT</h2>
+</div>
+</div>
+<div class="p-3 flex-1 overflow-y-auto space-y-2">
+<div class="flex justify-between items-center p-2 border border-white/10 bg-surface-container-high/30">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary-container text-sm">sailing</span>
+<span class="font-data-sm text-[11px] text-on-surface">CSG-7</span>
+</div>
+<span class="font-data-sm text-[10px] text-primary-container bg-primary-container/10 px-1 border border-primary-container/30">EN ROUTE</span>
+</div>
+<div class="flex justify-between items-center p-2 border border-white/10 bg-surface-container-high/30">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm">flight</span>
+<span class="font-data-sm text-[11px] text-on-surface">AWACS-2</span>
+</div>
+<span class="font-data-sm text-[10px] text-tertiary-fixed-dim bg-tertiary-fixed-dim/10 px-1 border border-tertiary-fixed-dim/30">LOITER</span>
+</div>
+<div class="flex justify-between items-center p-2 border border-white/10 bg-surface-container-high/30">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-outline text-sm">satellite</span>
+<span class="font-data-sm text-[11px] text-outline">SAT-V9</span>
+</div>
+<span class="font-data-sm text-[10px] text-outline bg-white/5 px-1 border border-white/10">MAINT</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Panel: Macro Trends (Spans 12 Cols) -->
+<div class="col-span-12 h-32 glass-panel rounded-DEFAULT flex flex-col overflow-hidden mb-4">
+<div class="p-2 border-b border-white/10 flex justify-between items-center bg-surface-container-high/50">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary-container text-sm">candlestick_chart</span>
+<h2 class="font-label-caps text-label-caps text-on-surface">MACRO-TREND INDICATORS</h2>
+</div>
+</div>
+<div class="flex-1 flex p-2 gap-4">
+<!-- Metric 1 -->
+<div class="flex-1 border-r border-white/10 pr-4 flex flex-col justify-center">
+<span class="font-data-sm text-[10px] text-outline mb-1">Global Energy Price Idx</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-data-lg text-error">142.50</span>
+<div class="h-8 w-16 flex items-end space-x-1">
+<div class="w-2 bg-error/40 h-2"></div>
+<div class="w-2 bg-error/60 h-4"></div>
+<div class="w-2 bg-error/80 h-6"></div>
+<div class="w-2 bg-error h-8"></div>
+</div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="flex-1 border-r border-white/10 pr-4 flex flex-col justify-center">
+<span class="font-data-sm text-[10px] text-outline mb-1">Supply Chain Flow</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-data-lg text-tertiary-fixed-dim">78%</span>
+<div class="h-8 w-full bg-surface-container-highest flex items-center relative overflow-hidden">
+<div class="absolute left-0 h-full w-[78%] bg-tertiary-fixed-dim/50 border-r border-tertiary-fixed-dim"></div>
+</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="flex-1 flex flex-col justify-center">
+<span class="font-data-sm text-[10px] text-outline mb-1">Cyber Disturbance Lvl</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-data-lg text-primary-container">NOMINAL</span>
+<div class="h-6 w-full max-w-[100px] border border-primary-container/30 flex items-center justify-center p-1">
+<div class="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,163,255,0.3)_2px,rgba(0,163,255,0.3)_4px)]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg border border-sky-500/30 w-[90%] max-w-[600px] shadow-[0_0_20px_rgba(0,163,255,0.2)]">
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-sm mb-1">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center justify-center border border-transparent">
+<span class="material-symbols-outlined text-sm mb-1">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center justify-center border border-transparent">
+<span class="material-symbols-outlined text-sm mb-1">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</button>
+<button class="text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center justify-center border border-transparent">
+<span class="material-symbols-outlined text-sm mb-1">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</button>
+</nav>
+</body></html>
+
+<!-- Aether Command: Iran Geopolitical Matrix -->

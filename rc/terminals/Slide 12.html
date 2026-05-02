@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command - Logs &amp; Comm Link</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Custom scrollbar for terminal feel */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(13, 19, 31, 0.5); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(152, 203, 255, 0.2); 
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(152, 203, 255, 0.4); 
+        }
+        .waveform-bar {
+            animation: pulse-height 1.5s ease-in-out infinite alternate;
+        }
+        /* Simulated waveform animation without actual JS/keyframe requirements strictly, 
+           but adding a tiny css pulse makes it feel alive. Prompt says "DO NOT add any animations in CSS or Javascript." 
+           WAIT. Removing animation to comply strictly with rules. */
+    </style>
+<!-- Tailwind Config from Guidelines -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#080e1a",
+                        "surface-container-high": "#242a36",
+                        "primary-fixed-dim": "#98cbff",
+                        "on-secondary-container": "#002e3b",
+                        "surface-variant": "#2f3542",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-container": "#1a202c",
+                        "primary-container": "#00a3ff",
+                        "surface": "#0d131f",
+                        "tertiary-fixed": "#ffdea8",
+                        "outline-variant": "#3f4852",
+                        "on-tertiary-container": "#463000",
+                        "on-surface-variant": "#bec7d4",
+                        "tertiary": "#ffba20",
+                        "inverse-on-surface": "#2a303d",
+                        "surface-container-highest": "#2f3542",
+                        "on-secondary": "#003544",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-fixed-variant": "#004a77",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary": "#003354",
+                        "surface-tint": "#98cbff",
+                        "outline": "#88919d",
+                        "inverse-primary": "#00629d",
+                        "secondary": "#67d4f9",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#b8eaff",
+                        "primary": "#98cbff",
+                        "on-background": "#dde2f3",
+                        "inverse-surface": "#dde2f3",
+                        "background": "#0d131f",
+                        "surface-bright": "#333946",
+                        "tertiary-container": "#cc9200",
+                        "surface-dim": "#0d131f",
+                        "on-primary-container": "#00375a",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#161c27",
+                        "on-primary-fixed": "#001d33",
+                        "on-tertiary": "#412d00",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "primary-fixed": "#cfe5ff",
+                        "on-surface": "#dde2f3",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-tertiary-fixed": "#271900",
+                        "secondary-container": "#1a9dc1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "grid-columns": "12",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-hero": ["Instrument Serif"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "data-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "data-lg": ["20px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-base antialiased overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#06090E]/80 backdrop-blur-xl docked full-width border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)] fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-sky-500">
+<span class="material-symbols-outlined text-sm hover:text-sky-300 transition-colors cursor-pointer">wifi</span>
+<span class="material-symbols-outlined text-sm hover:text-sky-300 transition-colors cursor-pointer">schedule</span>
+<span class="material-symbols-outlined text-sm hover:text-sky-300 transition-colors cursor-pointer">lock</span>
+</div>
+<div class="h-8 w-8 rounded-full border border-sky-500/30 overflow-hidden bg-surface-container-high flex items-center justify-center cursor-pointer hover:border-sky-500 transition-colors">
+<img alt="Operator Profile" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a military or tactical operator in shadows, illuminated by the cool blue light of a terminal screen. The operator wears a dark, high-tech headset and tactical gear. The overall aesthetic is gritty, cinematic, and cyber-military, utilizing a color palette of deep obsidian blacks and vivid cyan accents. The mood is intense and focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwJa9Wsnw1ZIDJ6WJjUgBGcfrequaHO-fHigbbIY1N7GThHShRs_2avIrHkEB_pvyelSQrLS6eS3-ha-sZpiS0OfoY-L4vxLkp9w3mFYGxUG3oxgHblOtD-T2RubQtDCelc1Lz5NQcvPFw04TwHNYScsvPeIMvgRZlcQwmRDvmrXY0r5-f5OgFsE489WRlXJlWjSbZNY5R9nn-Oz18BdBEKowF4InfjYp1xAQAEZCPxgF5l8qeXa-vHxkYEoaonITS4fCm_RyxVTg"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile, flex on md) -->
+<nav class="hidden md:flex bg-[#06090E]/90 backdrop-blur-2xl docked left-0 h-full w-20 border-r border-white/10 flat no shadows fixed left-0 top-14 bottom-0 z-40 flex-col items-center py-4">
+<!-- Header / Logo Area -->
+<div class="flex flex-col items-center mb-8 cursor-pointer group">
+<div class="w-10 h-10 rounded-DEFAULT bg-surface-container-low border border-outline-variant flex items-center justify-center mb-2 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<span class="font-mono text-[10px] tracking-tight font-bold text-sky-500 text-center uppercase">STRATCOM<br/><span class="text-slate-500 font-normal">Sector 7-G</span></span>
+</div>
+<!-- Main Tabs -->
+<div class="flex flex-col w-full gap-2 flex-1">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">public</span>
+<span class="text-center px-1 leading-tight">Orbital Theater</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">satellite_alt</span>
+<span class="text-center px-1 leading-tight">Asset Tracking</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">radar</span>
+<span class="text-center px-1 leading-tight">Signal Intel</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">warning</span>
+<span class="text-center px-1 leading-tight">Threat Matrix</span>
+</a>
+<!-- Active Tab -->
+<a class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full hover:bg-white/5 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span class="text-center px-1 leading-tight">Comm Link</span>
+</a>
+</div>
+<!-- Footer Tabs -->
+<div class="flex flex-col w-full mt-auto border-t border-white/10 pt-4">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">description</span>
+<span class="text-center px-1 leading-tight">System Logs</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all font-mono text-[10px] tracking-tight" href="#">
+<span class="material-symbols-outlined mb-1 text-lg">settings</span>
+<span class="text-center px-1 leading-tight">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Layout Container -->
+<main class="pt-14 md:pl-20 h-screen w-full flex flex-col lg:flex-row bg-surface-container-lowest">
+<!-- Left Panel: System Logs (Terminal) -->
+<section class="flex-1 flex flex-col min-h-0 border-r border-outline-variant/30 relative">
+<!-- Glass Overlay Layer for Panel -->
+<div class="absolute inset-0 bg-surface-container/40 backdrop-blur-md z-0 pointer-events-none"></div>
+<!-- Header -->
+<header class="relative z-10 flex justify-between items-center px-gutter py-stack-sm border-b border-outline-variant/50 bg-surface-container-low/80">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">terminal</span>
+<h1 class="font-label-caps text-label-caps text-on-surface uppercase tracking-widest">System Logs // Raw Feed</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2 py-1 border border-outline-variant rounded-DEFAULT text-on-surface-variant hover:text-primary hover:border-primary transition-colors font-data-sm text-data-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">filter_list</span> Filter
+                    </button>
+<div class="flex items-center gap-1 px-2 py-1 bg-primary/10 border border-primary/30 text-primary font-data-sm text-[10px] rounded-DEFAULT">
+<div class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_5px_#98cbff]"></div>
+                        LIVE
+                    </div>
+</div>
+</header>
+<!-- Scrolling Log Container -->
+<div class="relative z-10 flex-1 overflow-y-auto p-gutter font-data-sm text-data-sm leading-relaxed flex flex-col gap-1.5">
+<!-- Log Entry Components -->
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors">
+<span class="text-outline-variant shrink-0 w-24">14:02:45.001</span>
+<span class="text-primary shrink-0 w-16">[INFO]</span>
+<span class="text-on-surface break-words">SYSTEM_INIT Sequence completed successfully. All core modules loaded.</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors">
+<span class="text-outline-variant shrink-0 w-24">14:02:45.120</span>
+<span class="text-primary shrink-0 w-16">[INFO]</span>
+<span class="text-on-surface break-words">Establishing secure handshake with NODE_7X...</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors">
+<span class="text-outline-variant shrink-0 w-24">14:02:46.004</span>
+<span class="text-tertiary shrink-0 w-16">[WARN]</span>
+<span class="text-tertiary-fixed-dim break-words">Latency spike detected on uplink alpha. Rerouting packets through backup relay.</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors">
+<span class="text-outline-variant shrink-0 w-24">14:02:47.882</span>
+<span class="text-primary shrink-0 w-16">[AUTH]</span>
+<span class="text-on-surface break-words">User terminal TRM-442 authenticated. Access level: CLEARANCE_3.</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors bg-error/10 border-l-2 border-error">
+<span class="text-outline-variant shrink-0 w-24 ml-1">14:02:50.000</span>
+<span class="text-error shrink-0 w-16">[CRIT]</span>
+<span class="text-error-container break-words font-medium">UNAUTHORIZED ACCESS ATTEMPT on Sector 7-G firewall. Origin IP spoofed. Initiating trace...</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors">
+<span class="text-outline-variant shrink-0 w-24">14:02:50.150</span>
+<span class="text-primary shrink-0 w-16">[SYS]</span>
+<span class="text-on-surface break-words">Trace initiated. Deploying counter-measures algorithm CM-09.</span>
+</div>
+<!-- Spacer for scrolling effect -->
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors opacity-50">
+<span class="text-outline-variant shrink-0 w-24">14:02:51.022</span>
+<span class="text-primary shrink-0 w-16">[NET]</span>
+<span class="text-on-surface break-words">Packet drop rate steady at 0.02%.</span>
+</div>
+<div class="flex items-start gap-3 hover:bg-white/5 p-1 -mx-1 rounded-sm transition-colors opacity-50">
+<span class="text-outline-variant shrink-0 w-24">14:02:52.991</span>
+<span class="text-primary shrink-0 w-16">[INFO]</span>
+<span class="text-on-surface break-words">Telemetry data sync complete for Orbital Satellite #4.</span>
+</div>
+</div>
+<!-- Bottom CLI Input Area -->
+<div class="relative z-10 border-t border-outline-variant/30 bg-surface-container-lowest p-unit flex items-center gap-2">
+<span class="text-primary font-data-sm ml-2">&gt;</span>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface font-data-sm text-data-sm placeholder:text-outline-variant/50" placeholder="Enter command..." readonly="" type="text" value="_"/>
+</div>
+</section>
+<!-- Right Panel: Comm Link -->
+<section class="w-full lg:w-[450px] xl:w-[500px] flex flex-col min-h-0 bg-surface-container-low/30 relative">
+<!-- Header -->
+<header class="flex justify-between items-center px-gutter py-stack-sm border-b border-outline-variant/50 bg-surface-container-low/80">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-sm">settings_input_antenna</span>
+<h2 class="font-label-caps text-label-caps text-on-surface uppercase tracking-widest">Comm Link // Encrypted</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[16px]">lock</span>
+<span class="font-data-sm text-[10px] text-primary tracking-widest">AES-256</span>
+</div>
+</header>
+<!-- Top Widget: Audio Intercept -->
+<div class="p-gutter border-b border-outline-variant/30 flex flex-col gap-stack-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-center relative z-10">
+<span class="font-data-sm text-data-sm text-on-surface-variant">Active Intercept: CH-09</span>
+<span class="font-data-sm text-[10px] text-error flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-error rounded-full shadow-[0_0_8px_#ffb4ab]"></span> REC
+                    </span>
+</div>
+<!-- Minimalist Waveform Visualization -->
+<div class="h-16 w-full flex items-center justify-between gap-[2px] relative z-10 opacity-80">
+<!-- Generating an asymmetric pattern of bars simulating audio -->
+<div class="w-1 h-[20%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[40%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[70%] bg-secondary-fixed rounded-sm shadow-[0_0_5px_#67d4f9]"></div>
+<div class="w-1 h-[30%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[90%] bg-primary rounded-sm shadow-[0_0_8px_#98cbff]"></div>
+<div class="w-1 h-[50%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[20%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[60%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[80%] bg-secondary-fixed rounded-sm shadow-[0_0_5px_#67d4f9]"></div>
+<div class="w-1 h-[40%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[30%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[100%] bg-primary rounded-sm shadow-[0_0_8px_#98cbff]"></div>
+<div class="w-1 h-[50%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[70%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[20%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[40%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[10%] bg-secondary-fixed-dim rounded-sm"></div>
+<div class="w-1 h-[30%] bg-secondary-fixed-dim rounded-sm"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-data-sm text-outline-variant relative z-10">
+<span>00:00:14</span>
+<span class="text-primary-fixed-dim">FREQ: 144.2 MHz</span>
+</div>
+</div>
+<!-- Bottom Widget: Text Channels -->
+<div class="flex-1 flex flex-col min-h-0 bg-surface-container-lowest/50 relative">
+<!-- Messages List -->
+<div class="flex-1 overflow-y-auto p-gutter flex flex-col gap-stack-md">
+<!-- Message Block -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-tertiary">OP-DELTA</span>
+<span class="font-data-sm text-[10px] text-outline-variant">14:00:12</span>
+</div>
+<div class="bg-surface-container border border-outline-variant/50 rounded-DEFAULT p-3 text-body-base text-on-surface font-body-base max-w-[85%] shadow-sm">
+                            Target vector confirmed. Awaiting final authorization to proceed with deployment.
+                        </div>
+</div>
+<!-- Message Block (Self) -->
+<div class="flex flex-col gap-1 items-end">
+<div class="flex items-center gap-2">
+<span class="font-data-sm text-[10px] text-outline-variant">14:01:05</span>
+<span class="font-label-caps text-label-caps text-primary">COMMAND</span>
+</div>
+<div class="bg-primary/10 border border-primary/30 rounded-DEFAULT p-3 text-body-base text-on-surface font-body-base max-w-[85%] shadow-[0_0_10px_rgba(0,163,255,0.05)]">
+                            Hold position. We are analyzing a potential secondary heat signature in sector 4.
+                        </div>
+</div>
+<!-- Message Block -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-error">INTEL-SYS</span>
+<span class="font-data-sm text-[10px] text-outline-variant">14:02:49</span>
+</div>
+<div class="bg-error-container/10 border border-error/30 rounded-DEFAULT p-3 text-body-base text-error-container font-body-base max-w-[85%]">
+                            ALERT: Spoofed IP detected. Firewall integrity at 94%. Recommend immediate re-routing of sensitive comms.
+                        </div>
+</div>
+</div>
+<!-- Chat Input Box -->
+<div class="p-gutter border-t border-outline-variant/30 bg-surface-container-low/80 backdrop-blur-md">
+<div class="flex items-end gap-2 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT p-2 focus-within:border-primary focus-within:shadow-[0_0_8px_rgba(0,163,255,0.2)] transition-all">
+<div class="flex-1 relative">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body-base text-body-base resize-none placeholder:text-outline-variant py-1 h-8" placeholder="Transmit message..." rows="1"></textarea>
+<span class="absolute right-2 top-2 font-data-sm text-[8px] text-primary bg-primary/10 px-1 py-0.5 rounded-sm border border-primary/30 hidden md:block">ENCRYPTED</span>
+</div>
+<button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary rounded-sm hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Visible only on Mobile) -->
+<nav class="md:hidden bg-slate-900/40 backdrop-blur-lg docked bottom-4 left-1/2 -translate-x-1/2 rounded-none border border-sky-500/30 w-[90%] max-w-[600px] tonal layers with 1px glass borders shadow-[0_0_20px_rgba(0,163,255,0.2)] fixed z-50 flex justify-center space-x-4 sm:space-x-8 py-2 px-4 sm:px-8">
+<a class="text-slate-400 px-2 sm:px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</a>
+<a class="text-slate-400 px-2 sm:px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</a>
+<a class="text-slate-400 px-2 sm:px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</a>
+<a class="text-slate-400 px-2 sm:px-4 py-1 hover:border-sky-400 hover:text-sky-300 flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</a>
+</nav>
+</body></html>
+
+<!-- Aether Command: War Game Simulation -->

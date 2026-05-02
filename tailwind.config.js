@@ -12,7 +12,7 @@ export default {
         ink: "#f5f7fa",
         muted: "#8b95a3",
         dim: "#596577",
-        cyan: "#6dd9ff",
+        cyan: "#0EA5E9",
         amber: "#ffb186",
         red: "#ff7a8a",
         green: "#7ddbb0",

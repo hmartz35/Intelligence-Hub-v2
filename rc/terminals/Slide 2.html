@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Weapons Systems Explorer - Aether Command</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#003544",
+                        "on-primary-fixed-variant": "#004a77",
+                        "inverse-surface": "#dde2f3",
+                        "surface-container-lowest": "#080e1a",
+                        "primary-fixed": "#cfe5ff",
+                        "secondary": "#67d4f9",
+                        "inverse-on-surface": "#2a303d",
+                        "tertiary-fixed": "#ffdea8",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface": "#0d131f",
+                        "tertiary-container": "#cc9200",
+                        "on-surface": "#dde2f3",
+                        "on-secondary-fixed": "#001f28",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "on-tertiary": "#412d00",
+                        "inverse-primary": "#00629d",
+                        "background": "#0d131f",
+                        "outline-variant": "#3f4852",
+                        "primary-container": "#00a3ff",
+                        "outline": "#88919d",
+                        "surface-container-low": "#161c27",
+                        "on-error": "#690005",
+                        "surface-dim": "#0d131f",
+                        "error": "#ffb4ab",
+                        "primary": "#98cbff",
+                        "on-tertiary-fixed": "#271900",
+                        "on-tertiary-container": "#463000",
+                        "on-primary-container": "#00375a",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#ffba20",
+                        "secondary-fixed": "#b8eaff",
+                        "surface-variant": "#2f3542",
+                        "surface-container": "#1a202c",
+                        "surface-bright": "#333946",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "surface-container-high": "#242a36",
+                        "secondary-container": "#1a9dc1",
+                        "on-secondary-container": "#002e3b",
+                        "surface-tint": "#98cbff",
+                        "on-surface-variant": "#bec7d4",
+                        "on-primary": "#003354",
+                        "on-background": "#dde2f3",
+                        "surface-container-highest": "#2f3542",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-fixed": "#001d33",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "container-padding": "24px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "grid-columns": "12"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Instrument Serif"],
+                        "data-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-base": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Glassmorphism utils */
+        .glass-panel {
+            background-color: rgba(26, 32, 44, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hud-glow {
+            box-shadow: 0 0 15px rgba(0, 163, 255, 0.15);
+        }
+        
+        .glow-text-primary {
+            text-shadow: 0 0 8px rgba(0, 163, 255, 0.4);
+        }
+        
+        .neon-line {
+            filter: drop-shadow(0 0 2px rgba(0, 163, 255, 0.8));
+        }
+        
+        /* Grid */
+        .dense-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        
+        /* Custom Scrollbar for dense lists */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(136, 145, 157, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 163, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="hidden md:flex fixed top-0 w-full z-50 justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+<div class="h-4 w-px bg-white/10 mx-2"></div>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container border border-outline-variant/50 rounded-sm">
+<span class="material-symbols-outlined text-outline text-sm">search</span>
+<input class="bg-transparent border-none text-data-sm font-data-sm text-on-surface focus:ring-0 w-48 placeholder:text-outline-variant p-0 h-auto" placeholder="QUERY SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">wifi</span></button>
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">schedule</span></button>
+<button class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors p-1 rounded"><span class="material-symbols-outlined text-[20px]">lock</span></button>
+</div>
+<div class="w-8 h-8 rounded-full border border-sky-500/30 overflow-hidden bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-sky-500 fill text-[20px]">account_circle</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex fixed left-0 top-14 bottom-0 w-20 z-40 flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10 font-mono text-[10px] tracking-tight">
+<div class="flex-1 w-full flex flex-col items-center gap-2 mt-4">
+<!-- Orbital Theater -->
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all gap-1 group relative">
+<span class="material-symbols-outlined text-[24px]">public</span>
+<span class="text-center px-1 opacity-0 group-hover:opacity-100 absolute left-full ml-2 bg-surface-container border border-outline px-2 py-1 rounded whitespace-nowrap z-50">Orbital Theater</span>
+</button>
+<!-- Asset Tracking (ACTIVE) -->
+<button class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center justify-center py-4 w-full gap-1">
+<span class="material-symbols-outlined text-[24px] fill">satellite_alt</span>
+</button>
+<!-- Signal Intel -->
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all gap-1 group relative">
+<span class="material-symbols-outlined text-[24px]">radar</span>
+</button>
+<!-- Threat Matrix -->
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all gap-1 group relative">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</button>
+<!-- Comm Link -->
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all gap-1 group relative">
+<span class="material-symbols-outlined text-[24px]">terminal</span>
+</button>
+</div>
+<div class="w-full flex flex-col items-center gap-2 mb-4">
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</button>
+<button class="text-slate-600 flex flex-col items-center justify-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</nav>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg border border-sky-500/30 w-[90%] max-w-[400px] shadow-[0_0_20px_rgba(0,163,255,0.2)]">
+<button class="text-slate-400 px-2 py-1 flex flex-col items-center gap-1 font-mono text-[9px] font-bold">
+<span class="material-symbols-outlined">play_circle</span>
+            DEPLOY
+        </button>
+<button class="text-sky-400 bg-sky-950/50 border border-sky-500/50 px-2 py-1 flex flex-col items-center gap-1 font-mono text-[9px] font-bold">
+<span class="material-symbols-outlined fill">satellite_alt</span>
+            ASSETS
+        </button>
+<button class="text-slate-400 px-2 py-1 flex flex-col items-center gap-1 font-mono text-[9px] font-bold">
+<span class="material-symbols-outlined">insights</span>
+            ANALYZE
+        </button>
+<button class="text-slate-400 px-2 py-1 flex flex-col items-center gap-1 font-mono text-[9px] font-bold">
+<span class="material-symbols-outlined">cancel</span>
+            ABORT
+        </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-[70px] pl-0 md:pl-[80px] pb-24 md:pb-6 min-h-screen relative">
+<!-- Abstract Tech Background -->
+<div class="fixed inset-0 z-[-1] opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 50% 50%, rgba(0, 163, 255, 0.1) 0%, transparent 60%);"></div>
+<div class="p-container-padding max-w-[1600px] mx-auto h-full flex flex-col gap-gutter">
+<!-- Page Header -->
+<div class="flex justify-between items-end border-b border-outline-variant/30 pb-stack-sm">
+<div>
+<h2 class="font-label-caps text-label-caps text-primary mb-1 glow-text-primary tracking-[0.2em]">ASSET TRACKING / WPN-SYS</h2>
+<h1 class="font-headline-lg text-headline-lg text-on-background">Tomahawk TLAM Block V</h1>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-2 bg-surface-container-high border border-outline-variant px-3 py-1 rounded-sm">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#67d4f9]"></span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">SYS_ONLINE</span>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-4 py-1 rounded-sm hover:bg-primary-fixed transition-colors border border-transparent">
+                        ENGAGE
+                    </button>
+</div>
+</div>
+<!-- Dashboard Layout Grid -->
+<div class="dense-grid flex-1">
+<!-- Left Column: Target Selection & Logistics -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-gutter">
+<!-- Target List -->
+<div class="glass-panel rounded flex flex-col h-[400px]">
+<div class="p-3 border-b border-outline-variant/50 flex justify-between items-center bg-surface-container/50">
+<span class="font-label-caps text-label-caps text-on-surface">ACQUIRED TARGETS</span>
+<span class="material-symbols-outlined text-outline text-[16px]">filter_list</span>
+</div>
+<div class="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
+<!-- Target Item Active -->
+<div class="bg-primary-container/10 border border-primary-container p-3 rounded-sm relative overflow-hidden group cursor-pointer hover:bg-primary-container/20 transition-all">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-primary-container neon-line"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-sm text-data-sm text-primary font-medium">TGT-88A</span>
+<span class="font-data-sm text-[10px] text-error flex items-center"><span class="material-symbols-outlined text-[12px] mr-1">warning</span> HIGH</span>
+</div>
+<div class="font-body-base text-[14px] text-on-surface mb-1">Command Bunker Complex</div>
+<div class="flex justify-between text-on-surface-variant font-data-sm text-[10px]">
+<span>RNG: 850 NM</span>
+<span>CF: 94%</span>
+</div>
+</div>
+<!-- Target Item Inactive -->
+<div class="bg-surface-container border border-outline-variant p-3 rounded-sm cursor-pointer hover:border-outline transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">TGT-42C</span>
+<span class="font-data-sm text-[10px] text-tertiary flex items-center">MED</span>
+</div>
+<div class="font-body-base text-[14px] text-on-surface mb-1">Air Defense Radar Array</div>
+<div class="flex justify-between text-outline font-data-sm text-[10px]">
+<span>RNG: 420 NM</span>
+<span>CF: 88%</span>
+</div>
+</div>
+<!-- Target Item Inactive -->
+<div class="bg-surface-container border border-outline-variant p-3 rounded-sm cursor-pointer hover:border-outline transition-all opacity-70">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-sm text-data-sm text-on-surface-variant">TGT-12F</span>
+<span class="font-data-sm text-[10px] text-outline flex items-center">LOW</span>
+</div>
+<div class="font-body-base text-[14px] text-on-surface mb-1">Supply Depot Alpha</div>
+<div class="flex justify-between text-outline font-data-sm text-[10px]">
+<span>RNG: 1200 NM</span>
+<span>CF: 72%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Data -->
+<div class="glass-panel rounded p-4 flex flex-col gap-3">
+<span class="font-label-caps text-label-caps text-on-surface border-b border-outline-variant/50 pb-2">LIVE TELEMETRY FEED</span>
+<div class="flex justify-between items-center border-b border-white/5 pb-2">
+<span class="font-data-sm text-[11px] text-outline">UPLINK STATUS</span>
+<span class="font-data-sm text-[12px] text-secondary">SECURE [AES-256]</span>
+</div>
+<div class="flex justify-between items-center border-b border-white/5 pb-2">
+<span class="font-data-sm text-[11px] text-outline">GPS CONST</span>
+<span class="font-data-sm text-[12px] text-on-surface">12 SATS VISIBLE</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-data-sm text-[11px] text-outline">TERCOM DB</span>
+<span class="font-data-sm text-[12px] text-on-surface">SYNCED v4.2.1</span>
+</div>
+</div>
+</div>
+<!-- Center Column: 3D Render & Primary Specs -->
+<div class="col-span-12 lg:col-span-6 flex flex-col gap-gutter">
+<!-- Main Image Render Container -->
+<div class="glass-panel rounded flex-1 min-h-[400px] relative overflow-hidden group border border-primary-container/30 hud-glow">
+<!-- Corner Accents -->
+<div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary-container m-2"></div>
+<div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary-container m-2"></div>
+<div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary-container m-2"></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary-container m-2"></div>
+<!-- The Render Image -->
+<div class="absolute inset-4 bg-surface-container-lowest/50 rounded flex items-center justify-center overflow-hidden">
+<img alt="Schematic" class="w-full h-full object-cover opacity-80 mix-blend-screen filter contrast-125 sepia-[.2] hue-rotate-[180deg]" data-alt="A highly detailed, wireframe 3D schematic rendering of a cruise missile, viewed from an isometric angle. The rendering uses a dark slate background with glowing neon blue lines illustrating internal components and aerodynamic surfaces. The lighting is artificial and technical, creating a sleek, high-tech tactical interface aesthetic. The image conveys precision engineering and military-grade intelligence software." src="https://hmartz35.github.io/Coding-Practice-6/weapons-explorer.html"/>
+<!-- Overlay UI elements on the render -->
+<div class="absolute top-4 left-4 bg-background/80 px-2 py-1 border border-outline/50 font-data-sm text-[10px] text-primary">
+                                VAR: BGM-109E
+                            </div>
+<div class="absolute bottom-4 right-4 bg-background/80 px-2 py-1 border border-outline/50 font-data-sm text-[10px] text-secondary">
+                                PAYLOAD: JSME MULTI-EFFECT
+                            </div>
+</div>
+</div>
+<!-- Primary Specs Row -->
+<div class="grid grid-cols-4 gap-gutter">
+<div class="glass-panel p-3 rounded border-t-2 border-t-primary-container">
+<span class="font-label-caps text-[10px] text-outline block mb-1">CEP (ACCURACY)</span>
+<span class="font-data-lg text-data-lg text-on-surface glow-text-primary block">≤ 3 m</span>
+</div>
+<div class="glass-panel p-3 rounded">
+<span class="font-label-caps text-[10px] text-outline block mb-1">MAX RANGE</span>
+<span class="font-data-lg text-data-lg text-on-surface block">900+ NM</span>
+</div>
+<div class="glass-panel p-3 rounded">
+<span class="font-label-caps text-[10px] text-outline block mb-1">CRUISE SPEED</span>
+<span class="font-data-lg text-data-lg text-on-surface block">Mach 0.74</span>
+</div>
+<div class="glass-panel p-3 rounded">
+<span class="font-label-caps text-[10px] text-outline block mb-1">UNIT COST</span>
+<span class="font-data-lg text-data-lg text-outline block">$2.0M</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Graphs & Map Context -->
+<div class="col-span-12 lg:col-span-3 flex flex-col gap-gutter">
+<!-- Mini Map Context -->
+<div class="glass-panel rounded h-[200px] relative overflow-hidden">
+<img alt="Theater Map" class="w-full h-full object-cover opacity-60" data-alt="A stylized tactical map interface displaying a dark mode global projection with glowing turquoise and amber radar overlays. Grid lines and circular range indicators are visible, suggesting a strategic command center view. The aesthetic is flat, dense with data points, and utilizes a deep navy and slate color palette." data-location="Indo-Pacific" src="https://hmartz35.github.io/Coding-Practice-6/theater-map.html"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2 flex justify-between items-center bg-surface/80 p-2 border border-outline-variant/50 rounded-sm backdrop-blur-sm">
+<span class="font-data-sm text-[10px] text-on-surface">TRAJECTORY: PLANNED</span>
+<span class="font-label-caps text-[9px] text-secondary border border-secondary px-1">VIEW MAP</span>
+</div>
+</div>
+<!-- Damage Expectancy Graph (Pareto) -->
+<div class="glass-panel rounded flex-1 flex flex-col p-4">
+<span class="font-label-caps text-label-caps text-on-surface border-b border-outline-variant/50 pb-2 mb-4">DAMAGE EXPECTANCY (PD)</span>
+<div class="flex-1 relative border-l border-b border-outline-variant/50 ml-6 mb-6">
+<!-- Y-axis labels -->
+<div class="absolute -left-6 bottom-0 font-data-sm text-[9px] text-outline">0</div>
+<div class="absolute -left-6 top-[50%] -translate-y-1/2 font-data-sm text-[9px] text-outline">.5</div>
+<div class="absolute -left-6 top-0 font-data-sm text-[9px] text-outline">1.0</div>
+<!-- X-axis labels -->
+<div class="absolute -bottom-5 left-0 font-data-sm text-[9px] text-outline">T1</div>
+<div class="absolute -bottom-5 left-[50%] -translate-x-1/2 font-data-sm text-[9px] text-outline">T2</div>
+<div class="absolute -bottom-5 right-0 font-data-sm text-[9px] text-outline">T3</div>
+<!-- Bar charts (simulated gradient bars) -->
+<div class="absolute bottom-0 left-[10%] w-6 h-[85%] bg-gradient-to-t from-transparent to-primary-container border border-primary-container opacity-80"></div>
+<div class="absolute bottom-0 left-[45%] w-6 h-[60%] bg-gradient-to-t from-transparent to-primary-fixed border border-primary-fixed opacity-60"></div>
+<div class="absolute bottom-0 right-[10%] w-6 h-[25%] bg-gradient-to-t from-transparent to-outline border border-outline opacity-40"></div>
+<!-- Pareto Line (SVG simulation) -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none">
+<path class="neon-line" d="M 20 15 L 100 40 L 180 75" fill="none" stroke="#67d4f9" stroke-width="2"></path>
+<circle cx="20" cy="15" fill="#67d4f9" r="3"></circle>
+<circle cx="100" cy="40" fill="#67d4f9" r="3"></circle>
+<circle cx="180" cy="75" fill="#67d4f9" r="3"></circle>
+</svg>
+</div>
+<div class="mt-auto bg-surface-container-low p-2 rounded-sm border border-outline/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]">info</span>
+<p class="font-body-base text-[12px] text-on-surface-variant leading-tight">Optimal asset allocation threshold met for Primary Target (T1). Recommend salvo of 2 to achieve 0.95 Pd.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

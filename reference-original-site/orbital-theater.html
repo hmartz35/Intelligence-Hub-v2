@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orbital Theater · NSS v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--danger:#FF7A8A;--success:#7DDBB0;--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
+.bar{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(6,9,14,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.bar-in{padding:10px clamp(14px,2vw,24px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+#canvas-wrap{position:fixed;inset:0;z-index:1}
+#canvas-wrap canvas{display:block;width:100%;height:100%;cursor:grab}
+#canvas-wrap canvas.dragging{cursor:grabbing}
+.loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:var(--bg);flex-direction:column;gap:18px;font-family:var(--mono);font-size:12px;color:var(--ink-3);transition:opacity .5s}
+.loading.done{opacity:0;pointer-events:none}
+.loading .pulse{width:40px;height:40px;border:2px solid var(--accent);border-radius:50%;border-top-color:transparent;animation:spin 1s linear infinite}
+.loading .progress{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:4px;text-align:center;max-width:280px;line-height:1.5}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tl{position:fixed;left:max(14px,2vw);top:60px;z-index:10;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100vw - 28px)}
+.tl .chip{background:rgba(15,20,29,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border-2);padding:6px 12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);border-radius:100px;letter-spacing:.02em}
+.tl .chip.a{color:var(--accent);border-color:var(--accent-border);background:rgba(109,217,255,.1)}
+.tl .chip.w{color:var(--warm);border-color:rgba(255,177,134,.3)}
+.tl .chip.d{color:var(--danger);border-color:rgba(255,122,138,.3)}
+.hero-title{position:fixed;left:max(14px,2vw);top:100px;z-index:10;max-width:420px;pointer-events:none;transition:opacity .4s}
+.hero-title.hide{opacity:0}
+.hero-title .eye{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.06em;margin-bottom:10px}
+.hero-title h1{font-family:var(--display);font-size:clamp(36px,4.5vw,52px);font-weight:400;line-height:1;margin:0;letter-spacing:-.02em;color:var(--ink)}
+.hero-title h1 i{font-style:italic;color:var(--accent)}
+.hero-title p{font-family:var(--ui);font-size:13px;color:var(--ink-3);margin:12px 0 0;line-height:1.55;max-width:380px}
+.panel-r{position:fixed;right:max(14px,2vw);top:60px;bottom:100px;width:clamp(260px,22vw,340px);z-index:10;display:flex;flex-direction:column;gap:8px;overflow:hidden;pointer-events:none}
+.panel-r>*{pointer-events:auto}
+.pnl{background:rgba(15,20,29,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column}
+.pnl h3{font-family:var(--ui);font-size:12.5px;font-weight:500;color:var(--ink);margin:0;padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;letter-spacing:-.005em}
+.pnl h3 .sub{color:var(--ink-4);font-family:var(--mono);font-size:10px;font-weight:400}
+.pnl .body{padding:14px 16px;font-size:12.5px;color:var(--ink-2);max-height:100%;overflow:auto}
+.pnl .body::-webkit-scrollbar{width:4px}
+.pnl .body::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:2px}
+.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--divider);font-family:var(--mono);font-size:11.5px}
+.row:last-child{border-bottom:none}
+.row .k{color:var(--ink-4)}.row .v{color:var(--ink)}.row .v.a{color:var(--accent)}.row .v.w{color:var(--warm)}
+.asset-item{padding:10px 0;border-bottom:1px solid var(--divider);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:.12s}
+.asset-item:last-child{border-bottom:none}
+.asset-item:hover{padding-left:6px}
+.asset-item .l{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.asset-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.asset-item .n{font-family:var(--ui);font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.asset-item .t{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);letter-spacing:.04em;flex-shrink:0}
+.asset-item.on .n{color:var(--accent)}
+.asset-item.on .dot{box-shadow:0 0 8px currentColor}
+.scrub{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:10;width:min(760px,calc(100vw - 28px));background:rgba(15,20,29,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 18px;display:flex;align-items:center;gap:14px}
+.scrub .clk{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.04em;flex-shrink:0;min-width:110px}
+.scrub .tm{font-family:var(--mono);font-size:10px;color:var(--ink-4);margin-top:2px}
+.scrub input[type=range]{flex:1;-webkit-appearance:none;appearance:none;background:transparent;height:18px;margin:0;cursor:pointer}
+.scrub input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--border-2);border-radius:2px}
+.scrub input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border:2px solid var(--bg);border-radius:50%;margin-top:-6px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.scrub input[type=range]::-moz-range-track{height:3px;background:var(--border-2);border-radius:2px}
+.scrub input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:2px solid var(--bg);border-radius:50%}
+.scrub .speed{display:inline-flex;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:2px;gap:2px}
+.scrub .speed button{background:transparent;border:none;color:var(--ink-3);font-family:var(--mono);font-size:10.5px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:.12s;font-weight:500}
+.scrub .speed button.on{background:var(--accent);color:#06121a}
+.scrub .play{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#06121a;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:.15s}
+.scrub .play:hover{background:var(--accent-bright)}
+.views{position:fixed;right:max(14px,2vw);bottom:28px;z-index:10;display:flex;gap:6px;background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-sm);padding:4px;flex-wrap:wrap}
+.views button{background:transparent;border:none;color:var(--ink-3);font-family:var(--mono);font-size:10.5px;padding:7px 12px;cursor:pointer;border-radius:4px;transition:.12s;font-weight:500;letter-spacing:.04em}
+.views button.on{background:var(--accent-soft);color:var(--accent)}
+.views button:hover:not(.on){color:var(--ink)}
+.alt{position:fixed;right:max(14px,2vw);bottom:80px;z-index:10;background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:flex;gap:14px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 28px)}
+.alt .v{color:var(--accent);font-weight:500}
+.alt .gpsv{color:var(--ink-2);font-weight:500}
+.alt .lbl{color:var(--ink-4)}
+.zoombar{position:fixed;right:max(14px,2vw);bottom:130px;z-index:10;display:flex;flex-direction:column;gap:4px;background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-sm);padding:4px}
+.zoombar button{width:30px;height:30px;background:transparent;border:none;color:var(--ink-3);font-family:var(--mono);font-size:15px;cursor:pointer;border-radius:4px;transition:.12s;display:flex;align-items:center;justify-content:center}
+.zoombar button:hover{background:var(--surface-2);color:var(--accent)}
+.tooltip{position:fixed;z-index:20;background:rgba(6,9,14,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border-2);border-radius:var(--r-sm);padding:8px 12px;font-family:var(--mono);font-size:11px;color:var(--ink);pointer-events:none;transition:opacity .12s;opacity:0;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.tooltip.on{opacity:1}
+.tooltip .n{color:var(--accent);font-weight:500;margin-bottom:2px}
+.tooltip .d{color:var(--ink-3);font-size:10px}
+.strike{position:fixed;right:max(14px,2vw);bottom:180px;z-index:10;background:rgba(15,20,29,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 14px;display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.strike button{background:var(--danger);color:#06121a;border:none;font-family:var(--ui);font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:4px;cursor:pointer;letter-spacing:.04em;transition:.15s}
+.strike button:hover{background:#FF9BB0}
+@media(max-width:900px){
+  .hero-title{top:110px;max-width:calc(100vw - 28px)}
+  .panel-r{position:fixed;right:max(14px,2vw);bottom:240px;top:auto;width:calc(100vw - 28px);max-width:340px;height:auto;flex-direction:row;overflow-x:auto;gap:8px}
+  .panel-r>*{min-width:240px}
+  .views{bottom:80px}
+  .alt{bottom:130px;font-size:10px}
+  .zoombar{bottom:180px;flex-direction:row}
+  .strike{bottom:240px;display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="pulse"></div>
+  <div>Initializing orbital theater…</div>
+  <div class="progress" id="load-progress">Loading NASA Blue Marble imagery…</div>
+</div>
+
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Orbital Theater</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><span>NASA Blue Marble · Three.js r128</span><span class="sep">/</span><span id="fps">— fps</span></div>
+</div></div>
+
+<div id="canvas-wrap"></div>
+
+<div class="hero-title" id="hero">
+  <div class="eye">Strategic globe · real satellite imagery</div>
+  <h1>The theater <i>in three dimensions</i></h1>
+  <p>NASA Blue Marble imagery on a 3D Earth. Click <b>HORMUZ</b> below to drop into the strait. Drag to rotate; scroll to zoom; click any marker for intel.</p>
+</div>
+
+<div class="tl">
+  <span class="chip a" id="chip-imagery">Loading imagery…</span>
+  <span class="chip">12 theater assets</span>
+  <span class="chip">10 satellites</span>
+  <span class="chip w">Deep zoom · 95 km min</span>
+</div>
+
+<div class="panel-r">
+  <div class="pnl" style="flex:1;min-height:200px">
+    <h3><span>Assets on station</span><span class="sub" id="count-assets">—</span></h3>
+    <div class="body" id="asset-list"></div>
+  </div>
+  <div class="pnl" style="flex:0 0 auto">
+    <h3><span id="sel-title">Details</span><span class="sub" id="sel-sub">no selection</span></h3>
+    <div class="body" id="sel-body">
+      <div style="color:var(--ink-4);font-family:var(--mono);font-size:11px;line-height:1.6">Click any asset on the globe or in the list to view details.</div>
+    </div>
+  </div>
+</div>
+
+<div class="strike"><span>Simulate:</span><button id="btn-strike">Ballistic arc</button></div>
+
+<div class="zoombar">
+  <button id="z-in" title="Zoom in">+</button>
+  <button id="z-out" title="Zoom out">−</button>
+</div>
+
+<div class="alt">
+  <span class="lbl">Camera over:</span><span class="gpsv" id="gps-v">—</span><span class="sep" style="color:var(--ink-4);opacity:.4">·</span><span class="lbl">Alt:</span><span class="v" id="alt-v">—</span>
+</div>
+
+<div class="scrub">
+  <div><div class="clk" id="clk">—</div><div class="tm" id="tm">T+0h · real-time</div></div>
+  <button class="play" id="btn-play">▶</button>
+  <input type="range" min="-43200" max="43200" value="0" step="60" id="t-slider">
+  <div class="speed" id="speed">
+    <button data-x="1" class="on">1×</button>
+    <button data-x="60">60×</button>
+    <button data-x="600">600×</button>
+    <button data-x="3600">3600×</button>
+  </div>
+</div>
+
+<div class="views" id="views">
+  <button data-v="strategic" class="on">STRATEGIC</button>
+  <button data-v="theater">THEATER</button>
+  <button data-v="hormuz">HORMUZ</button>
+  <button data-v="redsea">RED SEA</button>
+  <button data-v="polar">POLAR</button>
+</div>
+
+<div class="tooltip" id="tt"><div class="n"></div><div class="d"></div></div>
+
+<script>
+/* ============================================================
+   Orbital Theater v5.1 — fixed globe orientation
+   
+   Key fixes vs v5.0:
+   1. Standard MeshPhongMaterial with Blue Marble texture (proven path)
+   2. llToXYZ derived from actual three.js r128 SphereGeometry source
+   3. Markers attached to Earth group → rotate WITH Earth (no drift)
+   4. Preset views compute camera position in world frame given CURRENT
+      Earth rotation (so HORMUZ click puts strait on screen now, not at T=0)
+   5. "Camera over" lat/lon readout for verification
+   ============================================================ */
+
+const EARTH_R = 1.0;
+const KM_PER_UNIT = 6371;
+const MU = 398600.4418;
+
+const THEATER = [
+  {id:'cvn70',   name:'USS Carl Vinson CSG',     type:'CVN', kind:'naval',  lat:22.4,  lon:66.1, info:'Nimitz-class. Arabian Sea.', reach_km:900},
+  {id:'cvn71',   name:'USS Theodore Roosevelt',  type:'CVN', kind:'naval',  lat:25.2,  lon:57.8, info:'Gulf of Oman. Hormuz escort.', reach_km:900},
+  {id:'audeid',  name:'Al Udeid AB',             type:'AB',  kind:'base',   lat:25.12, lon:51.32,info:'CAOC forward. F-22/F-35/B-1.', reach_km:2500},
+  {id:'adhafra', name:'Al Dhafra AB',            type:'AB',  kind:'base',   lat:24.25, lon:54.55,info:'ISR hub. MQ-9, U-2, F-35A', reach_km:2200},
+  {id:'prince',  name:'Prince Sultan AB',        type:'AB',  kind:'base',   lat:24.06, lon:47.58,info:'USAF 378th AEW. F-22A.', reach_km:2400},
+  {id:'dg',      name:'Diego Garcia',            type:'AB',  kind:'base',   lat:-7.31, lon:72.41,info:'B-2/B-52. 2800nm to Iran.', reach_km:5200},
+  {id:'fordow',  name:'Fordow Enrichment',       type:'NUC', kind:'iran',   lat:34.88, lon:50.99,info:'Underground, ~80m deep.', reach_km:0},
+  {id:'natanz',  name:'Natanz Enrichment',       type:'NUC', kind:'iran',   lat:33.72, lon:51.72,info:'Primary enrichment site.', reach_km:0},
+  {id:'bandar',  name:'Bandar Abbas IRGCN',      type:'NAV', kind:'iran',   lat:27.19, lon:56.27,info:'IRGC Navy HQ. FAC + ASCM.', reach_km:0},
+  {id:'tehran',  name:'IRGC-QF HQ Tehran',       type:'C2',  kind:'iran',   lat:35.72, lon:51.40,info:'Quds Force command.', reach_km:0},
+  {id:'hodeidah',name:'Hodeidah Port',           type:'PRT', kind:'houthi', lat:14.80, lon:42.95,info:'Primary Iranian resupply.', reach_km:0},
+  {id:'sanaa',   name:"Sana'a Ops Cell",         type:'C2',  kind:'houthi', lat:15.37, lon:44.19,info:'Houthi leadership.', reach_km:0},
+];
+
+const SATS = [
+  {id:'nros1', name:'NROS-1 (ISR)',    a:6778, i:51.6,raan:10, M0:0,   kind:'isr'},
+  {id:'nros2', name:'NROS-2 (ISR)',    a:6778, i:51.6,raan:130,M0:60,  kind:'isr'},
+  {id:'nros3', name:'NROS-3 (ISR)',    a:6778, i:51.6,raan:250,M0:180, kind:'isr'},
+  {id:'lac1',  name:'Lacrosse-1 (SAR)',a:7050, i:68,  raan:45, M0:0,   kind:'sar'},
+  {id:'lac2',  name:'Lacrosse-2 (SAR)',a:7050, i:68,  raan:165,M0:90,  kind:'sar'},
+  {id:'gps1',  name:'GPS-IIF-1',       a:26600,i:55,  raan:0,  M0:0,   kind:'gps'},
+  {id:'gps2',  name:'GPS-IIF-2',       a:26600,i:55,  raan:60, M0:60,  kind:'gps'},
+  {id:'gps3',  name:'GPS-IIF-3',       a:26600,i:55,  raan:120,M0:120, kind:'gps'},
+  {id:'sbirs1',name:'SBIRS-GEO-1',     a:42164,i:0,   raan:0,  M0:0,   kind:'geo'},
+  {id:'sbirs2',name:'SBIRS-GEO-2',     a:42164,i:0,   raan:0,  M0:90,  kind:'geo'},
+];
+
+const KINDS = {
+  naval:  {color:0x6DD9FF, hex:'#6DD9FF', label:'NAVAL'},
+  base:   {color:0x8EE3FF, hex:'#8EE3FF', label:'BASE'},
+  iran:   {color:0xFF7A8A, hex:'#FF7A8A', label:'IRAN'},
+  houthi: {color:0xFFB186, hex:'#FFB186', label:'HOUTHI'},
+  isr:    {color:0xB8A0FF, hex:'#B8A0FF', label:'LEO-ISR'},
+  sar:    {color:0xC9B8FF, hex:'#C9B8FF', label:'LEO-SAR'},
+  gps:    {color:0x7DDBB0, hex:'#7DDBB0', label:'MEO-GPS'},
+  geo:    {color:0xFFE38A, hex:'#FFE38A', label:'GEO'},
+};
+
+// ============ Scene ============
+const wrap = document.getElementById('canvas-wrap');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x06090E);
+
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.001, 1000);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+wrap.appendChild(renderer.domElement);
+
+// Lighting — sun is positional (in world frame, simulating ECI sun direction)
+const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+sun.position.set(5, 1, 0);
+scene.add(sun);
+const ambient = new THREE.AmbientLight(0x223344, 0.4);
+scene.add(ambient);
+
+// Stars
+function makeStars(n){
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(n*3);
+  const col = new Float32Array(n*3);
+  for(let i=0;i<n;i++){
+    const th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+    const r = 200 + Math.random()*400;
+    pos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1] = r*Math.cos(ph);
+    pos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+    const b = 0.3 + Math.random()*0.7;
+    col[i*3]=b; col[i*3+1]=b; col[i*3+2]=b;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col,3));
+  return new THREE.Points(geo, new THREE.PointsMaterial({size:0.5, vertexColors:true, sizeAttenuation:false, transparent:true, opacity:0.9}));
+}
+scene.add(makeStars(3500));
+
+// ============ Earth ============
+const earthGroup = new THREE.Group();
+scene.add(earthGroup);
+
+const earthGeo = new THREE.SphereGeometry(EARTH_R, 128, 96);
+const earthMat = new THREE.MeshPhongMaterial({
+  color: 0xffffff,
+  emissive: 0x081016,
+  emissiveIntensity: 0.45,
+  specular: 0x223344,
+  shininess: 12,
+});
+const earth = new THREE.Mesh(earthGeo, earthMat);
+earthGroup.add(earth);
+
+// Atmosphere glow shell
+const atmosMat = new THREE.ShaderMaterial({
+  uniforms: {},
+  vertexShader: 'varying vec3 vN; varying vec3 vP; void main(){ vN=normalize(normalMatrix*normal); vec4 w = modelMatrix*vec4(position,1.0); vP=w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }',
+  fragmentShader: 'varying vec3 vN; varying vec3 vP; void main(){ vec3 v=normalize(cameraPosition-vP); float r=pow(1.0-max(dot(vN,v),0.0), 2.5); gl_FragColor=vec4(0.30,0.65,0.95, r*0.55); }',
+  side: THREE.BackSide, transparent: true, depthWrite: false,
+});
+const atmos = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R*1.018, 96, 96), atmosMat);
+scene.add(atmos);
+
+// ============ Texture loading ============
+const texLoader = new THREE.TextureLoader();
+texLoader.setCrossOrigin('anonymous');
+let mapLoaded = false;
+
+const TEXTURE_CHAIN = [
+  'https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg',
+  'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+  'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
+];
+
+function tryLoadTexture(idx){
+  if(idx >= TEXTURE_CHAIN.length){
+    document.getElementById('chip-imagery').textContent = 'Imagery failed — check console';
+    document.getElementById('chip-imagery').classList.remove('a');
+    document.getElementById('chip-imagery').classList.add('d');
+    document.getElementById('load-progress').textContent = 'Could not load Earth imagery from any CDN. Using fallback color.';
+    earthMat.color.setHex(0x1a3050);
+    earthMat.needsUpdate = true;
+    finishLoading();
+    return;
+  }
+  document.getElementById('load-progress').textContent = 'Loading source ' + (idx+1) + '/' + TEXTURE_CHAIN.length + '…';
+  texLoader.load(TEXTURE_CHAIN[idx],
+    function(tex){
+      if(THREE.SRGBColorSpace !== undefined) tex.colorSpace = THREE.SRGBColorSpace;
+      else if(THREE.sRGBEncoding !== undefined) tex.encoding = THREE.sRGBEncoding;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      earthMat.map = tex;
+      earthMat.needsUpdate = true;
+      mapLoaded = true;
+      document.getElementById('chip-imagery').textContent = 'NASA Blue Marble · live';
+      finishLoading();
+    },
+    undefined,
+    function(){ tryLoadTexture(idx + 1); }
+  );
+}
+
+function finishLoading(){
+  setTimeout(function(){ document.getElementById('loading').classList.add('done'); }, 200);
+}
+
+tryLoadTexture(0);
+setTimeout(function(){
+  if(!document.getElementById('loading').classList.contains('done')){
+    tryLoadTexture(TEXTURE_CHAIN.length);
+  }
+}, 9000);
+
+// ============ Coordinate conversion ============
+// Three.js r128 SphereGeometry default UVs (CONFIRMED from source):
+//   At theta=0, vertex sits at -x (because of -cos(theta)*sin(phi))
+//   At theta=π, vertex at +x
+//   At theta=π/2, vertex at +z
+//   At theta=3π/2, vertex at -z
+//   Phi 0 = +y (north pole), Phi=π = -y (south pole)
+//   u = theta / (2π), v = phi / π
+//
+// For a standard equirectangular Blue Marble image:
+//   image left (u=0)   = lon -180°
+//   image center (u=.5) = lon 0° (Greenwich)
+//   image top (v=0)    = lat +90° (north)
+//   image bottom (v=1) = lat -90° (south)
+//
+// At u=0.5 (Greenwich) → theta=π → vertex at +x. So lon=0° is at +x. ✓
+// At u=0.25 (lon=-90°) → theta=π/2 → vertex at +z. So lon=-90° is at +z.
+// At u=0.75 (lon=+90°) → theta=3π/2 → vertex at -z. So lon=+90° is at -z.
+//
+// Therefore for a point at (lat, lon):
+//   theta = (lon + 180) * π/180  (so lon -180→0, lon 0→π, lon 180→2π)
+//   phi   = (90 - lat) * π/180   (so lat 90→0, lat -90→π)
+//   x = -r * cos(theta) * sin(phi)
+//   y =  r * cos(phi)
+//   z =  r * sin(theta) * sin(phi)
+function llToXYZ(lat, lon, r){
+  if(r === undefined) r = EARTH_R;
+  const theta = (lon + 180) * Math.PI / 180;
+  const phi = (90 - lat) * Math.PI / 180;
+  return new THREE.Vector3(
+    -r * Math.cos(theta) * Math.sin(phi),
+     r * Math.cos(phi),
+     r * Math.sin(theta) * Math.sin(phi)
+  );
+}
+
+// Inverse — given a point in Earth-fixed frame, get (lat, lon)
+function xyzToLL(p){
+  const r = Math.sqrt(p.x*p.x + p.y*p.y + p.z*p.z);
+  const lat = Math.asin(p.y / r) * 180 / Math.PI;
+  // x = -cos(theta)*sin(phi), z = sin(theta)*sin(phi)
+  // tan(theta) = z / -x → atan2(z, -x)
+  let theta = Math.atan2(p.z, -p.x);
+  // theta is in (-π, π], we want lon in (-180, 180]
+  // theta = (lon + 180) * π/180 mod 2π
+  // So lon = theta * 180/π - 180. But theta from atan2 is (-π, π], and we need to map
+  // it back: if theta < 0, add 2π first to get into [0, 2π).
+  if(theta < 0) theta += 2 * Math.PI;
+  let lon = theta * 180 / Math.PI - 180;
+  if(lon > 180) lon -= 360;
+  if(lon < -180) lon += 360;
+  return {lat: lat, lon: lon};
+}
+
+// ============ Markers (attached to Earth group → rotate with Earth) ============
+const markerData = [];
+THEATER.forEach(function(a){
+  const kind = KINDS[a.kind];
+  const col = new THREE.Color(kind.color);
+  const pos = llToXYZ(a.lat, a.lon, EARTH_R * 1.003);
+  const normal = pos.clone().normalize();
+  const grp = new THREE.Group();
+  grp.position.copy(pos);
+  grp.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1), normal);
+
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.008, 12, 12), new THREE.MeshBasicMaterial({color: col}));
+  grp.add(dot);
+
+  const beam = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.001, 0.0025, 0.10, 8, 1, true),
+    new THREE.MeshBasicMaterial({color: col, transparent:true, opacity:0.6, depthWrite:false})
+  );
+  beam.rotation.x = Math.PI/2;
+  beam.position.z = 0.05;
+  grp.add(beam);
+
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.011, 0.018, 32),
+    new THREE.MeshBasicMaterial({color: col, transparent:true, opacity:0.4, side:THREE.DoubleSide, depthWrite:false})
+  );
+  ring.rotation.x = Math.PI/2;
+  ring.position.z = 0.001;
+  grp.add(ring);
+
+  earthGroup.add(grp);
+  markerData.push({asset:a, group:grp, dot:dot, beam:beam, ring:ring, pos:pos.clone(), selected:false});
+});
+
+// Reach rings on Earth group
+function makeReachRing(a){
+  if(!a.reach_km || a.reach_km <= 0) return null;
+  const alpha = a.reach_km / KM_PER_UNIT;
+  const segments = 96;
+  const center = llToXYZ(a.lat, a.lon).normalize();
+  const up = Math.abs(center.y) < 0.95 ? new THREE.Vector3(0,1,0) : new THREE.Vector3(1,0,0);
+  const u = new THREE.Vector3().crossVectors(up, center).normalize();
+  const v = new THREE.Vector3().crossVectors(center, u).normalize();
+  const pts = [];
+  const ringR = Math.sin(alpha) * EARTH_R;
+  const ringH = Math.cos(alpha) * EARTH_R;
+  for(let i=0;i<=segments;i++){
+    const t = i/segments * Math.PI*2;
+    const p = center.clone().multiplyScalar(ringH)
+      .add(u.clone().multiplyScalar(Math.cos(t)*ringR))
+      .add(v.clone().multiplyScalar(Math.sin(t)*ringR));
+    p.normalize().multiplyScalar(EARTH_R*1.005);
+    pts.push(p);
+  }
+  return new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(pts),
+    new THREE.LineBasicMaterial({color: new THREE.Color(KINDS[a.kind].color), transparent:true, opacity:0.35})
+  );
+}
+THEATER.forEach(function(a){ const r = makeReachRing(a); if(r) earthGroup.add(r); });
+
+// ============ Satellites (inertial frame, NOT on Earth group) ============
+const satGroup = new THREE.Group(); scene.add(satGroup);
+const satData = [];
+SATS.forEach(function(s){
+  const grp = new THREE.Group();
+  const col = new THREE.Color(KINDS[s.kind].color);
+  const body = new THREE.Mesh(new THREE.OctahedronGeometry(0.012, 0), new THREE.MeshBasicMaterial({color: col}));
+  grp.add(body);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({color: col, transparent:true, opacity:0.7, depthWrite:false}));
+  sprite.scale.set(0.04, 0.04, 1);
+  grp.add(sprite);
+  // Orbit line
+  const orbitPts = [];
+  const N = 128;
+  const a_u = s.a / KM_PER_UNIT;
+  const iR = s.i * Math.PI/180, rR = s.raan * Math.PI/180;
+  for(let k=0;k<=N;k++){
+    const theta = k/N * Math.PI*2;
+    const x0 = a_u * Math.cos(theta), y0 = a_u * Math.sin(theta);
+    let X = x0, Y = y0*Math.cos(iR), Z = y0*Math.sin(iR);
+    const X2 = X*Math.cos(rR) + Z*Math.sin(rR);
+    const Z2 = -X*Math.sin(rR) + Z*Math.cos(rR);
+    orbitPts.push(new THREE.Vector3(X2, Y, Z2));
+  }
+  const orbit = new THREE.Line(new THREE.BufferGeometry().setFromPoints(orbitPts), new THREE.LineBasicMaterial({color: col, transparent:true, opacity:0.18}));
+  satGroup.add(orbit);
+  satGroup.add(grp);
+  satData.push({sat:s, group:grp, body:body, sprite:sprite});
+});
+
+function propagateSat(s, tSec){
+  const a_u = s.sat.a / KM_PER_UNIT;
+  const n = Math.sqrt(MU / Math.pow(s.sat.a, 3));
+  const M0 = s.sat.M0 * Math.PI/180;
+  const theta = M0 + n * tSec;
+  const iR = s.sat.i * Math.PI/180, rR = s.sat.raan * Math.PI/180;
+  const x0 = a_u * Math.cos(theta), y0 = a_u * Math.sin(theta);
+  let X = x0, Y = y0 * Math.cos(iR), Z = y0 * Math.sin(iR);
+  const X2 = X * Math.cos(rR) + Z * Math.sin(rR);
+  const Z2 = -X * Math.sin(rR) + Z * Math.cos(rR);
+  return new THREE.Vector3(X2, Y, Z2);
+}
+
+// ============ Ballistic arcs (on Earth group) ============
+const arcGroup = new THREE.Group();
+earthGroup.add(arcGroup);
+function ballisticArc(fromLL, toLL, apexFrac){
+  apexFrac = apexFrac || 0.10;
+  const from = llToXYZ(fromLL[0], fromLL[1]);
+  const to   = llToXYZ(toLL[0], toLL[1]);
+  const N = 96;
+  const pts = [];
+  for(let k=0;k<=N;k++){
+    const t = k/N;
+    const p = from.clone().multiplyScalar(1-t).add(to.clone().multiplyScalar(t)).normalize();
+    const h = EARTH_R * (1 + apexFrac * Math.sin(t * Math.PI));
+    pts.push(p.multiplyScalar(h));
+  }
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const line = new THREE.Line(geo, new THREE.LineBasicMaterial({color:0xFF7A8A, transparent:true, opacity:1}));
+  geo.setDrawRange(0, 0);
+  line.userData = {totalPts: pts.length, drawn: 0, speed: 1.8, ttl: 1500};
+  arcGroup.add(line);
+}
+function animateArcs(){
+  const toRemove = [];
+  arcGroup.children.forEach(function(line){
+    if(line.userData.drawn < line.userData.totalPts){
+      line.userData.drawn += line.userData.speed;
+      line.geometry.setDrawRange(0, Math.min(line.userData.drawn, line.userData.totalPts));
+    } else {
+      line.userData.ttl -= 16;
+      line.material.opacity = Math.max(0, line.userData.ttl/1500);
+      if(line.userData.ttl <= 0) toRemove.push(line);
+    }
+  });
+  toRemove.forEach(function(l){ arcGroup.remove(l); });
+}
+
+// ============ Earth rotation + sun ============
+const EARTH_ROT_RATE = 2 * Math.PI / 86164;
+function earthRotationY(epochSec){ return EARTH_ROT_RATE * epochSec; }
+function sunDir(epochSec){
+  const utcHour = ((epochSec / 3600) % 24 + 24) % 24;
+  const ang = ((utcHour - 12) / 24) * Math.PI * 2;
+  return new THREE.Vector3(Math.cos(ang), 0.15, Math.sin(ang)).normalize();
+}
+
+// ============ Camera controls ============
+const yaw = {v: 0.8};
+const pitch = {v: 0.3};
+const distance = {v: 3.5};
+let isDragging = false, px=0, py=0;
+const MIN_DIST = 1.015;
+const MAX_DIST = 30;
+
+renderer.domElement.addEventListener('mousedown', function(e){ isDragging=true; px=e.clientX; py=e.clientY; renderer.domElement.classList.add('dragging'); });
+window.addEventListener('mouseup', function(){ isDragging=false; renderer.domElement.classList.remove('dragging'); });
+window.addEventListener('mousemove', function(e){
+  if(!isDragging) return;
+  const dx = e.clientX - px, dy = e.clientY - py;
+  const sens = Math.max(0.0008, Math.min(0.005, (distance.v - 1.0) * 0.003));
+  yaw.v -= dx * sens;
+  pitch.v -= dy * sens;
+  pitch.v = Math.max(-Math.PI/2+0.03, Math.min(Math.PI/2-0.03, pitch.v));
+  px = e.clientX; py = e.clientY;
+});
+renderer.domElement.addEventListener('wheel', function(e){
+  e.preventDefault();
+  const excess = distance.v - MIN_DIST;
+  const f = e.deltaY > 0 ? 1.12 : 0.89;
+  distance.v = Math.max(MIN_DIST, Math.min(MAX_DIST, MIN_DIST + excess * f));
+}, {passive:false});
+
+let lastTouchDist = null;
+renderer.domElement.addEventListener('touchstart', function(e){
+  if(e.touches.length===1){ isDragging=true; px=e.touches[0].clientX; py=e.touches[0].clientY; }
+  else if(e.touches.length===2){
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastTouchDist = Math.hypot(dx, dy);
+  }
+});
+renderer.domElement.addEventListener('touchmove', function(e){
+  if(e.touches.length===1 && isDragging){
+    const dx = e.touches[0].clientX - px, dy = e.touches[0].clientY - py;
+    const sens = Math.max(0.0008, Math.min(0.005, (distance.v - 1.0) * 0.003));
+    yaw.v -= dx * sens; pitch.v -= dy * sens;
+    pitch.v = Math.max(-Math.PI/2+0.03, Math.min(Math.PI/2-0.03, pitch.v));
+    px = e.touches[0].clientX; py = e.touches[0].clientY;
+  } else if(e.touches.length===2 && lastTouchDist){
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d = Math.hypot(dx, dy);
+    const excess = distance.v - MIN_DIST;
+    distance.v = Math.max(MIN_DIST, Math.min(MAX_DIST, MIN_DIST + excess * (lastTouchDist / d)));
+    lastTouchDist = d;
+  }
+  e.preventDefault();
+}, {passive:false});
+renderer.domElement.addEventListener('touchend', function(){ isDragging=false; lastTouchDist = null; });
+
+document.getElementById('z-in').addEventListener('click', function(){
+  const excess = distance.v - MIN_DIST;
+  distance.v = Math.max(MIN_DIST, MIN_DIST + excess * 0.7);
+});
+document.getElementById('z-out').addEventListener('click', function(){
+  const excess = distance.v - MIN_DIST;
+  distance.v = Math.min(MAX_DIST, MIN_DIST + excess * 1.4);
+});
+
+function updateCamera(){
+  const r = distance.v;
+  camera.position.x = r * Math.cos(pitch.v) * Math.sin(yaw.v);
+  camera.position.y = r * Math.sin(pitch.v);
+  camera.position.z = r * Math.cos(pitch.v) * Math.cos(yaw.v);
+  camera.near = Math.max(0.001, (r - 1.0) * 0.05);
+  camera.far = Math.max(20, r * 4);
+  const zoomT = Math.min(1, Math.max(0, (r - MIN_DIST) / (3.5 - MIN_DIST)));
+  camera.fov = 22 + zoomT * 18;
+  camera.updateProjectionMatrix();
+  camera.lookAt(0, 0, 0);
+
+  // Altitude
+  const altKm = (r - 1.0) * KM_PER_UNIT;
+  document.getElementById('alt-v').textContent = altKm < 1000 ? altKm.toFixed(0) + ' km' : (altKm/1000).toFixed(1) + 'k km';
+
+  // "Camera over" lat/lon — un-rotate camera direction by current Earth rotation
+  // to get the corresponding Earth-fixed lat/lon under the camera.
+  const lookDir = camera.position.clone().normalize();
+  const earthRotY = earthGroup.rotation.y;
+  // Rotate by -earthRotY around y-axis to convert world → Earth-fixed
+  const cosR = Math.cos(-earthRotY), sinR = Math.sin(-earthRotY);
+  const localPoint = new THREE.Vector3(
+    lookDir.x * cosR + lookDir.z * sinR,
+    lookDir.y,
+    -lookDir.x * sinR + lookDir.z * cosR
+  );
+  const ll = xyzToLL(localPoint);
+  document.getElementById('gps-v').textContent = formatLL(ll.lat, ll.lon);
+}
+
+function formatLL(lat, lon){
+  const ns = lat >= 0 ? 'N' : 'S';
+  const ew = lon >= 0 ? 'E' : 'W';
+  return Math.abs(lat).toFixed(1) + '°' + ns + ' ' + Math.abs(lon).toFixed(1) + '°' + ew;
+}
+
+// ============ View presets ============
+// Compute camera yaw/pitch in WORLD frame for a given (lat, lon) target.
+// Accounts for current Earth rotation so HORMUZ goes to Hormuz NOW, not at T=0.
+function viewAtLatLon(lat, lon, dist){
+  // Earth-fixed point on surface
+  const pointEF = llToXYZ(lat, lon, 1);
+  // Apply current Earth rotation (around y-axis)
+  const earthRotY = earthGroup.rotation.y;
+  const cosR = Math.cos(earthRotY), sinR = Math.sin(earthRotY);
+  const worldX = pointEF.x * cosR + pointEF.z * sinR;
+  const worldZ = -pointEF.x * sinR + pointEF.z * cosR;
+  const worldY = pointEF.y;
+  // Camera should sit on the same vector outward, scaled by dist
+  // camPos = dist * (cos(pitch)*sin(yaw), sin(pitch), cos(pitch)*cos(yaw))
+  const pitchV = Math.asin(worldY);
+  const yawV = Math.atan2(worldX, worldZ);
+  return {yaw: yawV, pitch: pitchV, distance: dist};
+}
+
+const VIEW_PRESETS = {
+  strategic: {lat: 25, lon: 50, dist: 3.5},
+  theater:   {lat: 25, lon: 55, dist: 1.5},
+  hormuz:    {lat: 26.5, lon: 56.3, dist: 1.05},
+  redsea:    {lat: 17, lon: 41, dist: 1.4},
+  polar:     {lat: 75, lon: 45, dist: 2.4},
+};
+
+function animateToView(name){
+  const preset = VIEW_PRESETS[name];
+  const tgt = viewAtLatLon(preset.lat, preset.lon, preset.dist);
+  const start = {yaw: yaw.v, pitch: pitch.v, distance: distance.v};
+  let yawDiff = tgt.yaw - start.yaw;
+  while(yawDiff > Math.PI) yawDiff -= 2*Math.PI;
+  while(yawDiff < -Math.PI) yawDiff += 2*Math.PI;
+  const t0 = performance.now();
+  const dur = 1100;
+  function step(){
+    const now = performance.now();
+    const t = Math.min(1, (now-t0)/dur);
+    const ease = t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+    yaw.v = start.yaw + yawDiff * ease;
+    pitch.v = start.pitch + (tgt.pitch - start.pitch) * ease;
+    distance.v = start.distance + (tgt.distance - start.distance) * ease;
+    if(t<1) requestAnimationFrame(step);
+  }
+  step();
+  const hero = document.getElementById('hero');
+  if(preset.dist < 2) hero.classList.add('hide');
+  else hero.classList.remove('hide');
+}
+
+document.querySelectorAll('#views button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('#views button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    animateToView(b.dataset.v);
+  });
+});
+
+// ============ Time ============
+const baseEpoch = new Date('2026-03-16T12:00:00Z').getTime() / 1000;
+let simTime = 0;
+let playing = true;
+let speed = 1;
+
+const tSlider = document.getElementById('t-slider');
+tSlider.addEventListener('input', function(e){
+  simTime = +e.target.value;
+  playing = false;
+  document.getElementById('btn-play').textContent = '▶';
+});
+document.getElementById('btn-play').addEventListener('click', function(){
+  playing = !playing;
+  document.getElementById('btn-play').textContent = playing ? '❚❚' : '▶';
+});
+document.querySelectorAll('#speed button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('#speed button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    speed = +b.dataset.x;
+  });
+});
+
+function fmtTime(epochSec){
+  const d = new Date(epochSec*1000);
+  const z = function(n){ return String(n).padStart(2,'0'); };
+  return d.getUTCFullYear()+'-'+z(d.getUTCMonth()+1)+'-'+z(d.getUTCDate())+' '+z(d.getUTCHours())+':'+z(d.getUTCMinutes())+':'+z(d.getUTCSeconds())+'Z';
+}
+
+// ============ Asset list ============
+function renderAssets(){
+  const list = document.getElementById('asset-list');
+  const items = THEATER.map(function(a){ return {id:a.id, name:a.name, kind:a.kind}; })
+    .concat(SATS.map(function(s){ return {id:s.id, name:s.name, kind:s.kind}; }));
+  list.innerHTML = items.map(function(a){
+    const kind = KINDS[a.kind];
+    return '<div class="asset-item" data-id="'+a.id+'"><div class="l"><span class="dot" style="background:'+kind.hex+'"></span><span class="n">'+a.name+'</span></div><span class="t">'+kind.label+'</span></div>';
+  }).join('');
+  document.getElementById('count-assets').textContent = items.length;
+  list.querySelectorAll('.asset-item').forEach(function(el){
+    el.addEventListener('click', function(){ selectAsset(el.dataset.id, true); });
+  });
+}
+renderAssets();
+
+function selectAsset(id, flyTo){
+  document.querySelectorAll('.asset-item').forEach(function(el){ el.classList.toggle('on', el.dataset.id===id); });
+  markerData.forEach(function(m){
+    m.selected = (m.asset.id === id);
+    m.ring.material.opacity = m.selected ? 0.9 : 0.4;
+  });
+  let info = '', name = '', sub = '';
+  const surf = THEATER.find(function(a){ return a.id===id; });
+  const sat = SATS.find(function(s){ return s.id===id; });
+  if(surf){
+    name = surf.name; sub = KINDS[surf.kind].label;
+    info = '<div class="row"><span class="k">Type</span><span class="v">'+surf.type+'</span></div>'+
+      '<div class="row"><span class="k">Latitude</span><span class="v">'+surf.lat.toFixed(3)+'°</span></div>'+
+      '<div class="row"><span class="k">Longitude</span><span class="v">'+surf.lon.toFixed(3)+'°</span></div>'+
+      (surf.reach_km?'<div class="row"><span class="k">Ops reach</span><span class="v a">'+surf.reach_km+' km</span></div>':'')+
+      '<div style="margin-top:10px;font-size:12px;line-height:1.55;color:var(--ink-3)">'+surf.info+'</div>'+
+      (flyTo?'<button onclick="flyToLatLon('+surf.lat+','+surf.lon+',1.08)" style="margin-top:10px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:11px;font-weight:500;padding:6px 12px;border-radius:4px;cursor:pointer;width:100%">Fly to this asset</button>':'');
+  } else if(sat){
+    const period = 2*Math.PI*Math.sqrt(Math.pow(sat.a,3)/MU) / 60;
+    const alt = sat.a - 6371;
+    name = sat.name; sub = KINDS[sat.kind].label;
+    info = '<div class="row"><span class="k">Altitude</span><span class="v">'+alt.toFixed(0)+' km</span></div>'+
+      '<div class="row"><span class="k">Semi-major a</span><span class="v">'+sat.a.toFixed(0)+' km</span></div>'+
+      '<div class="row"><span class="k">Inclination</span><span class="v">'+sat.i.toFixed(1)+'°</span></div>'+
+      '<div class="row"><span class="k">RAAN</span><span class="v">'+sat.raan+'°</span></div>'+
+      '<div class="row"><span class="k">Period</span><span class="v a">'+period.toFixed(1)+' min</span></div>';
+  }
+  document.getElementById('sel-title').textContent = name || 'Details';
+  document.getElementById('sel-sub').textContent = sub || 'no selection';
+  document.getElementById('sel-body').innerHTML = info || '<div style="color:var(--ink-4);font-size:11px">No selection.</div>';
+}
+
+window.flyToLatLon = function(lat, lon, dist){
+  const tgt = viewAtLatLon(lat, lon, dist);
+  const start = {yaw: yaw.v, pitch: pitch.v, distance: distance.v};
+  let yawDiff = tgt.yaw - start.yaw;
+  while(yawDiff > Math.PI) yawDiff -= 2*Math.PI;
+  while(yawDiff < -Math.PI) yawDiff += 2*Math.PI;
+  const t0 = performance.now(); const dur = 1100;
+  function step(){
+    const now = performance.now();
+    const t = Math.min(1, (now-t0)/dur);
+    const ease = t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+    yaw.v = start.yaw + yawDiff * ease;
+    pitch.v = start.pitch + (tgt.pitch - start.pitch) * ease;
+    distance.v = start.distance + (tgt.distance - start.distance) * ease;
+    if(t<1) requestAnimationFrame(step);
+  }
+  step();
+};
+
+// ============ Raycasting ============
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+function onClick(e){
+  if(isDragging) return;
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const dots = markerData.map(function(m){ return m.dot; });
+  const hits = raycaster.intersectObjects(dots, false);
+  if(hits.length){
+    const m = markerData.find(function(x){ return x.dot === hits[0].object; });
+    if(m) selectAsset(m.asset.id, false);
+    return;
+  }
+  const satBodies = satData.map(function(s){ return s.body; });
+  const sh = raycaster.intersectObjects(satBodies, false);
+  if(sh.length){
+    const s = satData.find(function(x){ return x.body === sh[0].object; });
+    if(s) selectAsset(s.sat.id, false);
+  }
+}
+renderer.domElement.addEventListener('click', onClick);
+
+const tt = document.getElementById('tt');
+function onMouseMove(e){
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const dots = markerData.map(function(m){ return m.dot; });
+  const satBodies = satData.map(function(s){ return s.body; });
+  const hits = raycaster.intersectObjects(dots,false).concat(raycaster.intersectObjects(satBodies,false));
+  if(hits.length){
+    const obj = hits[0].object;
+    const m = markerData.find(function(x){ return x.dot === obj; });
+    const s = satData.find(function(x){ return x.body === obj; });
+    const a = m ? m.asset : (s ? s.sat : null);
+    if(a){
+      tt.querySelector('.n').textContent = a.name;
+      tt.querySelector('.d').textContent = KINDS[a.kind].label + (a.type?' · '+a.type:'');
+      tt.style.left = (e.clientX+12)+'px';
+      tt.style.top = (e.clientY+12)+'px';
+      tt.classList.add('on');
+      renderer.domElement.style.cursor = 'pointer';
+      return;
+    }
+  }
+  tt.classList.remove('on');
+  renderer.domElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+}
+renderer.domElement.addEventListener('mousemove', onMouseMove);
+
+document.getElementById('btn-strike').addEventListener('click', function(){
+  const from = THEATER.find(function(a){ return a.id === 'dg'; });
+  const targets = ['fordow','natanz','bandar','tehran'];
+  const to = THEATER.find(function(a){ return a.id === targets[Math.floor(Math.random()*targets.length)]; });
+  ballisticArc([from.lat, from.lon], [to.lat, to.lon], 0.12);
+  selectAsset(to.id, false);
+});
+
+window.addEventListener('resize', function(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ============ Main loop ============
+let lastT = performance.now();
+let fpsAcc = 0, fpsCount = 0;
+function animate(now){
+  requestAnimationFrame(animate);
+  const dt = (now - lastT) / 1000;
+  lastT = now;
+  fpsAcc += dt; fpsCount++;
+  if(fpsAcc > 0.5){
+    document.getElementById('fps').textContent = (fpsCount/fpsAcc).toFixed(0) + ' fps';
+    fpsAcc = 0; fpsCount = 0;
+  }
+
+  if(playing){
+    simTime += dt * speed;
+    if(simTime > 43200) simTime = -43200;
+    if(simTime < -43200) simTime = 43200;
+    tSlider.value = simTime;
+  }
+  const epoch = baseEpoch + simTime;
+  document.getElementById('clk').textContent = fmtTime(epoch);
+  const sign = simTime>=0 ? '+' : '-';
+  const h = Math.floor(Math.abs(simTime)/3600);
+  const m = Math.floor((Math.abs(simTime)%3600)/60);
+  document.getElementById('tm').textContent = 'T' + sign + h + 'h' + String(m).padStart(2,'0') + ' · ' + speed + '× · baseline 16 Mar 2026 12:00Z';
+
+  // Earth rotation
+  earthGroup.rotation.y = earthRotationY(epoch);
+
+  // Sun direction
+  const sd = sunDir(epoch);
+  sun.position.set(sd.x * 5, sd.y * 5, sd.z * 5);
+
+  // Satellites
+  satData.forEach(function(s){
+    const p = propagateSat(s, epoch);
+    s.group.position.copy(p);
+  });
+
+  // Marker pulses
+  const markerScale = Math.max(0.25, Math.min(1.0, (distance.v - 1.0) / 1.5));
+  markerData.forEach(function(m){
+    const baseScale = m.selected ? 1.0 + 0.5*Math.sin(now/250) : 0.85 + 0.15*Math.sin(now/600 + m.pos.x*10);
+    m.ring.scale.set(baseScale * markerScale, baseScale * markerScale, 1);
+    m.dot.scale.setScalar(markerScale);
+  });
+  satData.forEach(function(s){
+    const scale = 0.04 * (0.85 + 0.15*Math.sin(now/400));
+    s.sprite.scale.set(scale, scale, 1);
+  });
+
+  animateArcs();
+  updateCamera();
+  renderer.render(scene, camera);
+}
+
+camera.position.set(0, 0.3, 3.5);
+camera.lookAt(0, 0, 0);
+
+requestAnimationFrame(animate);
+setTimeout(function(){ selectAsset('fordow', false); }, 1200);
+</script>
+</body>
+</html>

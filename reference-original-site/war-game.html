@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>War Game · NSS v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--surface-3:#1C2434;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px;--maxw:1280px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.bar{position:sticky;top:0;z-index:40;background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.bar button.btn-r{background:var(--surface);border:1px solid var(--border);color:var(--ink-3);font-family:var(--ui);font-size:12px;padding:4px 12px;border-radius:var(--r-sm);cursor:pointer;transition:.15s;font-weight:500}
+.bar button.btn-r:hover{border-color:var(--accent);color:var(--accent)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:28px clamp(16px,3vw,40px) 60px}
+/* Intro */
+.intro{text-align:center;padding:60px 24px 80px;max-width:880px;margin:0 auto}
+.intro .eye{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:18px}
+.intro h1{font-family:var(--display);font-size:clamp(52px,8vw,96px);font-weight:400;line-height:.96;margin:0 0 24px;letter-spacing:-.022em}
+.intro h1 i{font-style:italic;color:var(--accent)}
+.intro .tag{color:var(--ink-2);font-size:18px;line-height:1.55;margin:0 0 40px}
+.intro-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:left;margin:0 0 44px}
+@media(max-width:860px){.intro-steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.intro-steps{grid-template-columns:1fr}}
+.intro-step{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px}
+.intro-step .n{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.04em;margin-bottom:8px}
+.intro-step h4{font-family:var(--display);font-size:20px;font-weight:400;margin:0 0 8px;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
+.intro-step h4 i{font-style:italic;color:var(--accent)}
+.intro-step p{margin:0;color:var(--ink-3);font-size:12.5px;line-height:1.55}
+.intro-btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:14px;font-weight:500;padding:13px 24px;border-radius:var(--r-sm);cursor:pointer;transition:.15s}
+.intro-btn:hover{background:var(--accent-bright)}
+.intro .small{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-top:16px;letter-spacing:.04em}
+/* Game UI */
+.game{display:none}
+.game.on{display:block}
+.game-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding-bottom:16px;margin-bottom:20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.game-head .week{font-family:var(--display);font-size:44px;font-weight:400;letter-spacing:-.02em;line-height:1}
+.game-head .week i{font-style:italic;color:var(--accent)}
+.game-head .week .sub{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-top:8px;letter-spacing:.04em}
+.game-head .status{font-family:var(--mono);font-size:11px;color:var(--ink-4);text-align:right;line-height:1.7}
+.game-head .status b{color:var(--ink)}
+/* Metrics bar */
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+@media(max-width:1040px){.metrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.metric .l{font-family:var(--mono);font-size:9.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:6px}
+.metric .v{font-family:var(--display);font-size:22px;line-height:1;letter-spacing:-.012em;color:var(--ink)}
+.metric .v.a{color:var(--accent)}.metric .v.w{color:var(--warm)}.metric .v.d{color:var(--danger)}.metric .v.g{color:var(--success)}
+.metric .bar{height:3px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}
+.metric .bar > span{display:block;height:100%;background:var(--accent);border-radius:2px;transition:width .5s}
+.metric .bar > span.w{background:var(--warm)}.metric .bar > span.d{background:var(--danger)}.metric .bar > span.g{background:var(--success)}
+/* Tracks */
+.tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:920px){.tracks{grid-template-columns:1fr}}
+.track{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;display:flex;flex-direction:column}
+.track .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--divider)}
+.track .h .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--accent)}
+.track .h .n.w{color:var(--warm)}.track .h .n.v{color:var(--violet)}
+.track .h h3{font-family:var(--display);font-size:22px;font-weight:400;margin:0;letter-spacing:-.012em;line-height:1}
+.track .h h3 i{font-style:italic;color:var(--accent)}
+.track.w .h h3 i{color:var(--warm)}
+.track.v .h h3 i{color:var(--violet)}
+.track .opts{display:flex;flex-direction:column;gap:6px;flex:1}
+.opt{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;cursor:pointer;transition:.12s;text-align:left;font-family:var(--ui);color:var(--ink-2);font-size:12.5px;line-height:1.4}
+.opt:hover{border-color:var(--border-2);background:var(--surface-2)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.track.w .opt.sel{border-color:var(--warm);background:var(--warm-soft);color:var(--ink)}
+.track.v .opt.sel{border-color:var(--violet);background:rgba(184,160,255,.10);color:var(--ink)}
+.opt .t{font-weight:500;color:var(--ink);margin-bottom:3px;display:flex;justify-content:space-between;gap:8px}
+.opt.sel .t::after{content:"✓";color:inherit;font-family:var(--mono);font-size:11px}
+.opt .d{color:var(--ink-3);font-size:11.5px;line-height:1.4}
+.opt.sel .d{color:var(--ink-2)}
+/* Advance button */
+.advance{display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 22px;margin-bottom:20px;flex-wrap:wrap}
+.advance .info{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.advance .info b{color:var(--ink)}
+.advance button{background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:13px;font-weight:500;padding:10px 20px;border-radius:var(--r-sm);cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.advance button:hover{background:var(--accent-bright)}
+.advance button:disabled{background:var(--surface-2);color:var(--ink-4);cursor:not-allowed}
+/* Log */
+.log{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 22px;max-height:420px;overflow:auto}
+.log h3{font-family:var(--mono);font-size:11px;color:var(--ink-4);letter-spacing:.04em;margin:0 0 12px;font-weight:500}
+.log-entry{padding:10px 0;border-bottom:1px solid var(--divider)}
+.log-entry:last-child{border-bottom:none}
+.log-entry .wk{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.04em;margin-bottom:6px}
+.log-entry .l{padding:3px 0;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.log-entry .l b{color:var(--ink);font-weight:500}
+.log-entry .l.us{color:var(--accent)}
+.log-entry .l.iran{color:var(--danger)}
+.log-entry .l.houthi{color:var(--warm)}
+.log-entry .l.hez{color:#FF9BB0}
+.log-entry .l.israel{color:var(--violet)}
+.log-entry .l.saudi{color:var(--success)}
+.log::-webkit-scrollbar{width:4px}
+.log::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:2px}
+/* Endgame */
+.endgame{display:none;padding:40px 0}
+.endgame.on{display:block}
+.endgame .eye{font-family:var(--mono);font-size:11.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:16px;text-align:center}
+.endgame h2{font-family:var(--display);font-size:clamp(36px,5vw,56px);font-weight:400;line-height:1.05;margin:0 0 16px;letter-spacing:-.02em;text-align:center}
+.endgame h2 i{font-style:italic;color:var(--accent)}
+.endgame .analog{text-align:center;color:var(--ink-2);font-size:16px;line-height:1.55;max-width:720px;margin:0 auto 40px}
+.endgame .analog b{color:var(--accent);font-weight:500}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:32px;max-width:880px;margin-left:auto;margin-right:auto}
+@media(max-width:760px){.score-grid{grid-template-columns:repeat(2,1fr)}}
+.score{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;text-align:center}
+.score .l{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:10px}
+.score .v{font-family:var(--display);font-size:36px;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.score .v.g{color:var(--success)}.score .v.w{color:var(--warm)}.score .v.d{color:var(--danger)}.score .v.a{color:var(--accent)}
+.endgame-actions{text-align:center;margin-top:24px}
+.endgame-actions button{background:var(--accent);color:#06121a;border:none;font-family:var(--ui);font-size:13px;font-weight:500;padding:11px 22px;border-radius:var(--r-sm);cursor:pointer;transition:.15s}
+.endgame-actions button:hover{background:var(--accent-bright)}
+.endgame-actions a{display:inline-block;margin-left:12px;color:var(--ink-3);text-decoration:none;font-family:var(--ui);font-size:13px;padding:10px 14px}
+.endgame-actions a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">War Game</span></div>
+  <div style="display:flex;gap:10px;align-items:center"><span id="hdr-status">Turn-based campaign · Iran theater · 2026</span><button class="btn-r" id="btn-restart" style="display:none">Restart</button></div>
+</div></div>
+
+<div class="wrap">
+
+<!-- Intro -->
+<section class="intro" id="intro">
+  <div class="eye">TURN-BASED STRATEGIC SIMULATION · 10 WEEKS</div>
+  <h1>War <i>game</i></h1>
+  <p class="tag">Iran theater, 2026. You are the senior U.S. decision-maker. Each week you issue one military order, choose one diplomatic track, and direct one covert operation. Six actors — Iran, Houthis, Hezbollah, Israel, Saudi Arabia — respond. Your goal: reopen the chokepoints, contain the conflict, avoid a global recession.</p>
+  <div class="intro-steps">
+    <div class="intro-step"><div class="n">01</div><h4>Issue military <i>orders</i></h4><p>Deploy forces, authorize strikes, or hold defensive posture. Each option costs resources and shifts the balance.</p></div>
+    <div class="intro-step"><div class="n">02</div><h4>Choose a diplomatic <i>track</i></h4><p>Activate back-channels, negotiate ceasefires, or coordinate with allies. Diplomacy builds capital that kinetic action spends.</p></div>
+    <div class="intro-step"><div class="n">03</div><h4>Direct covert <i>operations</i></h4><p>Cyber attacks, HUMINT expansion, economic warfare. High impact, low visibility — but slow to take effect.</p></div>
+    <div class="intro-step"><div class="n">04</div><h4>Watch the world <i>react</i></h4><p>Iran, the Houthis, Hezbollah, Saudi Arabia, and Israel respond. Oil prices shift. Chokepoints open or close. Your choices cascade.</p></div>
+  </div>
+  <button class="intro-btn" id="btn-begin">Begin simulation →</button>
+  <p class="small">10 weeks · 3 decisions per week · no undo</p>
+</section>
+
+<!-- Game -->
+<section class="game" id="game">
+  <div class="game-head">
+    <div class="week"><span id="week-num">W1</span><i>/10</i><span class="sub" id="week-date">Week of 8 Mar 2026</span></div>
+    <div class="status">ESCALATION RUNG · <b><span id="h-rung">7</span>/10</b><br>HORMUZ · <b><span id="h-hormuz">CLOSED</span></b><br>OIL · <b>$<span id="h-oil">105</span></b></div>
+  </div>
+
+  <div class="metrics" id="metrics"></div>
+
+  <div class="tracks">
+    <div class="track" id="tr-military">
+      <div class="h"><h3>Military <i>orders</i></h3><span class="n">TRACK 1</span></div>
+      <div class="opts" id="opts-military"></div>
+    </div>
+    <div class="track w" id="tr-diplomatic">
+      <div class="h"><h3>Diplomatic <i>track</i></h3><span class="n w">TRACK 2</span></div>
+      <div class="opts" id="opts-diplomatic"></div>
+    </div>
+    <div class="track v" id="tr-covert">
+      <div class="h"><h3>Covert <i>operations</i></h3><span class="n v">TRACK 3</span></div>
+      <div class="opts" id="opts-covert"></div>
+    </div>
+  </div>
+
+  <div class="advance">
+    <div class="info">Selected: <b id="sel-count">0 / 3</b> · You must pick one from each track before advancing.</div>
+    <button id="btn-advance" disabled>Resolve week <span>→</span></button>
+  </div>
+
+  <div class="log">
+    <h3>OPERATIONS LOG</h3>
+    <div id="log-body"></div>
+  </div>
+</section>
+
+<!-- Endgame -->
+<section class="endgame" id="endgame">
+  <div class="eye">CAMPAIGN COMPLETE · 10 WEEKS</div>
+  <h2 id="eg-title">Endstate: <i id="eg-name">—</i></h2>
+  <p class="analog" id="eg-analog">—</p>
+  <div class="score-grid">
+    <div class="score"><div class="l">OIL · FINAL</div><div class="v" id="sc-oil">$—</div></div>
+    <div class="score"><div class="l">HORMUZ</div><div class="v" id="sc-hormuz">—</div></div>
+    <div class="score"><div class="l">ESCALATION RUNG</div><div class="v" id="sc-rung">—</div></div>
+    <div class="score"><div class="l">COALITION</div><div class="v" id="sc-coalition">—</div></div>
+  </div>
+  <p class="analog" id="eg-summary" style="font-size:14px;color:var(--ink-3)">—</p>
+  <div class="endgame-actions">
+    <button id="btn-replay">Play again</button>
+    <a href="./index.html">Return to portfolio</a>
+  </div>
+</section>
+
+</div>
+
+<script>
+// ===========================================================
+// War Game — 10-week turn-based campaign
+// ===========================================================
+
+const WEEKS = 10;
+const DATES = ['8 Mar','15 Mar','22 Mar','29 Mar','5 Apr','12 Apr','19 Apr','26 Apr','3 May','10 May'];
+
+// Decision catalogue — indexed by track. Each option has:
+// label, desc, effects {rung, oil, hormuz, bab, vls, coalition, recession, diplomacy, covert}
+const CATALOG = {
+  military: [
+    { id:'m_strike_tlm',    t:'Maritime Tomahawk strikes · Iran coastal', d:'ASCM/ASBM batteries along Gulf coast. Degrades Hormuz threat but provokes retaliation.', eff:{rung:+1, oil:+3, vls:-5, coalition:-0.03} },
+    { id:'m_strike_gbu',    t:'GBU-57 strike · Fordow / Natanz',          d:'Deep penetrator strikes on nuclear sites. Signals resolve. High provocation.',         eff:{rung:+2, oil:+8, vls:-4, coalition:-0.08} },
+    { id:'m_escort_hormuz', t:'Hormuz escort Phase I · MCM + convoy',     d:'Begin mine-sweep and convoy operations. Reopens throughput. Expensive.',               eff:{rung:0, oil:-6, hormuz:+1, vls:-1, coalition:+0.02} },
+    { id:'m_csg_redeploy',  t:'Redeploy CVN-71 to Bab el-Mandeb',         d:'Signals Houthi deterrence. Trades Gulf coverage for Red Sea presence.',                eff:{rung:0, oil:-2, coalition:+0.01} },
+    { id:'m_air_patrol',    t:'Expanded air patrols over GCC',            d:'Force protection for Bahrain / Saudi / UAE. Defensive posture. Low cost.',              eff:{rung:0, oil:-1, vls:-2, coalition:+0.04} },
+    { id:'m_hold',          t:'Hold current posture',                     d:'No new orders. Let the current operation develop. No cost, no shift.',                 eff:{} },
+  ],
+  diplomatic: [
+    { id:'d_oman',    t:'Reactivate Omani back-channel',    d:'Offer 48–72h strike pause contingent on Hormuz reopening. Signals willingness to deal.',   eff:{rung:-1, oil:-3, diplomacy:+0.15, coalition:+0.03} },
+    { id:'d_qatar',   t:'Qatar-mediated Houthi outreach',   d:'Probe Houthi willingness to formalize current pause. Limited upside, no downside.',        eff:{bab:+1, diplomacy:+0.08, coalition:+0.02} },
+    { id:'d_un',      t:'UN Security Council meeting',      d:'Table a ceasefire resolution. Russia/China likely veto but the signal matters.',           eff:{diplomacy:+0.05, coalition:+0.04} },
+    { id:'d_saudi',   t:'Coordinate with Saudi Arabia',      d:'Align messaging with Riyadh. Preserves 2022 Houthi truce. Saudi oil reroute.',            eff:{oil:-2, coalition:+0.05, diplomacy:+0.05} },
+    { id:'d_euro',    t:'Rally EU / UK coalition',           d:'Aspides framework expansion. Shares cost burden but slows decisions.',                    eff:{coalition:+0.06, diplomacy:+0.04} },
+    { id:'d_silent',  t:'No diplomatic engagement',          d:'Keep all channels closed this week. Preserves leverage but drains coalition capital.',    eff:{coalition:-0.02} },
+  ],
+  covert: [
+    { id:'c_cyber',    t:'CYBERCOM · IRGC drone C2 disruption', d:'Targeted cyber against Houthi drone fire-control. Non-attributable. Takes 2+ weeks.',       eff:{covert:+0.10, bab:+1} },
+    { id:'c_humint',   t:'HUMINT · expand source network',      d:'Expand internal Iranian collection. High value, slow to yield.',                         eff:{covert:+0.15} },
+    { id:'c_treasury', t:'Treasury · deepen dollar sanctions',  d:'Iran Central Bank secondary sanctions. Oil revenue compression. Provokes ripple.',         eff:{oil:+4, covert:+0.08, recession:+0.03} },
+    { id:'c_info',     t:'Information ops · declassify evidence',d:'Release weapons-transfer intelligence. Builds coalition case. Low risk.',               eff:{covert:+0.05, coalition:+0.05} },
+    { id:'c_disrupt',  t:'Supply chain disruption · Houthi',     d:'Interdict Iranian resupply ships entering Bab el-Mandeb. Low visibility.',               eff:{bab:+1, covert:+0.10, coalition:-0.02} },
+    { id:'c_none',     t:'No covert operations',                  d:'Conserve assets. No cost, no gain.',                                                     eff:{} },
+  ],
+};
+
+// Game state
+let state = null;
+function initialState(){
+  return {
+    week: 0,
+    rung: 7,
+    oil: 105,
+    hormuz: 0,      // 0 closed, 1 phase I, 2 phase II, 3 open
+    bab: 3,         // 0 threatened, 3 contested, 5 secure
+    vls: 55,        // CENTCOM AOR VLS inventory %
+    coalition: 0.62,
+    recession: 0.25,
+    diplomacy: 0.00,
+    covert: 0.00,
+    selections: {},
+    log: [],
+    actors: { iran:0.85, houthi:0.45, hezbollah:0.60, israel:0.80, saudi:0.50 }, // hostility levels
+  };
+}
+
+function startGame(){
+  state = initialState();
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('endgame').classList.remove('on');
+  document.getElementById('game').classList.add('on');
+  document.getElementById('btn-restart').style.display = '';
+  renderWeek();
+}
+
+document.getElementById('btn-begin').addEventListener('click', startGame);
+document.getElementById('btn-restart').addEventListener('click', () => {
+  if(!confirm('Restart the campaign? Progress will be lost.')) return;
+  document.getElementById('game').classList.remove('on');
+  document.getElementById('endgame').classList.remove('on');
+  document.getElementById('intro').style.display = '';
+  document.getElementById('btn-restart').style.display = 'none';
+});
+document.getElementById('btn-replay').addEventListener('click', () => {
+  document.getElementById('endgame').classList.remove('on');
+  startGame();
+});
+
+// ============ Render ============
+function metricList(){
+  return [
+    { k:'oil',       l:'Brent $/bbl',     fmt:v => '$'+Math.round(v),             range:[70,180], thresh:[100,140], cls:v => v<90?'g':v<120?'w':'d' },
+    { k:'hormuz',    l:'Hormuz',          fmt:v => ['Closed','Phase I','Phase II','Open'][Math.min(3,Math.max(0,Math.round(v)))], range:[0,3], cls:v => v<1?'d':v<2.5?'w':'g' },
+    { k:'bab',       l:'Bab-el-Mandeb',   fmt:v => v<2?'Threatened':v<4?'Contested':'Secure', range:[0,5], cls:v => v<2?'d':v<4?'w':'g' },
+    { k:'vls',       l:'VLS inventory',   fmt:v => Math.max(0,Math.round(v))+'%', range:[0,100], cls:v => v<30?'d':v<50?'w':'g' },
+    { k:'coalition', l:'Coalition',       fmt:v => v.toFixed(2),                   range:[0,1],   cls:v => v<0.4?'d':v<0.65?'w':'g' },
+    { k:'rung',      l:'Escalation rung', fmt:v => Math.round(v)+'/10',            range:[0,10],  cls:v => v<5?'g':v<8?'w':'d' },
+  ];
+}
+
+function renderMetrics(){
+  const el = document.getElementById('metrics');
+  el.innerHTML = metricList().map(m => {
+    const val = state[m.k];
+    const pct = Math.max(0, Math.min(100, (val - m.range[0]) / (m.range[1] - m.range[0]) * 100));
+    const cls = m.cls(val);
+    return `<div class="metric"><div class="l">${m.l.toUpperCase()}</div><div class="v ${cls}">${m.fmt(val)}</div><div class="bar"><span class="${cls}" style="width:${pct}%"></span></div></div>`;
+  }).join('');
+  document.getElementById('h-rung').textContent = Math.round(state.rung);
+  document.getElementById('h-hormuz').textContent = ['CLOSED','PHASE I','PHASE II','OPEN'][Math.min(3,Math.max(0,Math.round(state.hormuz)))];
+  document.getElementById('h-oil').textContent = Math.round(state.oil);
+}
+
+function renderTracks(){
+  state.selections = {};
+  ['military','diplomatic','covert'].forEach(t => {
+    const el = document.getElementById('opts-'+t);
+    el.innerHTML = CATALOG[t].map((opt, i) => {
+      return `<button class="opt" data-track="${t}" data-i="${i}"><div class="t">${opt.t}</div><div class="d">${opt.d}</div></button>`;
+    }).join('');
+    el.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+      const track = b.dataset.track, i = +b.dataset.i;
+      state.selections[track] = i;
+      el.querySelectorAll('.opt').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+      refreshAdvance();
+    }));
+  });
+  refreshAdvance();
+}
+
+function refreshAdvance(){
+  const count = Object.keys(state.selections).length;
+  document.getElementById('sel-count').textContent = count + ' / 3';
+  document.getElementById('btn-advance').disabled = count !== 3;
+}
+
+document.getElementById('btn-advance').addEventListener('click', resolveWeek);
+
+function renderWeek(){
+  document.getElementById('week-num').textContent = 'W' + (state.week + 1);
+  document.getElementById('week-date').textContent = 'Week of ' + DATES[state.week];
+  renderMetrics();
+  renderTracks();
+  renderLog();
+}
+
+function renderLog(){
+  const el = document.getElementById('log-body');
+  el.innerHTML = state.log.map(entry => {
+    const lines = entry.lines.map(l => `<div class="l ${l.kind||''}">${l.text}</div>`).join('');
+    return `<div class="log-entry"><div class="wk">${entry.wk}</div>${lines}</div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+// ============ Resolution engine ============
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+function applyEffects(eff){
+  if(eff.rung)       state.rung       = clamp(state.rung + eff.rung, 0, 10);
+  if(eff.oil)        state.oil        = clamp(state.oil + eff.oil, 60, 220);
+  if(eff.hormuz)     state.hormuz     = clamp(state.hormuz + eff.hormuz, 0, 3);
+  if(eff.bab)        state.bab        = clamp(state.bab + eff.bab, 0, 5);
+  if(eff.vls)        state.vls        = clamp(state.vls + eff.vls, 0, 100);
+  if(eff.coalition)  state.coalition  = clamp(state.coalition + eff.coalition, 0, 1);
+  if(eff.recession)  state.recession  = clamp(state.recession + eff.recession, 0, 1);
+  if(eff.diplomacy)  state.diplomacy  = clamp(state.diplomacy + eff.diplomacy, 0, 1);
+  if(eff.covert)     state.covert     = clamp(state.covert + eff.covert, 0, 1);
+}
+
+// Adversary logic — actors respond based on current state and player moves
+function adversaryResponses(playerMoves){
+  const responses = [];
+  const MIL = CATALOG.military[playerMoves.military];
+  const DIP = CATALOG.diplomatic[playerMoves.diplomatic];
+  const COV = CATALOG.covert[playerMoves.covert];
+
+  // IRAN — responds to military provocation
+  if(MIL.id === 'm_strike_gbu' || MIL.id === 'm_strike_tlm'){
+    if(state.rung >= 8 && Math.random() < 0.45){
+      responses.push({ kind:'iran', text:'<b>IRAN:</b> Ballistic missile barrage against Al Udeid. CENTCOM intercepts most; 3 soldiers wounded.', eff:{rung:+1, vls:-4, oil:+2} });
+    } else {
+      responses.push({ kind:'iran', text:'<b>IRAN:</b> Asymmetric retaliation — FAC swarm attack on USS Roosevelt escorts. No vessel damage.', eff:{vls:-1, oil:+1} });
+    }
+    state.actors.iran = Math.min(1, state.actors.iran + 0.05);
+  } else if(DIP.id === 'd_oman'){
+    if(state.diplomacy > 0.35 && Math.random() < 0.55){
+      responses.push({ kind:'iran', text:'<b>IRAN (via Oman):</b> Signals receptiveness to ceasefire framework. IRIS Dena investigation to proceed.', eff:{diplomacy:+0.08, rung:-0.5} });
+      state.actors.iran = Math.max(0, state.actors.iran - 0.04);
+    } else {
+      responses.push({ kind:'iran', text:'<b>IRAN:</b> Rejects Omani proposal. Hardliners demand unconditional strike halt first.', eff:{} });
+    }
+  }
+
+  // HOUTHIS — reentry decision based on cumulative pressure
+  const houthiTrigger = state.actors.iran * 0.4 + (1 - state.bab/5) * 0.3 + (state.rung/10) * 0.2 + Math.random() * 0.3;
+  if(state.week >= 2 && houthiTrigger > 0.65 && state.bab > 1){
+    responses.push({ kind:'houthi', text:'<b>HOUTHIS:</b> Limited Red Sea strikes resume. 2 anti-ship ballistic missiles launched · 1 intercepted.', eff:{bab:-1, oil:+4, coalition:-0.02} });
+    state.actors.houthi = Math.min(1, state.actors.houthi + 0.10);
+  } else if(DIP.id === 'd_qatar' && Math.random() < 0.4){
+    responses.push({ kind:'houthi', text:'<b>HOUTHIS (via Qatar):</b> Pause extended. Conditioned on halt of US Red Sea transits for 14 days.', eff:{bab:+1, diplomacy:+0.04} });
+  }
+
+  // HEZBOLLAH — activates if Iran is squeezed
+  if(state.actors.iran > 0.9 && Math.random() < 0.35){
+    responses.push({ kind:'hez', text:'<b>HEZBOLLAH:</b> Rocket barrage against northern Israel. IDF responds with airstrikes on Beqaa.', eff:{rung:+0.5, coalition:-0.02} });
+  }
+
+  // ISRAEL — escalates when Iran escalates
+  if(state.actors.iran > 0.88 && Math.random() < 0.55){
+    responses.push({ kind:'israel', text:'<b>ISRAEL:</b> IDF conducts autonomous strikes on IRGC-QF facilities outside Tehran.', eff:{rung:+0.5, oil:+2, coalition:-0.01} });
+  } else if(MIL.id === 'm_air_patrol' || MIL.id === 'm_escort_hormuz'){
+    if(Math.random() < 0.3){
+      responses.push({ kind:'israel', text:'<b>ISRAEL:</b> Coordinates air defense posture with CENTCOM. Arrow intercept rate improves.', eff:{vls:+2, coalition:+0.02} });
+    }
+  }
+
+  // SAUDI ARABIA — Yanbu + truce preservation
+  if(DIP.id === 'd_saudi'){
+    responses.push({ kind:'saudi', text:'<b>SAUDI ARABIA:</b> Increases Yanbu reroute capacity to 4.2M bbl/day. Maintains 2022 Houthi truce.', eff:{oil:-3, coalition:+0.03} });
+  } else if(state.bab < 2 && Math.random() < 0.3){
+    responses.push({ kind:'saudi', text:'<b>SAUDI ARABIA:</b> Expresses concern about dual-chokepoint risk. Signals neutrality if Bab closes.', eff:{coalition:-0.03} });
+  }
+
+  // Second-order world effects
+  // Oil drift based on chokepoint status
+  if(state.hormuz < 1.5) state.oil = clamp(state.oil + (Math.random() * 3 - 1), 60, 220);
+  else if(state.hormuz > 2) state.oil = clamp(state.oil - Math.random() * 2, 60, 220);
+  if(state.bab < 2 && Math.random() < 0.4){
+    responses.push({ kind:'', text:'<b>World reaction:</b> EU considering emergency energy meeting. German 10y yields +18bp.', eff:{recession:+0.02} });
+  }
+
+  return responses;
+}
+
+function resolveWeek(){
+  const picks = {
+    military: state.selections.military,
+    diplomatic: state.selections.diplomatic,
+    covert: state.selections.covert,
+  };
+  const wLines = [];
+  wLines.push({ kind:'us', text:'<b>US · MIL:</b> ' + CATALOG.military[picks.military].t });
+  wLines.push({ kind:'us', text:'<b>US · DIP:</b> ' + CATALOG.diplomatic[picks.diplomatic].t });
+  wLines.push({ kind:'us', text:'<b>US · COV:</b> ' + CATALOG.covert[picks.covert].t });
+
+  // Apply player effects
+  applyEffects(CATALOG.military[picks.military].eff);
+  applyEffects(CATALOG.diplomatic[picks.diplomatic].eff);
+  applyEffects(CATALOG.covert[picks.covert].eff);
+
+  // Adversary responses
+  const responses = adversaryResponses(picks);
+  responses.forEach(r => {
+    wLines.push(r);
+    if(r.eff) applyEffects(r.eff);
+  });
+
+  // Baseline weekly drift
+  state.oil = clamp(state.oil + (Math.random() * 1.5 - 0.5), 60, 220);
+  state.coalition = clamp(state.coalition - 0.005, 0, 1); // natural decay
+  state.vls = clamp(state.vls - 1.2, 0, 100); // natural depletion
+
+  state.log.unshift({ wk: 'WEEK ' + (state.week + 1) + ' · ' + DATES[state.week], lines: wLines });
+  state.week += 1;
+
+  if(state.week >= WEEKS) endgame();
+  else renderWeek();
+}
+
+// ============ Endgame ============
+function endgame(){
+  document.getElementById('game').classList.remove('on');
+  document.getElementById('endgame').classList.add('on');
+  document.getElementById('btn-restart').style.display = 'none';
+
+  // Score the endstate
+  let title, analog, summary, cls = 'w';
+  const coalitionOK = state.coalition > 0.55;
+  const hormuzOpen = state.hormuz > 1.5;
+  const rungLow = state.rung < 7;
+  const oilLow = state.oil < 115;
+
+  if(hormuzOpen && rungLow && coalitionOK && oilLow){
+    title = 'Managed exit — favorable';
+    analog = '<b>Historical analog: Tanker War (1988).</b> Diplomatic re-engagement paired with sustained presence. Chokepoints reopened through combined military pressure and Omani mediation. Costs contained.';
+    summary = 'The Omani channel held. Hormuz traffic resumed. Oil prices stabilized below $120. Coalition intact. Iran did not escalate to direct conflict. The preferred endstate.';
+    cls = 'g';
+  } else if(state.rung >= 9 || state.coalition < 0.3){
+    title = 'Regional war — catastrophic';
+    analog = '<b>Historical analog: Iran–Iraq War (1980–88).</b> Escalation to multi-theater conflict. Coalition fragmented. Direct US–Iran kinetic exchange. Oil above $150. Global recession probable.';
+    summary = 'Rung 9+ reached. Coalition fractured. The war expanded beyond containment. Ground forces committed. $100B+ supplemental required. Consequences will unfold for years.';
+    cls = 'd';
+  } else if(!hormuzOpen && state.oil > 140){
+    title = 'Protracted stalemate';
+    analog = '<b>Historical analog: 1979–81 Iran hostage crisis + 1980 oil shock.</b> Chokepoints remain closed. Prices elevated. Coalition strained. No political settlement.';
+    summary = 'Hormuz still closed at campaign end. Oil persistently above $140. Recession risk elevated. Status quo has become unsustainable but no off-ramp was activated.';
+    cls = 'w';
+  } else if(hormuzOpen && !rungLow){
+    title = 'Military success, political drift';
+    analog = '<b>Historical analog: Operation Praying Mantis (1988).</b> Tactical victories. Hormuz reopened through force. But diplomatic framework never materialized — unresolved grievance.';
+    summary = 'The chokepoints reopened through military pressure. But the escalation rung stayed high. No diplomatic framework was locked in. Risk of rapid return to crisis posture in months.';
+    cls = 'a';
+  } else {
+    title = 'Mixed outcome';
+    analog = '<b>Historical analog: Quasi-War with France (1798–1800).</b> Limited kinetic engagement bounded by political maneuver. No clear victor.';
+    summary = 'Mixed results across the board. Some objectives partially met. The next administration will inherit an unresolved but managed conflict.';
+    cls = 'w';
+  }
+
+  document.getElementById('eg-name').textContent = title;
+  document.getElementById('eg-analog').innerHTML = analog;
+  document.getElementById('eg-summary').innerHTML = summary;
+  document.getElementById('sc-oil').textContent = '$' + Math.round(state.oil);
+  document.getElementById('sc-oil').className = 'v ' + (state.oil < 100 ? 'g' : state.oil < 140 ? 'w' : 'd');
+  document.getElementById('sc-hormuz').textContent = ['Closed','Phase I','Phase II','Open'][Math.min(3,Math.round(state.hormuz))];
+  document.getElementById('sc-hormuz').className = 'v ' + (state.hormuz < 1 ? 'd' : state.hormuz < 2.5 ? 'w' : 'g');
+  document.getElementById('sc-rung').textContent = Math.round(state.rung) + '/10';
+  document.getElementById('sc-rung').className = 'v ' + (state.rung < 5 ? 'g' : state.rung < 8 ? 'w' : 'd');
+  document.getElementById('sc-coalition').textContent = state.coalition.toFixed(2);
+  document.getElementById('sc-coalition').className = 'v ' + (state.coalition > 0.65 ? 'g' : state.coalition > 0.4 ? 'w' : 'd');
+}
+</script>
+</body>
+</html>

@@ -61,9 +61,9 @@ export const TACTICAL_THEME = Object.freeze({
     onSurfaceVariant: "#bec7d4",
     outline: "#88919d",
     outlineVariant: "#3f4852",
-    commandBlue: "#00A3FF",
-    primary: "#98cbff",
-    secondary: "#67d4f9",
+    commandBlue: "#0EA5E9",
+    primary: "#38BDF8",
+    secondary: "#7DD3FC",
     amber: "#ffba20",
     critical: "#ff4d4d",
     peach: "#ffb186"
@@ -77,7 +77,7 @@ export const TACTICAL_THEME = Object.freeze({
   effects: {
     glassBlur: "16px",
     thinFilmBorder: "1px solid rgba(255,255,255,.10)",
-    commandGlow: "0 0 18px rgba(0,163,255,.28)",
+    commandGlow: "0 0 18px rgba(14,165,233,.28)",
     criticalGlow: "0 0 18px rgba(255,77,77,.30)",
     scanlineOpacity: 0.2
   }
@@ -162,6 +162,14 @@ export const NAV_MODULES = Object.freeze([
   { id: "executive-briefing", label: "Executive Briefing", icon: "article", objective: "Prepare decision-grade reports and briefing tools." }
 ]);
 
+export const SIDEBAR_TARGETS = Object.freeze([
+  { id: "orbital-theater", label: "Orbital Theater", icon: "public", screenId: "68817393c07c4e0baa7344d5b0281c9f" },
+  { id: "asset-tracking", label: "Asset Tracking", icon: "satellite", screenId: "44bccb7dfe5d4c5d85b1d0764bdf4d6e" },
+  { id: "signal-intel", label: "Signal Intel", icon: "radar", screenId: "e3c603dbe52d49e89822b3c8adbab77a" },
+  { id: "threat-matrix", label: "Threat Matrix", icon: "warning", screenId: "87bde3d47be94b5392ab335ec86cfd46" },
+  { id: "comm-link", label: "Comm Link", icon: "cell_tower", screenId: "69b8e3c7a8e84d1a8464cb1f2f7f18fa" }
+]);
+
 export const TERMINAL_HIERARCHY = Object.freeze({
   root: {
     id: "command-center",
@@ -194,11 +202,19 @@ export const EXECUTIVE_BRIEFING_TOOLS = Object.freeze([
 ]);
 
 const DIRECTIVES = Object.freeze({
-  mil1: { label: "Raise orbital asset readiness", impact: 11, domain: "orbital" },
-  dip3: { label: "Open allied diplomatic backchannel", impact: -6, domain: "executive-briefing" },
-  sig2: { label: "Escalate signal-intelligence sweep", impact: 8, domain: "electronic-warfare" },
-  drone5: { label: "Retask UAV swarm to maritime ISR", impact: 5, domain: "drone-swarm" },
-  hormuz7: { label: "Advance Hormuz escalation ladder", impact: 14, domain: "hormuz-escalation" }
+  // Military track
+  mil1:    { label: "Raise orbital asset readiness",       impact: 11,  domain: "orbital"            },
+  drone5:  { label: "Retask UAV swarm to maritime ISR",    impact:  5,  domain: "drone-swarm"        },
+  // Diplomatic track
+  dip3:    { label: "Open allied diplomatic backchannel",  impact: -6,  domain: "executive-briefing" },
+  dip1:    { label: "Engage Saudi Arabia liaison",         impact: -4,  domain: "executive-briefing" },
+  dip2:    { label: "Activate UAE backchannel",            impact: -3,  domain: "executive-briefing" },
+  // Intelligence track
+  sig2:    { label: "Escalate signal-intelligence sweep",  impact:  8,  domain: "electronic-warfare" },
+  int1:    { label: "SIGINT surge — Qeshm Island",         impact:  6,  domain: "electronic-warfare" },
+  int2:    { label: "HUMINT asset activation",             impact:  7,  domain: "electronic-warfare" },
+  // Escalation track
+  hormuz7: { label: "Advance Hormuz escalation ladder",    impact: 14,  domain: "hormuz-escalation"  }
 });
 
 function seededNoise(seed, week, salt) {
@@ -232,6 +248,24 @@ export function createHubState(options = {}) {
     activeScreenId: drillDown[activeModule]?.activeScreenId ?? STITCH_PROJECT.homeScreenId,
     drillDown,
     terminalTransitions: [],
+    strikePlanner: {
+      lockedSolutionId: null,
+      lockCount: 0
+    },
+    threatMatrix: {
+      activeProtocolId: null,
+      protocolCount: 0
+    },
+    hormuzParameters: {
+      economicPressure: 50,
+      navalPosture: 40,
+      allianceCohesion: 65,
+      escalationRate: 35,
+      oilPrice: 105,
+      recession: 46
+    },
+    causalBeliefs: {},
+    causalInterventions: {},
     system: {
       seed: options.seed ?? 0x5a17c0de,
       week: 1,
@@ -241,6 +275,8 @@ export function createHubState(options = {}) {
       spectrumIntegrity: 78,
       swarmCohesion: 83,
       hormuzEscalation: 46,
+      hormuzHistory: [{ week: 1, escalation: 46 }],
+      actors: { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 },
       log: [
         "Final Stitch canvas synced: Tactical Operations Command",
         "Command Center hierarchy initialized",
@@ -329,6 +365,24 @@ export function advanceWarRoom(state, directiveIds = []) {
   const threat = Math.max(0, Math.min(100, state.system.threat + impact + noise - 4));
   const hormuzEscalation = Math.max(0, Math.min(100, state.system.hormuzEscalation + (applied.some((item) => item.domain === "hormuz-escalation") ? 12 : 2)));
 
+  // Actor hostility drift — simplified from reference war-room.html adversary models.
+  // Iran responds to military pressure (escalates) and diplomatic engagement (de-escalates).
+  // Houthis track Iranian support + degrade under drone ops.
+  // Israel escalates if Iran crosses 0.82 hostility threshold.
+  // KSA de-escalates under direct Saudi liaison directive.
+  const prev = state.system.actors ?? { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 };
+  const hasMilitary   = applied.some(d => d.id === "mil1");
+  const hasDiplomatic = applied.some(d => d.domain === "executive-briefing");
+  const hasDroneOps   = applied.some(d => d.domain === "drone-swarm");
+  const hasEscalation = applied.some(d => d.domain === "hormuz-escalation");
+  const nf = (noise - 4) * 0.008;
+  const actors = {
+    iran:    Math.max(0, Math.min(1, prev.iran    + (hasMilitary || hasEscalation ? 0.04 : 0.01) + (hasDiplomatic ? -0.06 : 0) + nf)),
+    houthis: Math.max(0, Math.min(1, prev.houthis + prev.iran * 0.03 + (hasDroneOps ? -0.05 : 0.01) + nf * 0.5)),
+    israel:  Math.max(0, Math.min(1, prev.israel  + (prev.iran > 0.82 ? 0.05 : -0.01))),
+    ksa:     Math.max(0, Math.min(1, prev.ksa     + (directiveIds.includes("dip1") ? -0.08 : 0.01)))
+  };
+
   return {
     ...state,
     activeModule: "war-room",
@@ -339,9 +393,11 @@ export function advanceWarRoom(state, directiveIds = []) {
       readiness: Math.max(0, Math.min(100, state.system.readiness + applied.length * 3 - Math.ceil(threat / 25))),
       threat,
       hormuzEscalation,
+      hormuzHistory: [...(state.system.hormuzHistory ?? []), { week, escalation: hormuzEscalation }],
       spectrumIntegrity: Math.max(25, Math.min(100, state.system.spectrumIntegrity - (applied.some((item) => item.domain === "electronic-warfare") ? 7 : 1))),
       swarmCohesion: Math.max(35, Math.min(100, state.system.swarmCohesion + (applied.some((item) => item.domain === "drone-swarm") ? 4 : -1))),
       confidence: Math.max(45, Math.min(99, state.system.confidence + (threat > 60 ? -4 : 2))),
+      actors,
       log: [
         ...state.system.log,
         ...applied.map((directive) => `W${week}: ${directive.label}`),
@@ -349,6 +405,79 @@ export function advanceWarRoom(state, directiveIds = []) {
       ]
     }
   };
+}
+
+export function lockStrikeSolution(state, solutionId) {
+  if (!solutionId) {
+    throw new RangeError("Strike solution id is required");
+  }
+
+  const strikeScreenId = "de9fb7397dfe4e5e8668347badd31b3c";
+  return updateDrillDownState({
+    ...state,
+    activeModule: "war-room",
+    activeTerminal: "war-room",
+    activeScreenId: strikeScreenId,
+    strikePlanner: {
+      ...state.strikePlanner,
+      lockedSolutionId: solutionId,
+      lockCount: (state.strikePlanner?.lockCount ?? 0) + 1
+    },
+    system: {
+      ...state.system,
+      readiness: Math.min(100, state.system.readiness + 2),
+      confidence: Math.min(99, state.system.confidence + 1),
+      log: [
+        ...state.system.log,
+        `W${state.system.week}: Strike solution locked / ${solutionId}`
+      ]
+    }
+  }, "war-room", {
+    activeScreenId: strikeScreenId,
+    selectedNodeId: solutionId,
+    panel: "assets"
+  });
+}
+
+// Per-protocol state deltas — matched exactly to THREAT_PROTOCOLS display labels.
+const PROTOCOL_EFFECTS = Object.freeze({
+  containment:    { threat: -6, readiness:  0, spectrumIntegrity:  0 },
+  deconflict:     { threat: -2, readiness: +4, spectrumIntegrity:  0 },
+  "signal-sweep": { threat: -4, readiness:  0, spectrumIntegrity: +8 }
+});
+
+export function initiateThreatProtocol(state, protocolId) {
+  if (!protocolId) {
+    throw new RangeError("Threat protocol id is required");
+  }
+
+  const effect = PROTOCOL_EFFECTS[protocolId] ?? PROTOCOL_EFFECTS.containment;
+  const threatScreenId = "87bde3d47be94b5392ab335ec86cfd46";
+  return updateDrillDownState({
+    ...state,
+    activeModule: "war-room",
+    activeTerminal: "war-room",
+    activeScreenId: threatScreenId,
+    threatMatrix: {
+      ...state.threatMatrix,
+      activeProtocolId: protocolId,
+      protocolCount: (state.threatMatrix?.protocolCount ?? 0) + 1
+    },
+    system: {
+      ...state.system,
+      threat: Math.max(0, state.system.threat + effect.threat),
+      readiness: Math.max(0, Math.min(100, state.system.readiness + effect.readiness)),
+      spectrumIntegrity: Math.max(25, Math.min(100, state.system.spectrumIntegrity + effect.spectrumIntegrity)),
+      log: [
+        ...state.system.log,
+        `W${state.system.week}: Threat protocol initiated / ${protocolId}`
+      ]
+    }
+  }, "war-room", {
+    activeScreenId: threatScreenId,
+    selectedNodeId: protocolId,
+    panel: "spectrum"
+  });
 }
 
 export function getLayerSummary(state) {
@@ -377,5 +506,284 @@ export function validateAssetMappings() {
   return {
     valid: assets.every((asset) => asset.valid),
     assets
+  };
+}
+
+// ─── Shared UI constants ──────────────────────────────────────────────────────
+// Single canonical source for data used across multiple modules.
+// Previously duplicated between src/app.js and src/modules/war-room.js.
+
+export const STRIKE_SOLUTIONS = Object.freeze([
+  { id: "solution-blue",  label: "Blue Vector",  eta: "T+04", confidence: 91, posture: "ISR hold"   },
+  { id: "solution-echo",  label: "Echo Net",     eta: "T+07", confidence: 84, posture: "Signal mask" },
+  { id: "solution-umbra", label: "Umbra Lane",   eta: "T+11", confidence: 78, posture: "Standby"     }
+]);
+
+// Delta labels match PROTOCOL_EFFECTS exactly — each protocol has distinct mechanical effects.
+export const THREAT_PROTOCOLS = Object.freeze([
+  { id: "containment",   label: "Containment",  delta: "-6 THREAT",   tone: "chip-cyan"  },
+  { id: "deconflict",    label: "Deconflict",   delta: "+4 READY",    tone: "chip-amber" },
+  { id: "signal-sweep",  label: "Signal Sweep", delta: "+8 SPECTRUM", tone: "chip-cyan"  }
+]);
+
+// Orbital sensor lattice nodes — used in orbital and drone-swarm display.
+export const SENSOR_NODES = Object.freeze([
+  "UAV-RAVEN-03", "EW-NODE-12", "HORMUZ-LANE-A", "SAT-LINK-7"
+]);
+
+// Six-actor war game cast. Posture is computed from state in the war-room module.
+export const WAR_GAME_ACTORS = Object.freeze([
+  { id: "us",    label: "United States", icon: "verified_user" },
+  { id: "iran",  label: "Iran",          icon: "swords"        },
+  { id: "uae",   label: "UAE",           icon: "shield"        },
+  { id: "ksa",   label: "Saudi Arabia",  icon: "groups"        },
+  { id: "oman",  label: "Oman",          icon: "handshake"     },
+  { id: "china", label: "China",         icon: "language"      }
+]);
+
+// Ten-rung strategic escalation model, adapted from reference escalation-simulator.html.
+// Used by hormuz-escalation module for narrative context; Phase 3 will tie rung to hormuzEscalation.
+export const ESCALATION_RUNGS = Object.freeze([
+  { rung: 0, name: "Status Quo",            color: "#38BDF8", desc: "Routine maritime security operations. CENTCOM monitoring. No active kinetic exchanges." },
+  { rung: 1, name: "Maritime Harassment",   color: "#7DD3FC", desc: "IRGCN harassment of commercial shipping. US carrier strike group surges to the Gulf." },
+  { rung: 2, name: "Limited Strikes",       color: "#ffba20", desc: "US-UK precision strikes on Houthi launch infrastructure. IRGCN deploys mines in shipping lanes." },
+  { rung: 3, name: "Sustained Campaign",    color: "#ffba20", desc: "Sustained allied air strikes on Houthi and IRGCN infrastructure. Saudi-UAE airspace coordinated." },
+  { rung: 4, name: "HVT Decapitation",      color: "#ff9040", desc: "High-value target strikes on IRGCN command nodes. Proxy network structure degraded." },
+  { rung: 5, name: "Ceasefire Window",      color: "#4ade80", desc: "US-Houthi ceasefire framework via Oman channel. Fragile 72-hour negotiation window." },
+  { rung: 6, name: "Iran Strike",           color: "#ff4d4d", desc: "US-Israel combined strike on Iranian nuclear and IRGCN naval facilities. Direct war risk." },
+  { rung: 7, name: "Hormuz Closure",        color: "#ff4d4d", desc: "Iran closes the Strait. Global oil markets in shock. $160/bbl price spike imminent." },
+  { rung: 8, name: "Dual Chokepoint",       color: "#ff4d4d", desc: "Houthis re-enter full war footing. Bab el-Mandeb fully blocked. Dual chokepoint crisis." },
+  { rung: 9, name: "Regional War",          color: "#ff0000", desc: "Full regional escalation. Multiple state actors in direct conflict. Catastrophic scenario." }
+]);
+
+// Real-world geographic asset data for the Persian Gulf / Hormuz theater.
+// Phase 3c will render these on a Leaflet 2D map (CartoDB DarkMatter tiles).
+// Coordinates verified against open-source geographic sources.
+export const THEATER_ASSETS = Object.freeze([
+  // US Naval assets
+  { id: "CVN-71",        label: "USS Theodore Roosevelt (CSG)",  lat: 25.8, lng: 61.2, type: "naval",      icon: "directions_boat" },
+  { id: "CVN-70",        label: "USS Carl Vinson (CSG)",         lat: 24.0, lng: 58.5, type: "naval",      icon: "directions_boat" },
+  // US / Coalition air bases
+  { id: "AL-UDEID",      label: "Al Udeid AB — CAOC",            lat: 25.1, lng: 51.3, type: "base",       icon: "flight_takeoff"  },
+  { id: "AL-DHAFRA",     label: "Al Dhafra AB — ISR Hub",        lat: 24.2, lng: 54.5, type: "base",       icon: "flight_takeoff"  },
+  { id: "DIEGO-GARCIA",  label: "Diego Garcia",                  lat: -7.3, lng: 72.4, type: "base",       icon: "flight_takeoff"  },
+  // Iranian targets / IRGCN
+  { id: "BANDAR-ABBAS",  label: "Bandar Abbas — IRGCN HQ",       lat: 27.2, lng: 56.3, type: "threat",     icon: "swords"          },
+  { id: "FORDOW",        label: "Fordow Nuclear Facility",        lat: 34.9, lng: 49.7, type: "threat",     icon: "warning"         },
+  { id: "NATANZ",        label: "Natanz Nuclear Facility",        lat: 33.7, lng: 51.7, type: "threat",     icon: "warning"         },
+  // Houthi zones (Yemen)
+  { id: "HODEIDAH",      label: "Hodeidah Port — Houthi",        lat: 14.8, lng: 42.9, type: "threat",     icon: "swords"          },
+  { id: "SANAA-OPS",     label: "Sana'a Operations Cell",        lat: 15.4, lng: 44.2, type: "threat",     icon: "swords"          },
+  // Critical chokepoints
+  { id: "HORMUZ-STRAIT", label: "Strait of Hormuz",              lat: 26.6, lng: 56.4, type: "chokepoint", icon: "crisis_alert"    },
+  { id: "BAB-MANDEB",    label: "Bab el-Mandeb",                 lat: 12.6, lng: 43.4, type: "chokepoint", icon: "crisis_alert"    },
+  // UAV nodes (match drone-swarm.js UAV_NODES)
+  { id: "UAV-RAVEN-03",  label: "UAV RAVEN-03 — ISR",           lat: 26.1, lng: 56.3, type: "uav",        icon: "flight"          },
+  { id: "UAV-HAWK-07",   label: "UAV HAWK-07 — Strike",         lat: 25.4, lng: 57.8, type: "uav",        icon: "flight"          },
+  { id: "UAV-GHOST-12",  label: "UAV GHOST-12 — EW",            lat: 27.2, lng: 55.1, type: "uav",        icon: "flight"          },
+  { id: "UAV-SHADE-19",  label: "UAV SHADE-19 — Relay",         lat: 24.8, lng: 58.5, type: "uav",        icon: "flight"          }
+]);
+
+// Theater bounds for Leaflet map initialisation: Persian Gulf + Red Sea + Oman Sea approach.
+// Use: map.fitBounds(THEATER_BOUNDS); initial zoom covers the full operational area.
+// Use: map.flyToBounds(HORMUZ_ZOOM_BOUNDS) for Strait close-up on hormuz module activation.
+export const THEATER_BOUNDS    = Object.freeze([[10, 38], [32, 67]]);
+export const HORMUZ_ZOOM_BOUNDS = Object.freeze([[24.5, 54.0], [28.5, 59.5]]);
+
+/**
+ * Apply Hormuz strategic parameters. Sliders drive a pressure delta relative
+ * to the neutral baseline (navalPosture 40, escalationRate 35,
+ * economicPressure 50, allianceCohesion 65). Departures from baseline push
+ * hormuzEscalation up or down proportionally.
+ */
+export function setHormuzParameters(state, params) {
+  const prev = state.hormuzParameters ?? {
+    economicPressure: 50, navalPosture: 40, allianceCohesion: 65, escalationRate: 35
+  };
+  const merged = { ...prev, ...params };
+
+  const delta = Math.round(
+    (merged.navalPosture    - 40) * 0.25 +
+    (merged.escalationRate  - 35) * 0.20 +
+    (merged.economicPressure - 50) * 0.10 +
+    (65 - merged.allianceCohesion) * 0.10
+  );
+
+  const newEscalation = Math.max(0, Math.min(100, state.system.hormuzEscalation + delta));
+  // Adapted from reference dashboard.html oil-price model:
+  // oilPrice = $75 baseline + escalation-driven supply shock (max +$65 at full closure)
+  // recession = probability derived from price spike + escalation severity
+  const oilPrice = Math.round(75 + (newEscalation / 100) * 65);
+  const recession = Math.min(95, Math.max(5, Math.round((oilPrice - 80) * 1.2 + newEscalation * 0.35)));
+  return {
+    ...state,
+    hormuzParameters: { ...merged, oilPrice, recession },
+    system: {
+      ...state.system,
+      hormuzEscalation: newEscalation,
+      hormuzHistory: [
+        ...(state.system.hormuzHistory ?? []),
+        { week: state.system.week, escalation: newEscalation, source: "parameters" }
+      ],
+      log: [
+        ...state.system.log,
+        `W${state.system.week}: Hormuz parameters applied — index ${newEscalation}`
+      ]
+    }
+  };
+}
+
+// ─── Causal Inference Engine (Phase 3) ───────────────────────────────────────
+//
+// Bayesian DAG over 18 simulation nodes. Root nodes are sampled with Gaussian
+// noise around the current state metric; derived nodes use sigmoid CPTs adapted
+// from reference causal-cascade.html. The DAG is acyclic (two cycles in the
+// visualization layer — alliance↔diplo and threat↔esc-rate — are resolved here
+// by removing diplo→alliance and keeping eco→esc-rate as the causal direction).
+//
+// Topology: naval, alliance, eco, spectrum, swarm, protocols, strike-lock, week,
+// lock-count (roots) → hormuz, diplo → esc-rate → threat → readiness, confidence,
+// sys-stress, isr, ew-density (leaves)
+
+// Topological order: must be exported so war-room can iterate in the right order.
+export const CAUSAL_NODE_ORDER = Object.freeze([
+  "naval", "alliance", "eco", "spectrum", "swarm", "protocols", "strike-lock", "week", "lock-count",
+  "hormuz", "diplo",
+  "esc-rate",
+  "threat",
+  "readiness", "confidence", "sys-stress", "isr", "ew-density"
+]);
+
+// Node definitions. Root nodes have `prior(state) → 0-1`. Derived nodes have
+// `cpt: { i: intercept, p: [[parentId, weight], ...] }`.
+// CPT weights calibrated so default state (week=1, threat=41, hormuzEscalation=46, …)
+// produces posterior beliefs consistent with observed metric values.
+const CAUSAL_NODE_DEFS = Object.freeze([
+  // ── Root nodes (sampled with noise around current state value) ──
+  { id: "naval",       prior: s => (s.hormuzParameters?.navalPosture     ?? 40) / 100 },
+  { id: "alliance",    prior: s => (s.hormuzParameters?.allianceCohesion ?? 65) / 100 },
+  { id: "eco",         prior: s => (s.hormuzParameters?.economicPressure ?? 50) / 100 },
+  { id: "spectrum",    prior: s => s.system.spectrumIntegrity / 100 },
+  { id: "swarm",       prior: s => s.system.swarmCohesion / 100 },
+  { id: "protocols",   prior: s => Math.min(1, (s.threatMatrix?.protocolCount  ?? 0) / 5) },
+  { id: "strike-lock", prior: s => (s.strikePlanner?.lockedSolutionId ? 1 : 0) },
+  { id: "week",        prior: s => (s.system.week - 1) / 9 },
+  { id: "lock-count",  prior: s => Math.min(1, (s.strikePlanner?.lockCount ?? 0) / 4) },
+  // ── Derived nodes (sigmoid CPT, parents in CAUSAL_NODE_ORDER order) ──
+  // hormuz: naval posture and campaign week are primary drivers
+  { id: "hormuz",    cpt: { i: -1.3, p: [["naval", 2.5], ["week", 1.5]] } },
+  // diplo: driven by alliance cohesion
+  { id: "diplo",     cpt: { i: -1.5, p: [["alliance", 2.5]] } },
+  // esc-rate: driven by economic pressure
+  { id: "esc-rate",  cpt: { i: -1.9, p: [["eco", 2.5]] } },
+  // threat: hormuz + naval + escalation rate escalate; active protocols suppress
+  { id: "threat",    cpt: { i: -2.8, p: [["hormuz", 2.5], ["naval", 1.5], ["esc-rate", 2.0], ["protocols", -1.5]] } },
+  // readiness: high threat degrades; swarm cohesion improves
+  { id: "readiness", cpt: { i: -0.3, p: [["threat", -2.0], ["swarm", 2.5]] } },
+  // confidence: threat erodes; alliance + locks improve
+  { id: "confidence",cpt: { i:  1.5, p: [["threat", -1.5], ["alliance", 1.5], ["strike-lock", 1.0], ["lock-count", 0.8]] } },
+  // sys-stress: driven by threat, hormuz, and strike commitment
+  { id: "sys-stress",cpt: { i: -2.4, p: [["threat", 2.5], ["hormuz", 1.5], ["strike-lock", 0.8]] } },
+  // isr: spectrum integrity + swarm assets
+  { id: "isr",       cpt: { i: -2.1, p: [["spectrum", 2.0], ["swarm", 1.5]] } },
+  // ew-density: spectrum integrity is the sole driver
+  { id: "ew-density",cpt: { i: -1.1, p: [["spectrum", 2.5]] } }
+]);
+
+// Build lookup map for O(1) access during propagation
+const _CAUSAL_MAP = Object.fromEntries(CAUSAL_NODE_DEFS.map(n => [n.id, n]));
+
+function _sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+
+// Gaussian noise via Box-Muller (approximated cheaply with 3-uniform sum)
+function _gaussianNoise(sigma) {
+  return ((Math.random() + Math.random() + Math.random()) - 1.5) * sigma * 1.15;
+}
+
+/**
+ * Monte Carlo forward sampling through the causal DAG.
+ * interventions: { [nodeId]: 0-1 } — clamp a node to a fixed value (do-calculus).
+ * Returns { [nodeId]: posterior_probability } for all 18 nodes.
+ */
+export function propagateCausalBeliefs(state, interventions = {}, iters = 1000) {
+  const sums = {};
+  for (const id of CAUSAL_NODE_ORDER) sums[id] = 0;
+
+  for (let i = 0; i < iters; i++) {
+    const s = {};
+    for (const id of CAUSAL_NODE_ORDER) {
+      if (interventions[id] !== undefined) {
+        s[id] = interventions[id];
+      } else {
+        const def = _CAUSAL_MAP[id];
+        if (def.prior) {
+          const obs = def.prior(state);
+          s[id] = Math.max(0.01, Math.min(0.99, obs + _gaussianNoise(0.07)));
+        } else {
+          let logit = def.cpt.i;
+          for (const [pid, w] of def.cpt.p) logit += w * s[pid];
+          s[id] = _sigmoid(logit);
+        }
+      }
+      sums[id] += s[id]; // accumulate every node, including clamped ones
+    }
+  }
+
+  const beliefs = {};
+  for (const id of CAUSAL_NODE_ORDER) beliefs[id] = sums[id] / iters;
+  return beliefs;
+}
+
+/**
+ * Sensitivity of targetId to each upstream node: ΔP(target | clamp=HI) vs clamp=LO.
+ * Returns array sorted by |delta| descending.
+ */
+export function computeSensitivity(state, targetId, iters = 120) {
+  const intv = state.causalInterventions ?? {};
+  const results = [];
+  for (const id of CAUSAL_NODE_ORDER) {
+    if (id === targetId) continue;
+    const hi  = propagateCausalBeliefs(state, { ...intv, [id]: 0.98 }, iters)[targetId];
+    const lo  = propagateCausalBeliefs(state, { ...intv, [id]: 0.02 }, iters)[targetId];
+    results.push({ nodeId: id, delta: (hi - lo) / 2 });
+  }
+  return results.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+}
+
+/** Dispatch: run propagation, store beliefs + active interventions in state. */
+export function updateCausalBeliefs(state, extraInterventions = {}) {
+  const interventions = { ...(state.causalInterventions ?? {}), ...extraInterventions };
+  const beliefs = propagateCausalBeliefs(state, interventions, 1000);
+  return {
+    ...state,
+    causalBeliefs: beliefs,
+    causalInterventions: interventions,
+    system: {
+      ...state.system,
+      log: [...state.system.log, `W${state.system.week}: Causal propagation — 1 000 trials, ${Object.keys(interventions).length} interventions`]
+    }
+  };
+}
+
+/** Dispatch: clamp one node to a value (0-1), or null to release the clamp. Re-propagates. */
+export function setCausalIntervention(state, nodeId, value) {
+  const interventions = { ...(state.causalInterventions ?? {}) };
+  if (value === null) { delete interventions[nodeId]; }
+  else { interventions[nodeId] = value; }
+  const beliefs = propagateCausalBeliefs(state, interventions, 1000);
+  return { ...state, causalBeliefs: beliefs, causalInterventions: interventions };
+}
+
+/** Dispatch: clear all interventions and re-propagate from priors. */
+export function clearCausalInterventions(state) {
+  const beliefs = propagateCausalBeliefs(state, {}, 1000);
+  return {
+    ...state,
+    causalBeliefs: beliefs,
+    causalInterventions: {},
+    system: {
+      ...state.system,
+      log: [...state.system.log, `W${state.system.week}: Causal interventions cleared`]
+    }
   };
 }

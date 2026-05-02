@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Strategic Dashboard · NSS v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#06090E;--bg-1:#0A0D12;--surface:#0F141D;--surface-2:#151C28;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--violet:#B8A0FF;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px;--maxw:1180px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 10% -5%,rgba(109,217,255,.06),transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(184,160,255,.04),transparent 55%)}
+.bar{position:sticky;top:0;z-index:40;background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 10px rgba(109,217,255,.6)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:40px clamp(16px,3vw,40px) 100px}
+.head{padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--border)}
+.eye{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:12px}
+h1{font-family:var(--display);font-size:clamp(40px,6vw,72px);font-weight:400;line-height:1;margin:0 0 14px;letter-spacing:-.022em}
+h1 i{font-style:italic;color:var(--accent)}
+.lede{color:var(--ink-2);font-size:17px;line-height:1.65;max-width:780px;margin:16px 0 0}
+.lede b{color:var(--ink);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px}
+.kpi .l{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:6px}
+.kpi .v{font-family:var(--display);font-size:28px;color:var(--ink);line-height:1;letter-spacing:-.015em}
+.kpi .v.w{color:var(--warm)}.kpi .v.d{color:var(--danger)}.kpi .v.g{color:var(--success)}
+.kpi .d{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:8px}
+h2.sec{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--ink-3);border-top:1px solid var(--border);padding-top:18px;margin:56px 0 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;letter-spacing:.04em}
+h2.sec .lbl{color:var(--ink);font-family:var(--display);font-size:32px;font-weight:400;letter-spacing:-.012em}
+h2.sec .lbl i{font-style:italic;color:var(--accent)}
+h2.sec .n{color:var(--ink-4);font-size:11px}
+.pred-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:760px){.pred-grid{grid-template-columns:1fr}}
+.pred{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;cursor:pointer;transition:.15s}
+.pred:hover{border-color:var(--border-2)}
+.pred.open{border-color:var(--accent-border);background:linear-gradient(180deg,var(--accent-soft),var(--surface))}
+.pred .t{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;color:var(--ink);font-weight:500;font-size:14.5px;line-height:1.4}
+.pred .t .ch{color:var(--accent);font-family:var(--mono);font-size:11px;transition:transform .2s}
+.pred.open .t .ch{transform:rotate(90deg)}
+.pred .c{color:var(--ink-2);font-size:13px;line-height:1.6;margin-top:10px;display:none}
+.pred.open .c{display:block}
+.pred .prob{font-family:var(--mono);font-size:11px;color:var(--accent);margin-top:8px;display:inline-block}
+.scenario{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px 32px}
+.sliders{display:grid;grid-template-columns:1fr 1fr;gap:22px 32px;margin-bottom:24px}
+@media(max-width:760px){.sliders{grid-template-columns:1fr}}
+.slider label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--ink-2);margin-bottom:8px;font-weight:500}
+.slider label .v{font-family:var(--mono);font-size:12px;color:var(--accent)}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:20px;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-moz-range-track{height:3px;background:var(--border-2);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%;margin-top:-6px}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border:2px solid var(--surface);border-radius:50%}
+.outputs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding-top:20px;border-top:1px solid var(--divider)}
+@media(max-width:760px){.outputs{grid-template-columns:repeat(2,1fr)}}
+.out{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 18px}
+.out .l{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;margin-bottom:6px}
+.out .v{font-family:var(--display);font-size:24px;color:var(--accent);line-height:1;letter-spacing:-.012em}
+.out .v.w{color:var(--warm)}.out .v.d{color:var(--danger)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.charts{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px}
+.chart-card h3{font-family:var(--ui);font-size:13px;color:var(--ink);margin:0 0 4px;font-weight:500}
+.chart-card .sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:14px}
+.chart-wrap{height:260px;position:relative}
+.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.cost-grid{grid-template-columns:1fr}}
+.cost{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 22px}
+.cost h4{font-family:var(--ui);font-size:13px;color:var(--ink);margin:0 0 14px;font-weight:500}
+.cost table{width:100%;border-collapse:collapse;font-size:12.5px}
+.cost td{padding:6px 0;border-bottom:1px solid var(--divider);color:var(--ink-2)}
+.cost td:last-child{text-align:right;font-family:var(--mono);color:var(--ink)}
+.cost tr:last-child td{border-bottom:none;padding-top:12px;border-top:1px solid var(--border-2);color:var(--ink);font-weight:500;padding-bottom:0}
+.cost tr:last-child td:last-child{color:var(--accent);font-weight:500}
+.cost.us tr:last-child td:last-child{color:var(--danger)}
+.asym{background:linear-gradient(180deg,rgba(255,122,138,.08),var(--surface));border:1px solid rgba(255,122,138,.3);border-radius:var(--r-lg);padding:22px 26px;margin-top:14px;text-align:center}
+.asym .k{font-family:var(--mono);font-size:10.5px;color:var(--danger);letter-spacing:.04em;margin-bottom:8px}
+.asym .v{font-family:var(--display);font-size:56px;color:var(--danger);line-height:1;letter-spacing:-.02em;margin-bottom:6px}
+.asym .d{font-size:14px;color:var(--ink-2)}
+.targets{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-top:14px}
+.targets table{width:100%;border-collapse:collapse;font-size:12.5px}
+.targets th{background:var(--surface-2);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;font-weight:500;border-bottom:1px solid var(--border)}
+.targets td{padding:10px 14px;border-bottom:1px solid var(--divider);color:var(--ink-2);vertical-align:top}
+.targets tr:last-child td{border-bottom:none}
+.targets td:first-child{color:var(--ink);font-weight:500;white-space:nowrap}
+.targets td:last-child{font-family:var(--mono);color:var(--accent);white-space:nowrap;text-align:right}
+.rec-list{display:flex;flex-direction:column;gap:10px}
+.rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px 14px 52px;position:relative}
+.rec .n{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:22px;color:var(--accent);font-weight:400}
+.rec .t{color:var(--ink);font-weight:500;margin-bottom:4px;font-size:14px}
+.rec .d{color:var(--ink-3);font-size:13px;line-height:1.55}
+.bottom{background:linear-gradient(180deg,rgba(109,217,255,.06),var(--surface));border:1px solid var(--accent);border-radius:var(--r-lg);padding:26px 30px}
+.bottom .k{font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:10px}
+.bottom h3{font-family:var(--display);font-size:26px;font-weight:400;margin:0 0 12px;letter-spacing:-.012em;line-height:1.2}
+.bottom h3 i{font-style:italic;color:var(--accent)}
+.bottom p{margin:0 0 12px;color:var(--ink-2);line-height:1.7;font-size:14px}
+.bottom p:last-child{margin-bottom:0}
+.bottom p b{color:var(--ink);font-weight:500}
+.fn{margin-top:56px;padding-top:22px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--ink-4);line-height:1.65}
+.fn a{color:var(--ink-3);text-decoration:none}
+.fn a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Strategic Dashboard</span></div>
+  <div>Independent analyst · 31 March 2026 · Day 31</div>
+</div></div>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="eye">INDEPENDENT STRATEGIC ANALYSIS · OPEN-SOURCE DERIVED</div>
+  <h1>The next six weeks: <i>predictions</i>, costs, recommendations</h1>
+  <p class="lede">Independent analytical assessment derived from open-source intelligence. Not affiliated with any government agency. Quantitative scenario model, 8-week forecasts, and the central strategic problem — the <b>60:1 cost asymmetry</b>.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="l">BRENT CRUDE</div><div class="v w">~$110/bbl</div><div class="d">Pre-war $75</div></div>
+    <div class="kpi"><div class="l">STRAIT OF HORMUZ</div><div class="v d">Closed</div><div class="d">Day 31 · 16+ ships struck</div></div>
+    <div class="kpi"><div class="l">BAB EL-MANDEB</div><div class="v w">Threatened</div><div class="d">40–50% Houthi reentry</div></div>
+    <div class="kpi"><div class="l">WAR DURATION</div><div class="v">Day 31</div><div class="d">Feb 28 Day 1</div></div>
+  </div>
+</header>
+
+<h2 class="sec"><span class="lbl">My six <i>predictions</i></span><span class="n">Click to expand reasoning</span></h2>
+<div class="pred-grid" id="pred-grid"></div>
+
+<h2 class="sec"><span class="lbl">Scenario <i>model</i></span><span class="n">Adjust parameters · results update in real time</span></h2>
+<div class="scenario">
+  <div class="sliders">
+    <div class="slider"><label><span>Hormuz closure duration</span><span class="v"><span id="v-hormuz">8</span> weeks</span></label><input type="range" id="s-hormuz" min="0" max="16" value="8"></div>
+    <div class="slider"><label><span>Bab-al-Mandeb disruption level</span><span class="v"><span id="v-bab">30</span>%</span></label><input type="range" id="s-bab" min="0" max="100" value="30"></div>
+    <div class="slider"><label><span>SPR release rate</span><span class="v"><span id="v-spr">2.0</span> M bbl/day</span></label><input type="range" id="s-spr" min="0" max="40" value="20"></div>
+    <div class="slider"><label><span>Saudi Yanbu reroute capacity</span><span class="v"><span id="v-yanbu">4.5</span> M bbl/day</span></label><input type="range" id="s-yanbu" min="0" max="80" value="45"></div>
+  </div>
+  <div class="outputs">
+    <div class="out"><div class="l">ESTIMATED OIL PRICE</div><div class="v w" id="o-oil">$128/bbl</div></div>
+    <div class="out"><div class="l">NET SUPPLY LOSS</div><div class="v d" id="o-supply">-6.2M</div></div>
+    <div class="out"><div class="l">US GDP IMPACT</div><div class="v d" id="o-gdp">-0.5%</div></div>
+    <div class="out"><div class="l">EU RECESSION RISK</div><div class="v w" id="o-recession">45%</div></div>
+  </div>
+</div>
+
+<h2 class="sec"><span class="lbl">Threat &amp; price <i>forecasts</i></span><span class="n">8-week horizon · my estimates</span></h2>
+<div class="charts">
+  <div class="chart-card">
+    <h3>Threat probability forecast</h3>
+    <div class="sub">My estimated probabilities for four scenarios over the next 8 weeks</div>
+    <div class="chart-wrap"><canvas id="chartProb"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <h3>Oil price scenarios</h3>
+    <div class="sub">Actual Brent through Day 31 · three forward-looking scenarios</div>
+    <div class="chart-wrap"><canvas id="chartOil"></canvas></div>
+  </div>
+</div>
+
+<h2 class="sec"><span class="lbl">Cost analysis: <i>defending Bab el-Mandeb</i></span><span class="n">The 60:1 asymmetry</span></h2>
+<div class="cost-grid">
+  <div class="cost us">
+    <h4>US defensive costs (per month)</h4>
+    <table>
+      <tr><td>SM-6 interceptors (~60/mo @ $4.3M)</td><td>$258M</td></tr>
+      <tr><td>SM-2 interceptors (~40/mo @ $2M)</td><td>$80M</td></tr>
+      <tr><td>CSG operational tempo</td><td>$65M</td></tr>
+      <tr><td>MQ-9 losses (~3/mo @ $32M)</td><td>$96M</td></tr>
+      <tr><td>Tomahawk strikes (~50/mo @ $2.5M)</td><td>$125M</td></tr>
+      <tr><td>Estimated monthly total</td><td>~$624M</td></tr>
+    </table>
+  </div>
+  <div class="cost">
+    <h4>Houthi attack costs (per month)</h4>
+    <table>
+      <tr><td>Shahed-136 drones (~80/mo @ $30K)</td><td>$2.4M</td></tr>
+      <tr><td>Anti-ship ballistic missiles (~15/mo)</td><td>$4.5M</td></tr>
+      <tr><td>Cruise missiles (~10/mo @ $200K)</td><td>$2.0M</td></tr>
+      <tr><td>USVs / explosive boats (~5/mo)</td><td>$0.5M</td></tr>
+      <tr><td>C2, logistics, personnel</td><td>$1.0M</td></tr>
+      <tr><td>Estimated monthly total</td><td>~$10.4M</td></tr>
+    </table>
+  </div>
+</div>
+<div class="asym">
+  <div class="k">COST RATIO IN HOUTHI FAVOR</div>
+  <div class="v">60:1</div>
+  <div class="d">The central strategic problem — defensive spending cannot close this gap</div>
+</div>
+
+<h2 class="sec"><span class="lbl">Target categories &amp; <i>equipment</i></span><span class="n">Strike package reference</span></h2>
+<div class="targets">
+  <table>
+    <thead><tr><th>Category</th><th>Targets</th><th>Strike platform</th><th>Est. cost</th></tr></thead>
+    <tbody>
+      <tr><td>A · Missile storage</td><td>Sa'dah underground · Sana'a outskirts</td><td>B-2 (GBU-57 MOP) · Tomahawk</td><td>$50–80M/pkg</td></tr>
+      <tr><td>B · Drone launch</td><td>6+ fixed sites · mobile TELs</td><td>F/A-18E/F (JDAM) · MQ-9 (Hellfire)</td><td>$15–30M/pkg</td></tr>
+      <tr><td>C · Radar / C2</td><td>S-75 · Buk-M2 · mobile comms</td><td>EA-18G (SEAD) · Tomahawk</td><td>$20–40M/pkg</td></tr>
+      <tr><td>D · Port infrastructure</td><td>Hodeidah cranes · Saleef fuel</td><td>Tomahawk · JDAM</td><td>$30–60M/pkg</td></tr>
+      <tr><td>E · HVT (persons)</td><td>al-Houthi · al-Madani · IRGC-QF</td><td>MQ-9 (Hellfire) · F/A-18 (SDB)</td><td>$5–15M/op</td></tr>
+      <tr><td>F · Cyber / non-kinetic</td><td>Drone nav · missile fire control</td><td>CYBERCOM CMF</td><td>$2–5M/op</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="sec"><span class="lbl">What I'd <i>recommend</i></span><span class="n">Four priorities, one don't</span></h2>
+<div class="rec-list">
+  <div class="rec"><div class="n">1</div><div class="t">Reactivate the Omani channel within 72 hours</div><div class="d">Offer a 48–72 hour strike pause contingent on Hormuz reopening. Oman has brokered every durable off-ramp in this conflict family since 2013.</div></div>
+  <div class="rec"><div class="n">2</div><div class="t">Begin Hormuz escort operations immediately</div><div class="d">Phase I MCM and convoy. Global economy is losing $1.5–2B/day of disrupted trade — every day of closure amplifies political pressure.</div></div>
+  <div class="rec"><div class="n">3</div><div class="t">Pre-position for Houthi reentry regardless of political track</div><div class="d">40–50% probability of symbolic strikes in 30 days. The Houthis are hedging, not deterred. Build the deterrence signal while also building the response capacity.</div></div>
+  <div class="rec"><div class="n">4</div><div class="t">Declassify the Iranian weapons-transfer evidence now</div><div class="d">Build the coalition legal case for expanded sanctions. This is the option with highest deniability — it reads as routine intelligence declassification but produces disproportionate diplomatic leverage.</div></div>
+  <div class="rec" style="border-color:rgba(255,122,138,.4);background:rgba(255,122,138,.06)"><div class="n" style="color:var(--danger)">×</div><div class="t" style="color:var(--danger)">Do not strike Iranian oil infrastructure</div><div class="d">Abqaiq 2.0 risk · Russia/China intervention risk · $100B+ supplemental · protracted occupation pathway. This is the single highest-regret option in the current decision space.</div></div>
+</div>
+
+<h2 class="sec"><span class="lbl">The <i>bottom line</i></span><span class="n">Synthesis</span></h2>
+<div class="bottom">
+  <div class="k">SYNTHESIS</div>
+  <h3>The Houthi pause is <i>the most important data point</i> in this analysis.</h3>
+  <p>The Houthis' one-month strategic pause proves three things: they can be deterred, they make rational survival calculations, and they are <b>not</b> simply an Iranian puppet that activates on command. That pause is a diplomatic opening — but it's closing. Every day without engagement through the Omani channel increases the probability that the Houthis resume Red Sea attacks, creating an unprecedented <b>dual-chokepoint crisis</b> that could push oil past $170/barrel and trigger a global recession.</p>
+  <p>The 60:1 cost asymmetry means the US cannot defend its way out of this problem. The only sustainable solution is a <b>negotiated framework</b> that keeps Bab el-Mandeb open — and the only party that can broker that framework is <b>Oman</b>. The window is 4–6 weeks. After that, we're in a different world.</p>
+</div>
+
+<footer class="fn">
+  <p style="margin:0"><b style="color:var(--ink-3)">Sources:</b> Wikipedia · ACLED · CFR Global Conflict Tracker · Bloomberg · EIA · IEA · Dallas Fed · CNBC · PBS NewsHour · Al Jazeera · Times of Israel · Reuters · AP News · NPR · Axios · Britannica · UN Security Council · House of Commons Library · FDD Long War Journal · ISW · Global Security Review · The National · MARAD.</p>
+  <p style="margin:10px 0 0;font-style:italic">Retroactive simulation exercise for academic / educational purposes. Predictions reflect analytical reasoning applied to publicly available information, not intelligence holdings. All cost estimates are unclassified approximations from open sources. Drafted with AI assistance (Anthropic's Claude). <a href="./index.html">Return to portfolio</a></p>
+</footer>
+
+</div>
+
+<script>
+Chart.defaults.font.family = "'Inter',sans-serif";
+Chart.defaults.color = '#8B95A3';
+
+// Predictions
+const PREDICTIONS = [
+  {t:'Houthi resume Red Sea strikes within 30 days', p:'55–70%', c:'Ideological pressure from Iran (Mojtaba invoked Axis of Resistance) vs institutional memory of Israeli decapitation. Hedging posture most likely yields symbolic strikes — enough to claim solidarity without triggering Rough Rider II. The 4–6 week window is the critical period.'},
+  {t:'Iran shifts to asymmetric warfare', p:'65–80%', c:'Conventional missile inventory depletion plus fear of further decapitation drives Iran toward proxy activation and cyber operations. Historical parallel: post-Soleimani IRGC-QF pivoted toward proxy coordination rather than direct action.'},
+  {t:'Formal ceasefire within 60 days', p:'50–65%', c:'Oman is the only party with credibility across both sides. The economic pressure from Hormuz closure is asymmetric in the US favor — Iran has fewer options to absorb the hit. A face-saving framework is achievable if the US reactivates the channel this week.'},
+  {t:'Iran nuclear reconstitution begins', p:'70–85%', c:'DIA assessment: enriched uranium may have been moved pre-Feb 28 strike. Fordow/Natanz damage is significant but not necessarily catastrophic to the program. Regime will want a deterrent signal against future decapitation.'},
+  {t:'US domestic crisis over war costs', p:'55–70%', c:'$1.5–1.9B/day with no supplemental. Congressional oversight hearings very likely (80–90% in 30 days). Domestic coalition erosion accelerates as gas prices persist above $3.60/gal (22-month high).'},
+  {t:'Oil above $120/bbl within 30 days', p:'40–55%', c:'Highly dependent on Hormuz duration and SPR release rate. 16-week closure with limited SPR pushes $150+ region. 8-week closure with aggressive SPR stays around $110–130. Yanbu capacity is the central lever.'},
+];
+const grid = document.getElementById('pred-grid');
+grid.innerHTML = PREDICTIONS.map((p, i) =>
+  '<div class="pred" data-i="'+i+'"><div class="t"><span>'+p.t+'</span><span class="ch">›</span></div><div class="prob">'+p.p+'</div><div class="c">'+p.c+'</div></div>'
+).join('');
+grid.querySelectorAll('.pred').forEach(el => el.addEventListener('click', () => el.classList.toggle('open')));
+
+// Scenario model
+function recalc(){
+  const hormuz = +document.getElementById('s-hormuz').value;
+  const bab = +document.getElementById('s-bab').value;
+  const spr = +document.getElementById('s-spr').value / 10;
+  const yanbu = +document.getElementById('s-yanbu').value / 10;
+
+  document.getElementById('v-hormuz').textContent = hormuz;
+  document.getElementById('v-bab').textContent = bab;
+  document.getElementById('v-spr').textContent = spr.toFixed(1);
+  document.getElementById('v-yanbu').textContent = yanbu.toFixed(1);
+
+  // Very illustrative model
+  const netLoss = Math.max(0, 21 - yanbu - spr) + (bab/100) * 4.5;
+  const oilPrice = Math.round(75 + netLoss * 4.5 + hormuz * 0.8);
+  const gdpImpact = -(oilPrice - 75) * 0.015;
+  const recession = Math.min(95, Math.max(5, (oilPrice - 80) * 1.2 + hormuz * 1.5));
+
+  document.getElementById('o-oil').textContent = '$' + oilPrice + '/bbl';
+  document.getElementById('o-supply').textContent = '−' + netLoss.toFixed(1) + 'M';
+  document.getElementById('o-gdp').textContent = gdpImpact.toFixed(2) + '%';
+  document.getElementById('o-recession').textContent = Math.round(recession) + '%';
+}
+['s-hormuz','s-bab','s-spr','s-yanbu'].forEach(id => document.getElementById(id).addEventListener('input', recalc));
+recalc();
+
+// Charts
+new Chart(document.getElementById('chartProb'), {
+  type:'bar',
+  data:{
+    labels:['Houthi reentry','Iran asymmetric','Ceasefire (60d)','Oil >$120'],
+    datasets:[
+      { label:'Low', data:[55,65,50,40], backgroundColor:'rgba(109,217,255,.35)', borderRadius:2, stack:'s' },
+      { label:'Mid', data:[10,10,10,10], backgroundColor:'rgba(109,217,255,.55)', borderRadius:2, stack:'s' },
+      { label:'High reach', data:[5,5,5,5], backgroundColor:'rgba(109,217,255,.85)', borderRadius:2, stack:'s' },
+    ]
+  },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.parsed.y+'%'}}}, scales:{ x:{stacked:true,grid:{display:false}, ticks:{font:{size:10.5}}}, y:{stacked:true,grid:{color:'#171D27'}, max:100, ticks:{callback:v=>v+'%', font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chartOil'), {
+  type:'line',
+  data:{
+    labels:['Day 0','Day 7','Day 14','Day 21','Day 31','+2wk','+4wk','+6wk','+8wk'],
+    datasets:[
+      { label:'Actual', data:[75,85,95,102,110,null,null,null,null], borderColor:'#6DD9FF', backgroundColor:'rgba(109,217,255,.12)', borderWidth:2.5, fill:false, tension:.25, pointRadius:3 },
+      { label:'Low (Oman deal)', data:[null,null,null,null,110,102,92,82,78], borderColor:'#7DDBB0', borderDash:[4,3], borderWidth:2, fill:false, tension:.25, pointRadius:2 },
+      { label:'Mid (stalemate)', data:[null,null,null,null,110,115,120,122,120], borderColor:'#FFB186', borderDash:[4,3], borderWidth:2, fill:false, tension:.25, pointRadius:2 },
+      { label:'High (escalation)', data:[null,null,null,null,110,128,150,165,170], borderColor:'#FF7A8A', borderDash:[4,3], borderWidth:2, fill:false, tension:.25, pointRadius:2 },
+    ]
+  },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:true, position:'top', labels:{font:{size:10.5}, boxWidth:10, color:'#C8D0DC'}}, tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.parsed.y}}}, scales:{ x:{grid:{color:'#171D27'}, ticks:{font:{size:10}}}, y:{grid:{color:'#171D27'}, ticks:{callback:v=>'$'+v, font:{size:10}}}}}
+});
+</script>
+</body>
+</html>

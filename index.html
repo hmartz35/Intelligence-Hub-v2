@@ -3,17 +3,26 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Tactical Operations Command Center synced from the finalized Stitch canvas."
-    />
-    <title>Tactical Operations Command | Intelligence Hub</title>
+    <title>AETHER COMMAND | Intelligence Hub</title>
+    <!-- Font preconnect for render performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Typefaces: Inter (headings/body), JetBrains Mono (data), Space Grotesk (label-caps), Instrument Serif (display) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@700&family=Instrument+Serif:ital@0;1&display=swap" />
+    <!-- Material Symbols icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
     <link rel="stylesheet" href="./global-ui.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body>
-    <div class="command-background" aria-hidden="true"></div>
-    <div class="scanline" aria-hidden="true"></div>
-    <div id="app"></div>
+    <!-- Shell containers — never replaced by JS, only their contents update -->
+    <header id="shell-topbar"></header>
+    <nav id="shell-rail"></nav>
+    <main id="module-mount"></main>
+    <!-- CDN simulation libraries — loaded before app module so globals are available -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="./src/app.js"></script>
   </body>
 </html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether Command: Spectrum Dominance &amp; EW Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#00375a",
+                        "surface-container-lowest": "#080e1a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#001f28",
+                        "on-primary": "#003354",
+                        "on-secondary-container": "#002e3b",
+                        "on-background": "#dde2f3",
+                        "surface-variant": "#2f3542",
+                        "inverse-primary": "#00629d",
+                        "surface-bright": "#333946",
+                        "secondary-fixed": "#b8eaff",
+                        "inverse-surface": "#dde2f3",
+                        "background": "#0d131f",
+                        "on-secondary": "#003544",
+                        "secondary-container": "#1a9dc1",
+                        "primary-fixed": "#cfe5ff",
+                        "outline": "#88919d",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-fixed": "#001d33",
+                        "surface-container-low": "#161c27",
+                        "primary": "#98cbff",
+                        "tertiary": "#ffba20",
+                        "on-tertiary": "#412d00",
+                        "surface-container": "#1a202c",
+                        "on-tertiary-fixed": "#271900",
+                        "tertiary-fixed-dim": "#ffba20",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-surface": "#dde2f3",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface": "#0d131f",
+                        "inverse-on-surface": "#2a303d",
+                        "on-surface-variant": "#bec7d4",
+                        "surface-dim": "#0d131f",
+                        "secondary-fixed-dim": "#67d4f9",
+                        "surface-container-high": "#242a36",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#cc9200",
+                        "surface-container-highest": "#2f3542",
+                        "surface-tint": "#98cbff",
+                        "primary-container": "#00a3ff",
+                        "outline-variant": "#3f4852",
+                        "on-error": "#690005",
+                        "secondary": "#67d4f9",
+                        "on-primary-fixed-variant": "#004a77",
+                        "tertiary-fixed": "#ffdea8",
+                        "on-tertiary-container": "#463000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px",
+                        "unit": "4px",
+                        "container-padding": "24px",
+                        "stack-md": "16px",
+                        "grid-columns": "12"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Instrument Serif"],
+                        "body-base": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "data-sm": ["JetBrains Mono"],
+                        "label-caps": ["Space Grotesk"],
+                        "headline-lg": ["Inter"],
+                        "data-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "data-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "data-lg": ["20px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-base overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_20px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="text-xl font-black tracking-tighter text-sky-500 font-label-caps uppercase">STRATOS_COMMAND</span>
+</div>
+<div class="flex-1 flex justify-center">
+<nav class="flex gap-6 font-mono tracking-tighter text-[11px] uppercase">
+<!-- Since intent is Theater/Intelligence, mapping to closest from generic TopNav if it existed, but JSON only gave SideNav tabs. We'll simulate generic top nav items -->
+<a class="text-sky-400 font-bold border-b-2 border-sky-500 pb-1" href="#">Spectrum Dominance</a>
+<a class="text-slate-500 hover:text-slate-300 hover:bg-white/5 hover:text-sky-300 transition-all duration-150 cursor-pointer active:opacity-70" href="#">Grid Controls</a>
+<a class="text-slate-500 hover:text-slate-300 hover:bg-white/5 hover:text-sky-300 transition-all duration-150 cursor-pointer active:opacity-70" href="#">Asset Status</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 text-sky-500">
+<button class="hover:text-sky-300 transition-colors"><span class="material-symbols-outlined">notifications_active</span></button>
+<button class="hover:text-sky-300 transition-colors"><span class="material-symbols-outlined">settings_input_component</span></button>
+<button class="hover:text-sky-300 transition-colors"><span class="material-symbols-outlined">terminal</span></button>
+<button class="bg-primary-container text-on-primary-container px-3 py-1 rounded-DEFAULT font-label-caps uppercase hover:bg-sky-400 transition-colors">
+                SIGNAL_LOCK
+            </button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-white/10 overflow-hidden">
+<img alt="Operator Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRRzKoh_OiJJGSVHhcNuiXJ4Z4-8jJP-Y92gF9vNw3_UTEvBO9qylwIKeXyq-FRVAmU5uuiqdxR0CIENlsuMyzS7Pm3hf74ez4z6EodmLDjBF64mP7j-KD7AMsCLDZUUa82-GxRKEv-iXzRgHZV-4b8gObdqOnRuUfj_hkWEwS3FKpgHBGtTyQzxri2DC3qVqN2Py5Oj4rUHiCsSoMikxe1lbExO0sEtoNlXg19T22lNzhWdbMj97Q0lElBp6pCl2G0wd_-CgA_FA"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 pt-16 pb-6 z-40 bg-slate-950/80 backdrop-blur-2xl border-r border-white/10">
+<div class="px-6 mb-8 mt-4">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border border-white/10 flex items-center justify-center text-sky-500">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">router</span>
+</div>
+<div>
+<div class="font-black text-sky-500 font-label-caps uppercase text-sm">HQ_ALPHA</div>
+<div class="text-slate-500 font-data-sm text-[10px]">09:00Z | ACTIVE</div>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary-container text-on-primary-container py-2 rounded-DEFAULT font-label-caps uppercase text-[11px] font-bold hover:bg-sky-400 transition-colors border border-primary-container">
+                NEW_OP
+            </button>
+</div>
+<div class="flex-1 flex flex-col font-mono tracking-widest text-[10px] uppercase">
+<!-- Active Tab: Intelligence/Theater based on EW/Map intent -->
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">public</span> Theater
+            </a>
+<a class="bg-sky-500/10 text-sky-400 border-l-2 border-sky-500 flex items-center px-4 py-3" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">visibility</span> Intelligence
+            </a>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">grid_view</span> Matrices
+            </a>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">query_stats</span> Modeling
+            </a>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">folder_managed</span> Archive
+            </a>
+</div>
+<div class="mt-auto flex flex-col font-mono tracking-widest text-[10px] uppercase border-t border-white/5 pt-4">
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">help</span> Help
+            </a>
+<a class="text-slate-500 flex items-center px-4 py-3 hover:text-slate-300 hover:bg-sky-500/5 transition-colors active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">logout</span> Logout
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-0 md:ml-64 pt-14 h-screen flex flex-col p-gutter gap-gutter bg-[#06090E] relative">
+<!-- Background Map (Bleeds through glass) -->
+<div class="absolute inset-0 z-0 opacity-40 pointer-events-none bg-cover bg-center" data-alt="A highly detailed, tactical dark mode satellite map of the Strait of Hormuz. The water is a deep, near-black obsidian, while the landmasses are outlined in thin, glowing cyan and muted slate lines. Overlaying the map are complex, semi-transparent red and amber geometric cones representing radar jamming zones and signal interference heatmaps. The overall aesthetic is a high-tech, military-grade digital command interface with glowing data paths and minimal extraneous details." data-location="Strait of Hormuz" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBS8w5I1KN1BML-P6DcsEsPBnxKwy63_keizlJkXnOQRquXgfjUfS2zBIRv5KCyyMkKQkDcgeUTRSlw0Rmv9x7UwdTdzkdSLEia3yiBsmZ8LVmOkrzAoxlwcQwHrbu-Hgkj1PUHBPPGdyueSAeaWktIGFJ2_Dvs4L3764AKH6tLwLX5pgaY4QbBbInsaP3A3WmzfzKlMKZlUZGEKUt9lzH09zATfYrcVoZPtSBnrIqUTLuLU7DBnITr_qT9bCTgU08GkmHGsLmH3C8');"></div>
+<div class="absolute inset-0 z-0 bg-gradient-to-t from-[#06090E] via-transparent to-transparent pointer-events-none"></div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter h-full z-10 relative">
+<!-- Left Panel: Telemetry & Emitter Classification (3 cols) -->
+<div class="col-span-3 flex flex-col gap-gutter h-full overflow-y-auto">
+<!-- Telemetry Card -->
+<div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-lg flex flex-col">
+<div class="px-4 py-2 border-b border-slate-800 flex justify-between items-center">
+<span class="font-label-caps text-on-surface-variant uppercase text-xs">Signal Quality</span>
+<span class="material-symbols-outlined text-xs text-sky-500">sensors</span>
+</div>
+<div class="p-4 flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<div class="font-data-sm text-slate-400 text-[10px] uppercase">Avg SNR (X-Band)</div>
+<div class="font-data-lg text-tertiary">24.8 dB</div>
+</div>
+<!-- Small sparkline simulation -->
+<div class="w-16 h-8 flex items-end gap-[2px]">
+<div class="w-1 bg-tertiary/40 h-[40%]"></div>
+<div class="w-1 bg-tertiary/60 h-[60%]"></div>
+<div class="w-1 bg-tertiary/80 h-[50%]"></div>
+<div class="w-1 bg-tertiary h-[90%]"></div>
+<div class="w-1 bg-tertiary/70 h-[70%]"></div>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<div class="font-data-sm text-slate-400 text-[10px] uppercase">Bit Error Rate</div>
+<div class="font-data-lg text-error">1.2e-4</div>
+</div>
+<div class="w-16 h-8 flex items-end gap-[2px]">
+<div class="w-1 bg-error h-[80%]"></div>
+<div class="w-1 bg-error/80 h-[70%]"></div>
+<div class="w-1 bg-error/60 h-[50%]"></div>
+<div class="w-1 bg-error/40 h-[30%]"></div>
+<div class="w-1 bg-error/20 h-[20%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Emitter Classification List -->
+<div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-lg flex-1 flex flex-col overflow-hidden">
+<div class="px-4 py-2 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+<span class="font-label-caps text-on-surface-variant uppercase text-xs">Active Emitters</span>
+<div class="px-2 py-[2px] bg-sky-500/15 border border-sky-500 rounded text-sky-500 font-data-sm text-[9px] uppercase">Auto-Classify ON</div>
+</div>
+<div class="flex-1 overflow-y-auto p-2 flex flex-col gap-1">
+<!-- Emitter Item 1 -->
+<div class="flex flex-col p-2 border border-white/5 rounded bg-white/5 hover:bg-white/10 transition-colors">
+<div class="flex justify-between items-center mb-1">
+<span class="font-data-sm text-sky-400 font-medium">#EM-8422</span>
+<span class="material-symbols-outlined text-[14px] text-error">warning</span>
+</div>
+<div class="font-body-base text-sm text-on-surface">Silkworm Target Radar</div>
+<div class="flex gap-2 mt-2">
+<span class="px-1.5 py-0.5 bg-error/15 border border-error rounded text-error font-data-sm text-[9px]">9.4 GHz</span>
+<span class="px-1.5 py-0.5 bg-slate-700/50 border border-slate-600 rounded text-slate-300 font-data-sm text-[9px]">COASTAL</span>
+</div>
+</div>
+<!-- Emitter Item 2 -->
+<div class="flex flex-col p-2 border border-white/5 rounded bg-white/5 hover:bg-white/10 transition-colors">
+<div class="flex justify-between items-center mb-1">
+<span class="font-data-sm text-sky-400 font-medium">#EM-119X</span>
+<span class="material-symbols-outlined text-[14px] text-tertiary">priority_high</span>
+</div>
+<div class="font-body-base text-sm text-on-surface">UAV Control Link (Shahed)</div>
+<div class="flex gap-2 mt-2">
+<span class="px-1.5 py-0.5 bg-tertiary/15 border border-tertiary rounded text-tertiary font-data-sm text-[9px]">2.45 GHz</span>
+<span class="px-1.5 py-0.5 bg-slate-700/50 border border-slate-600 rounded text-slate-300 font-data-sm text-[9px]">MOBILE</span>
+</div>
+</div>
+<!-- Emitter Item 3 -->
+<div class="flex flex-col p-2 border border-white/5 rounded bg-white/5 hover:bg-white/10 transition-colors">
+<div class="flex justify-between items-center mb-1">
+<span class="font-data-sm text-sky-400 font-medium">#EM-005A</span>
+<span class="material-symbols-outlined text-[14px] text-sky-500">verified</span>
+</div>
+<div class="font-body-base text-sm text-on-surface">Friendly Comms (Link 16)</div>
+<div class="flex gap-2 mt-2">
+<span class="px-1.5 py-0.5 bg-sky-500/15 border border-sky-500 rounded text-sky-500 font-data-sm text-[9px]">L-BAND</span>
+<span class="px-1.5 py-0.5 bg-slate-700/50 border border-slate-600 rounded text-slate-300 font-data-sm text-[9px]">NAVAL</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Central Area: 3D Waterfall & Tactical Map Overlays (6 cols) -->
+<div class="col-span-6 flex flex-col gap-gutter h-full">
+<!-- Spectral Waterfall Display (Top Half) -->
+<div class="h-1/2 bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-lg flex flex-col overflow-hidden relative">
+<div class="px-4 py-2 border-b border-slate-800 flex justify-between items-center absolute top-0 w-full z-10 bg-slate-900/50 backdrop-blur-sm">
+<span class="font-label-caps text-on-surface-variant uppercase text-xs">Real-Time Spectral Waterfall (2.4 - 18 GHz)</span>
+<div class="flex gap-2">
+<button class="text-[10px] font-data-sm text-sky-400 border border-sky-400/30 px-2 rounded hover:bg-sky-400/10">SWEEP</button>
+<button class="text-[10px] font-data-sm text-slate-400 border border-slate-600 px-2 rounded hover:bg-slate-600/30">HOLD</button>
+</div>
+</div>
+<!-- Simulated 3D Waterfall -->
+<div class="flex-1 mt-8 relative bg-gradient-to-b from-[#0a1120] to-[#04060a] overflow-hidden flex items-end">
+<!-- Frequency Grid Lines -->
+<div class="absolute inset-0 flex justify-between px-4 pb-4 opacity-20 pointer-events-none">
+<div class="border-l border-white/20 h-full"></div>
+<div class="border-l border-white/20 h-full"></div>
+<div class="border-l border-white/20 h-full"></div>
+<div class="border-l border-white/20 h-full"></div>
+<div class="border-l border-white/20 h-full"></div>
+</div>
+<!-- Simulated Data Lines (Waterfall effect) -->
+<div class="w-full h-full relative" style="perspective: 1000px;">
+<div class="absolute bottom-0 w-full h-[150%] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjAlIiB5Mj0iMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMCwxNjMsMjU1LDAuOCkiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSgwcjE2MywyNTUsMC4yKSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgwLDE2MywyNTUsMCkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNMCAxMDBMMTAgOTBMMjAgOTVMMzAgNjBMMzUgMjBMMzggMTBMMzkgNTBMODAgOTBMMTAwIDgwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZykiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] bg-repeat-x bg-bottom opacity-50 style='transform: rotateX(60deg);'">
+<!-- A pure CSS simulation of glowing peaks -->
+<div class="absolute bottom-[20%] left-[30%] w-[5%] h-[80%] bg-gradient-to-t from-transparent via-error/50 to-error blur-sm"></div>
+<div class="absolute bottom-[10%] left-[70%] w-[8%] h-[60%] bg-gradient-to-t from-transparent via-tertiary/50 to-tertiary blur-[2px]"></div>
+<div class="absolute bottom-[30%] left-[10%] w-[3%] h-[40%] bg-gradient-to-t from-transparent via-sky-500/50 to-sky-500 blur-[1px]"></div>
+</div>
+</div>
+<!-- X-Axis Labels -->
+<div class="absolute bottom-0 w-full flex justify-between px-4 pb-1 text-[9px] font-data-sm text-slate-500">
+<span>2.4</span>
+<span>6.0</span>
+<span>10.0</span>
+<span>14.0</span>
+<span>18.0 GHz</span>
+</div>
+</div>
+</div>
+<!-- Tactical Map Area (Bottom Half) -->
+<div class="h-1/2 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-lg relative overflow-hidden">
+<div class="absolute top-4 left-4 z-10 flex gap-2">
+<div class="bg-surface-container/90 border border-slate-700 px-2 py-1 rounded flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="font-data-sm text-[10px] text-slate-300">JAMMING CONES</span>
+</div>
+<div class="bg-surface-container/90 border border-slate-700 px-2 py-1 rounded flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary opacity-70"></div>
+<span class="font-data-sm text-[10px] text-slate-300">EMI HEATMAP</span>
+</div>
+</div>
+<!-- Map Content is handled by the global background bleeding through this semi-transparent div. 
+                         We'll add some SVG overlays to simulate the EW cones -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Hostile Jamming Cone (Red) -->
+<polygon fill="rgba(255,180,171,0.1)" points="70,80 30,20 80,10" stroke="rgba(255,180,171,0.5)" stroke-width="0.5"></polygon>
+<circle cx="70" cy="80" fill="#ffb4ab" r="1.5"></circle>
+<!-- Friendly Asset Sector (Blue) -->
+<polygon fill="rgba(152,203,255,0.1)" points="20,70 10,30 50,40" stroke="rgba(152,203,255,0.4)" stroke-width="0.5"></polygon>
+<circle cx="20" cy="70" fill="#98cbff" r="1.5"></circle>
+<!-- EMI Heatmap Blur (Amber) -->
+<circle cx="60" cy="40" fill="url(#emi-grad)" r="15"></circle>
+<defs>
+<radialgradient id="emi-grad">
+<stop offset="0%" stop-color="rgba(255,186,32,0.4)"></stop>
+<stop offset="100%" stop-color="rgba(255,186,32,0)"></stop>
+</radialgradient>
+</defs>
+</svg>
+</div>
+</div>
+<!-- Right Panel: Controls & Status (3 cols) -->
+<div class="col-span-3 flex flex-col gap-gutter h-full">
+<!-- Action / Escalation Status -->
+<div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-lg p-4 flex flex-col gap-4">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-on-surface-variant uppercase text-xs">EW Posture</span>
+<span class="px-2 py-0.5 bg-error border border-error text-[#06090E] rounded font-data-sm text-[10px] font-bold">DEFCON 3</span>
+</div>
+<!-- Escalation Rungs -->
+<div class="flex flex-col gap-1">
+<div class="h-2 w-full bg-slate-800 rounded-sm overflow-hidden">
+<div class="h-full bg-error w-[80%] glow-error"></div>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-sm overflow-hidden">
+<div class="h-full bg-tertiary w-[60%]"></div>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-sm overflow-hidden">
+<div class="h-full bg-sky-500 w-[100%]"></div>
+</div>
+<div class="flex justify-between text-[9px] font-data-sm text-slate-500 mt-1 uppercase">
+<span>Threat</span>
+<span>Interference</span>
+<span>Comms</span>
+</div>
+</div>
+</div>
+<!-- Control Console -->
+<div class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-lg flex-1 flex flex-col p-4">
+<span class="font-label-caps text-on-surface-variant uppercase text-xs mb-4">Countermeasures</span>
+<div class="flex flex-col gap-3">
+<!-- Input Field -->
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-slate-700 rounded text-sky-400 font-data-sm text-xs p-2 focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 outline-none transition-all" readonly="" type="text" value="FROSTBITE_PROTOCOL"/>
+<div class="absolute top-2 right-2 text-[9px] text-sky-500 font-data-sm opacity-70">ACTIVE</div>
+</div>
+<!-- Actions -->
+<button class="w-full bg-transparent border border-sky-500 text-sky-400 py-2 rounded font-label-caps text-[11px] hover:bg-sky-500/10 transition-colors uppercase tracking-widest text-left px-3 flex justify-between items-center">
+                             Initiate Broad-Band Jam
+                             <span class="material-symbols-outlined text-[16px]">podcasts</span>
+</button>
+<button class="w-full bg-transparent border border-tertiary text-tertiary py-2 rounded font-label-caps text-[11px] hover:bg-tertiary/10 transition-colors uppercase tracking-widest text-left px-3 flex justify-between items-center">
+                             Deploy Decoy Signal
+                             <span class="material-symbols-outlined text-[16px]">leak_add</span>
+</button>
+<div class="mt-auto pt-4 border-t border-slate-800">
+<button class="w-full bg-error text-[#06090E] py-3 rounded font-label-caps text-xs font-bold hover:bg-error/80 transition-colors uppercase tracking-widest flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(255,180,171,0.4)]">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+                                 AUTHORIZE STRIKE
+                             </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

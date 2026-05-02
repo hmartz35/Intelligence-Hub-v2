@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Theater Map · NSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D12;--bg-1:#0E131A;--surface:#141A24;--surface-2:#1A2131;--surface-3:#222A3B;--border:#1F2735;--border-2:#2B3446;--divider:#171D27;--ink:#F5F7FA;--ink-2:#C8D0DC;--ink-3:#8B95A3;--ink-4:#5A6574;--accent:#6DD9FF;--accent-bright:#8EE3FF;--accent-soft:rgba(109,217,255,.10);--accent-border:rgba(109,217,255,.28);--warm:#FFB186;--warm-soft:rgba(255,177,134,.10);--warm-border:rgba(255,177,134,.28);--danger:#FF7A8A;--danger-soft:rgba(255,122,138,.12);--success:#7DDBB0;--success-soft:rgba(125,219,176,.10);--violet:#B8A0FF;--violet-soft:rgba(184,160,255,.10);--sea:#0B151F;--land:#141A23;--display:'Instrument Serif',Georgia,serif;--ui:'Inter',-apple-system,system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--r-sm:6px;--r:10px;--r-lg:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
+.bar{position:sticky;top:0;z-index:40;background:rgba(10,13,18,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.bar-in{padding:10px clamp(14px,2.5vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.bar .home{color:var(--ink-2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.bar .home::before{content:"←";color:var(--accent)}
+.bar .home:hover{color:var(--accent)}
+.bar .brand{color:var(--ink);font-family:var(--ui);font-size:13px;font-weight:500}
+.bar .brand::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 8px rgba(109,217,255,.5)}
+.bar .sep{color:var(--ink-4);opacity:.6}
+
+.frame{display:grid;grid-template-columns:300px 1fr 320px;height:calc(100vh - 45px);overflow:hidden}
+@media(max-width:1100px){.frame{grid-template-columns:260px 1fr}}
+@media(max-width:800px){.frame{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+
+.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow:auto;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.sidebar-right{border-right:none;border-left:1px solid var(--border)}
+.s-head{padding:18px 18px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2}
+.s-head .eye{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:6px;letter-spacing:.04em}
+.s-head h2{font-family:var(--display);font-size:26px;font-weight:400;margin:0;letter-spacing:-.01em;line-height:1.1}
+.s-head h2 i{font-style:italic;color:var(--accent)}
+.s-head p{margin:6px 0 0;color:var(--ink-3);font-size:12px;line-height:1.45}
+.s-sec{padding:14px 18px 10px;font-family:var(--mono);font-size:10.5px;color:var(--ink-4);letter-spacing:.04em;border-top:1px solid var(--divider)}
+.layer{padding:8px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s;font-size:12.5px;color:var(--ink-2)}
+.layer:hover{background:var(--surface-2)}
+.layer input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.layer .ico{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.layer .lbl{flex:1}
+.layer .count{font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+
+.map-wrap{position:relative;background:#060A0F;overflow:hidden}
+.map-svg{width:100%;height:100%;cursor:grab}
+.map-svg.drag{cursor:grabbing}
+.map-grid{stroke:#141C27;stroke-width:.5}
+.map-sea{fill:var(--sea)}
+.map-land{fill:var(--land);stroke:#1A222E;stroke-width:.8}
+
+.map-ctrl{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.map-ctrl button{width:34px;height:34px;background:rgba(20,26,36,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border-2);color:var(--ink-2);font-family:var(--mono);font-size:14px;cursor:pointer;border-radius:var(--r-sm);transition:.12s;display:flex;align-items:center;justify-content:center;font-weight:500}
+.map-ctrl button:hover{border-color:var(--accent);color:var(--accent)}
+.map-ctrl button.sm{font-size:11px}
+
+.map-scale{position:absolute;bottom:14px;left:14px;background:rgba(10,13,18,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border);padding:8px 12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);border-radius:var(--r-sm);display:flex;align-items:center;gap:10px}
+.map-scale .bar{width:80px;height:4px;border:1px solid var(--ink-3);border-top:none;position:relative}
+.map-scale .bar::before,.map-scale .bar::after{content:"";position:absolute;top:0;width:1px;height:4px;background:var(--ink-3)}
+.map-scale .bar::before{left:0}.map-scale .bar::after{right:0}
+
+.map-legend{position:absolute;bottom:14px;right:14px;background:rgba(10,13,18,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--border);padding:10px 14px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);border-radius:var(--r-sm);line-height:1.7;max-width:230px;z-index:3}
+.map-legend .h{color:var(--ink);font-size:10.5px;font-weight:500;margin-bottom:4px;letter-spacing:.04em}
+.map-legend .sw{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:6px;border-radius:50%}
+.map-legend .sw.sq{border-radius:2px}
+
+.ring-ts{fill:none;stroke-dasharray:4 4;pointer-events:none}
+.isr-footprint{pointer-events:none}
+.marker{cursor:pointer;transition:.15s}
+.marker:hover{filter:brightness(1.3)}
+.marker-label{font-family:var(--mono);font-size:9.5px;fill:var(--ink-3);pointer-events:none}
+
+.intel{padding:18px;overflow:auto;flex:1;font-size:13px}
+.intel::-webkit-scrollbar{width:6px}
+.intel::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.intel .eye{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);margin-bottom:8px;letter-spacing:.04em}
+.intel h3{font-family:var(--display);font-size:24px;font-weight:400;margin:0 0 10px;letter-spacing:-.01em;line-height:1.1}
+.intel h3 i{font-style:italic;color:var(--accent)}
+.intel .cat{display:inline-block;padding:3px 8px;font-family:var(--mono);font-size:10px;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:100px;margin-bottom:12px;letter-spacing:.04em}
+.intel .cat.r{color:var(--danger);background:var(--danger-soft);border-color:rgba(255,122,138,.3)}
+.intel .cat.w{color:var(--warm);background:var(--warm-soft);border-color:var(--warm-border)}
+.intel .cat.s{color:var(--success);background:var(--success-soft);border-color:rgba(125,219,176,.3)}
+.intel .cat.v{color:var(--violet);background:var(--violet-soft);border-color:rgba(184,160,255,.3)}
+.intel dl{margin:0;padding:12px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1.4fr;gap:4px 10px;font-family:var(--mono);font-size:11.5px}
+.intel dt{color:var(--ink-4)}.intel dd{color:var(--ink-2);margin:0}
+.intel dd b{color:var(--accent);font-weight:500}.intel dd.w{color:var(--warm)}.intel dd.r{color:var(--danger)}.intel dd.s{color:var(--success)}
+.intel p{color:var(--ink-2);line-height:1.55;margin:12px 0 0;font-size:12.5px}
+.intel .empty{color:var(--ink-4);font-family:var(--mono);font-size:11.5px;line-height:1.7;padding:40px 8px;text-align:center}
+
+.status-line{padding:12px 18px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:grid;gap:5px}
+.status-line .row{display:flex;justify-content:space-between}
+.status-line .row b{color:var(--ink-2);font-weight:500}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><a class="home" href="./index.html">Portfolio</a><span class="sep">/</span><span class="brand">Theater Map</span></div>
+  <div style="display:flex;gap:14px;align-items:center"><span>v2.0 · CENTCOM AOR · T+15d simulated</span></div>
+</div></div>
+
+<div class="frame">
+  <aside class="sidebar">
+    <div class="s-head">
+      <div class="eye">Theater map · Layers</div>
+      <h2>Red Sea · <i>Gulf</i></h2>
+      <p>Pan (drag) · zoom (wheel) · click markers for intel.</p>
+    </div>
+    <div class="s-sec">U.S. &amp; Coalition assets</div>
+    <label class="layer"><input type="checkbox" data-layer="naval" checked><span class="ico" style="background:#6DD9FF"></span><span class="lbl">Naval forces</span><span class="count" id="c-naval">—</span></label>
+    <label class="layer"><input type="checkbox" data-layer="air" checked><span class="ico" style="background:#8EE3FF"></span><span class="lbl">Air bases &amp; orbits</span><span class="count" id="c-air">—</span></label>
+    <label class="layer"><input type="checkbox" data-layer="coalition" checked><span class="ico" style="background:#B8A0FF"></span><span class="lbl">Coalition forces</span><span class="count" id="c-coal">—</span></label>
+
+    <div class="s-sec">Adversary &amp; threat</div>
+    <label class="layer"><input type="checkbox" data-layer="iran" checked><span class="ico" style="background:#FF7A8A"></span><span class="lbl">Iran facilities</span><span class="count" id="c-iran">—</span></label>
+    <label class="layer"><input type="checkbox" data-layer="houthi" checked><span class="ico" style="background:#FFB186"></span><span class="lbl">Houthi threats</span><span class="count" id="c-hou">—</span></label>
+    <label class="layer"><input type="checkbox" data-layer="sam" ><span class="ico" style="background:#FF7A8A;opacity:.6"></span><span class="lbl">SAM envelopes</span></label>
+
+    <div class="s-sec">Intelligence &amp; reach</div>
+    <label class="layer"><input type="checkbox" data-layer="isr" checked><span class="ico" style="background:#B8A0FF;opacity:.5"></span><span class="lbl">ISR coverage</span></label>
+    <label class="layer"><input type="checkbox" data-layer="revisit"><span class="ico" style="background:#B8A0FF;opacity:.8"></span><span class="lbl">Revisit-time heatmap</span></label>
+    <label class="layer"><input type="checkbox" data-layer="td1"><span class="ico" style="background:#6DD9FF"></span><span class="lbl">Time-distance · 1hr</span></label>
+    <label class="layer"><input type="checkbox" data-layer="td6" checked><span class="ico" style="background:#6DD9FF;opacity:.6"></span><span class="lbl">Time-distance · 6hr</span></label>
+    <label class="layer"><input type="checkbox" data-layer="td24"><span class="ico" style="background:#6DD9FF;opacity:.3"></span><span class="lbl">Time-distance · 24hr</span></label>
+
+    <div class="s-sec">Environmental</div>
+    <label class="layer"><input type="checkbox" data-layer="lanes" checked><span class="ico sq" style="background:#7DDBB0;height:2px;border-radius:0"></span><span class="lbl">Shipping lanes</span></label>
+    <label class="layer"><input type="checkbox" data-layer="choke" checked><span class="ico" style="background:#FFB186;border-radius:2px"></span><span class="lbl">Chokepoints</span></label>
+    <label class="layer"><input type="checkbox" data-layer="risk"><span class="ico" style="background:#FF7A8A;opacity:.3"></span><span class="lbl">Attack risk zone</span></label>
+
+    <div class="status-line">
+      <div class="row"><span>Zoom</span><b id="s-zoom">1.0×</b></div>
+      <div class="row"><span>Center</span><b id="s-ctr">—</b></div>
+      <div class="row"><span>Scale</span><b id="s-scale">—</b></div>
+    </div>
+  </aside>
+
+  <main class="map-wrap">
+    <svg id="map" class="map-svg" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="map-ctrl">
+      <button id="b-in">+</button>
+      <button id="b-out">−</button>
+      <button id="b-reset" class="sm">⟲</button>
+    </div>
+    <div class="map-scale"><span>0</span><div class="bar"></div><span id="scale-dist">200 nm</span></div>
+    <div class="map-legend">
+      <div class="h">THEATER SNAPSHOT · T+15d</div>
+      Op phase <b style="color:var(--ink)">Rough Rider · Phase 2</b><br>
+      Rung <b style="color:var(--warm)">7 / 10</b> · Hormuz <b style="color:var(--danger)">closed</b><br>
+      VLS AOR <b style="color:var(--warm)">41%</b> · Brent <b style="color:var(--warm)">$98.12</b>
+    </div>
+  </main>
+
+  <aside class="sidebar sidebar-right">
+    <div class="intel" id="intel">
+      <div class="empty">Click a marker to view intel.<br><br>Toggle layers to show/hide asset categories, ISR coverage, and time-distance reach rings from U.S. assets.</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+// ============ Assets ============
+// Positions on 1000x650 canvas approximating Red Sea → Gulf → Iran
+// U.S. Naval
+const NAVAL=[
+  {id:'cvn70', name:'USS Carl Vinson CSG', type:'CVN',  x:820, y:350, cat:'naval', speed:25, notes:'Nimitz-class. 44 F-35C/F-18E. Positioned Arabian Sea, 22.4°N 66.1°E.', stats:{crew:'5,000+',sorties:'120/day',vls:'88 Mk41'}},
+  {id:'cvn71', name:'USS Theodore Roosevelt CSG', type:'CVN', x:720, y:285, cat:'naval', speed:25, notes:'Supporting Hormuz escort. Gulf of Oman.', stats:{crew:'5,000+',sorties:'110/day',vls:'88 Mk41'}},
+  {id:'lhd7',  name:'USS Iwo Jima ESG', type:'LHD',  x:380, y:440, cat:'naval', speed:20, notes:'26th MEU embarked. Red Sea. AV-8B strike capability.', stats:{crew:'1,600',helos:'22',marines:'2,200'}},
+  {id:'ddg1',  name:'USS Laboon (DDG-58)', type:'DDG', x:260, y:490, cat:'naval', speed:30, notes:'Arleigh Burke Flight I. Bab el-Mandeb station.', stats:{vls:'96 cells',role:'BMD/escort'}},
+  {id:'ddg2',  name:'USS Gravely (DDG-107)', type:'DDG', x:200, y:420, cat:'naval', speed:30, notes:'Red Sea escort mission. Aegis Baseline 9.', stats:{vls:'96 cells',role:'Strike/AAW'}},
+  {id:'ddg3',  name:'USS Mason (DDG-87)', type:'DDG', x:770, y:310, cat:'naval', speed:30, notes:'Gulf of Oman. SM-2/SM-6 loadout.', stats:{vls:'96 cells',role:'AAW'}},
+  {id:'ddg4',  name:'USS Stockdale (DDG-106)', type:'DDG', x:680, y:250, cat:'naval', speed:30, notes:'Hormuz escort, Flight IIA.', stats:{vls:'96 cells',role:'Escort'}},
+];
+// Air bases
+const AIR=[
+  {id:'audeid', name:'Al Udeid AB · Qatar', type:'AB', x:590, y:310, cat:'air', speed:0, notes:'CAOC forward. 80+ aircraft including F-22, F-35, B-1, KC-135.', stats:{runways:'2',apron:'Large',hardened:'Yes'}},
+  {id:'adhafra', name:'Al Dhafra AB · UAE', type:'AB', x:655, y:325, cat:'air', speed:0, notes:'ISR hub. MQ-9, U-2, F-35A. Combat search &amp; rescue.', stats:{runways:'2',role:'ISR/strike'}},
+  {id:'prince', name:'Prince Sultan AB · KSA', type:'AB', x:500, y:260, cat:'air', speed:0, notes:'USAF 378th AEW. F-22A deployed here Mar 2026.', stats:{runways:'2',role:'F-22 hub'}},
+  {id:'dg', name:'Diego Garcia · BIOT', type:'AB', x:960, y:630, cat:'air', speed:0, notes:'B-2/B-52 bomber launch. 2,800 nm to Bandar Abbas.', stats:{runways:'1',role:'Strategic'}},
+  {id:'mq9a', name:'MQ-9 Orbit · Bab al-Mandeb', type:'UAV', x:260, y:470, cat:'air', orbit:true, speed:230, notes:'Persistent orbit. Sensor: MTS-B EO/IR. Coverage ~160 nm.', stats:{alt:'25,000 ft',end:'14 hrs'}},
+  {id:'mq9b', name:'MQ-9 Orbit · North Red Sea', type:'UAV', x:170, y:280, cat:'air', orbit:true, speed:230, notes:'Covers Saudi south. 16-hr persistence.', stats:{alt:'25,000 ft',end:'16 hrs'}},
+  {id:'mq9c', name:'MQ-9 Orbit · Hormuz', type:'UAV', x:680, y:265, cat:'air', orbit:true, speed:230, notes:'Straits surveillance. Tracks IRGCN small-boat activity.', stats:{alt:'25,000 ft',end:'14 hrs'}},
+];
+// Coalition
+const COAL=[
+  {id:'hms-diamond', name:'HMS Diamond (T45) · UK', type:'DDG', x:290, y:440, cat:'coalition', speed:28, notes:'Type 45 Destroyer. Sea Viper (Aster 15/30).', stats:{role:'AAW',flag:'UK'}},
+  {id:'fs-lang', name:'FS Languedoc (FREMM) · FR', type:'FFG', x:230, y:370, cat:'coalition', speed:27, notes:'French FREMM multi-mission frigate. Aster/Exocet.', stats:{role:'ASW/AAW',flag:'FR'}},
+  {id:'its-fasan', name:'ITS Fasan (FREMM) · IT', type:'FFG', x:310, y:490, cat:'coalition', speed:27, notes:'Italian FREMM. Aster 30.', stats:{role:'AAW',flag:'IT'}},
+  {id:'deu-hessen', name:'FGS Hessen (F124) · DE', type:'FFG', x:340, y:400, cat:'coalition', speed:29, notes:'German Sachsen-class. SM-2/ESSM.', stats:{role:'AAW',flag:'DE'}},
+];
+// Iran facilities
+const IRAN=[
+  {id:'fordow', name:'Fordow Enrichment Facility', type:'NUC', x:740, y:110, cat:'iran', speed:0, notes:'Underground enrichment (~80m below surface). Hardened. GBU-57 MOP-viable, B-2 delivery only.', stats:{hard:'0.97',val:'15 (max)'}},
+  {id:'natanz', name:'Natanz Enrichment Facility', type:'NUC', x:710, y:140, cat:'iran', speed:0, notes:'Primary civilian enrichment site. Pilot and commercial halls.', stats:{hard:'0.95',val:'14'}},
+  {id:'bandar-a', name:'IRGC-N Bandar Abbas', type:'NAV', x:720, y:240, cat:'iran', speed:0, notes:'IRGC Navy HQ. Fast-attack craft and ASCM base.', stats:{hard:'0.50',val:'10'}},
+  {id:'bandar-j', name:'Bandar Jask ASCM Complex', type:'MIS', x:780, y:265, cat:'iran', speed:0, notes:'Noor/Ghader ASCM batteries. Range ~200km.', stats:{hard:'0.40',val:'9'}},
+  {id:'tehran-qf', name:'IRGC-QF HQ · Tehran', type:'C2',  x:700, y:90, cat:'iran', speed:0, notes:'Quds Force command complex. Hardened C2.', stats:{hard:'0.70',val:'11'}},
+  {id:'fateh', name:'Fateh-110 BM Garrison', type:'MIS', x:660, y:120, cat:'iran', speed:0, notes:'Solid-fuel SRBM. ~300km range.', stats:{hard:'0.30',val:'9'}},
+];
+// Houthi threats
+const HOU=[
+  {id:'hod', name:'Hodeidah Port Complex', type:'PRT', x:180, y:440, cat:'houthi', speed:0, notes:'Primary Iranian resupply node. Monitored by Maxar.', stats:{hard:'0.65',val:'7'}},
+  {id:'sanaa', name:"Sana'a Operations Cell", type:'C2', x:210, y:410, cat:'houthi', speed:0, notes:'Houthi political and operational leadership base.', stats:{hard:'0.55',val:'6'}},
+  {id:'saada', name:'Saada Weapons Depot', type:'AMO', x:230, y:370, cat:'houthi', speed:0, notes:'Ansar Allah weapons storage. Tunnel network reported.', stats:{hard:'0.55',val:'6'}},
+  {id:'mukha', name:'Mukha Coastal Launchers', type:'ASM', x:200, y:495, cat:'houthi', speed:0, notes:'Mobile ASCM launch sites. Multiple dispersed positions.', stats:{hard:'0.20',val:'7'}},
+  {id:'hodaz', name:'Hodeidah Air Defense', type:'SAM', x:185, y:450, cat:'houthi', speed:0, notes:'Ad-hoc SAM cluster. Reported SA-2/modified Sayyad variants.', stats:{hard:'0.40',val:'5'}},
+  {id:'launch1', name:'Mobile Launcher Sector A', type:'UAV', x:250, y:420, cat:'houthi', speed:0, notes:'UAV launch pit cluster.', stats:{hard:'0.20',val:'5'}},
+];
+// SAM rings
+const SAM=[
+  {x:740, y:110, r:65, name:'Fordow SAM belt'},
+  {x:710, y:140, r:52, name:'Natanz SAM belt'},
+  {x:720, y:240, r:48, name:'Bandar Abbas IADS'},
+  {x:700, y:90,  r:62, name:'Tehran IADS'},
+  {x:185, y:450, r:32, name:'Hodeidah local SAM'},
+];
+// Chokepoints
+const CHOKE=[
+  {x:200, y:500, name:'Bab el-Mandeb', sub:'14 nm wide · 4.5 Mbpd'},
+  {x:680, y:248, name:'Strait of Hormuz', sub:'21 nm wide · 17 Mbpd · CLOSED'},
+  {x:125, y:145, name:'Suez Canal', sub:'Northbound · diversion via Cape'},
+];
+// Shipping lanes
+const LANES=[
+  {path:'M 120 140 C 180 200, 200 320, 260 500 L 850 520'},
+  {path:'M 850 520 C 780 400, 720 330, 680 260'},
+];
+// Attack risk zone polygon (Houthi attack corridor)
+const RISK_POLY='M 150 360 L 400 380 L 500 520 L 200 600 Z';
+
+// Asset speed profiles by type (in knots, for time-distance rings)
+// Different from 'speed' field which is platform sustained
+const SPEED_PROFILE={CVN:25, LHD:22, DDG:30, FFG:28, AB:500 /*aircraft from base*/, UAV:230};
+
+const CATS=['naval','air','coalition','iran','houthi'];
+const COLORS={naval:'#6DD9FF',air:'#8EE3FF',coalition:'#B8A0FF',iran:'#FF7A8A',houthi:'#FFB186',sam:'rgba(255,122,138,.3)',choke:'#FFB186',isr:'rgba(184,160,255,.15)',isrb:'rgba(184,160,255,.45)',td:'#6DD9FF',risk:'rgba(255,122,138,.15)'};
+
+// Current layer toggles
+const L={naval:1,air:1,coalition:1,iran:1,houthi:1,sam:0,isr:1,revisit:0,td1:0,td6:1,td24:0,lanes:1,choke:1,risk:0};
+
+// ============ Render ============
+// Scale: 1000 px ≈ 2100 nm across (Red Sea to Hormuz) → roughly 2.1 nm/px at z=1
+const NM_PER_PX = 2.1;
+
+let view={x:0, y:0, zoom:1};
+const svg = document.getElementById('map');
+
+function viewBox(){
+  const w = 1000/view.zoom, h = 650/view.zoom;
+  svg.setAttribute('viewBox', `${view.x} ${view.y} ${w} ${h}`);
+  document.getElementById('s-zoom').textContent = view.zoom.toFixed(1)+'×';
+  document.getElementById('s-ctr').textContent = `${(view.x+w/2).toFixed(0)}, ${(view.y+h/2).toFixed(0)}`;
+  // Update scale bar (80px bar)
+  const nm = 80 * NM_PER_PX / view.zoom;
+  document.getElementById('scale-dist').textContent = Math.round(nm) + ' nm';
+  document.getElementById('s-scale').textContent = (NM_PER_PX/view.zoom).toFixed(1)+' nm/px';
+}
+
+function renderMap(){
+  // Background: sea + stylized landmasses
+  let s = `
+    <defs>
+      <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+        <path d="M50 0 L0 0 0 50" fill="none" class="map-grid"/>
+      </pattern>
+      <radialGradient id="isr-grad"><stop offset="0" stop-color="rgba(184,160,255,.35)"/><stop offset="1" stop-color="rgba(184,160,255,0)"/></radialGradient>
+      <radialGradient id="sam-grad"><stop offset="0" stop-color="rgba(255,122,138,.12)"/><stop offset="1" stop-color="rgba(255,122,138,0)"/></radialGradient>
+    </defs>
+    <rect x="-500" y="-500" width="2000" height="1600" class="map-sea"/>
+    <rect x="-500" y="-500" width="2000" height="1600" fill="url(#grid)"/>
+  `;
+  // Stylized continental masses
+  // Arabia (big central shape)
+  s+=`<path class="map-land" d="M 280 80 L 550 70 L 620 100 L 650 180 L 640 240 L 600 300 L 540 360 L 420 400 L 340 380 L 270 320 L 240 220 L 250 140 Z"/>`;
+  // Yemen / horn
+  s+=`<path class="map-land" d="M 150 380 L 280 390 L 380 430 L 390 510 L 310 560 L 210 555 L 140 480 Z"/>`;
+  // Iran (top right)
+  s+=`<path class="map-land" d="M 620 100 L 800 80 L 920 120 L 940 200 L 900 250 L 800 290 L 720 260 L 660 220 L 640 160 Z"/>`;
+  // Africa (left edge)
+  s+=`<path class="map-land" d="M -20 100 L 140 130 L 170 220 L 150 310 L 120 380 L 60 430 L -20 440 Z"/>`;
+  // East Africa / Somalia
+  s+=`<path class="map-land" d="M 80 540 L 280 570 L 330 640 L 200 670 L 50 640 L 30 580 Z"/>`;
+  // Oman peninsula
+  s+=`<path class="map-land" d="M 700 280 L 800 320 L 830 390 L 770 420 L 710 380 L 680 330 Z"/>`;
+  // Coastlines/country markers (thin)
+  s+=`<g fill="none" stroke="#222A38" stroke-width=".6" stroke-dasharray="1 2" opacity=".6">
+    <path d="M 280 80 L 280 220 M 540 360 L 620 300"/>
+  </g>`;
+
+  // Geographic labels
+  s+=`<g font-family="JetBrains Mono" font-size="10" fill="#5A6574" opacity=".85">
+    <text x="400" y="230" text-anchor="middle" font-size="14" letter-spacing="2">SAUDI ARABIA</text>
+    <text x="770" y="170" text-anchor="middle" font-size="14" letter-spacing="2">IRAN</text>
+    <text x="240" y="480" text-anchor="middle" font-size="12" letter-spacing="1.5">YEMEN</text>
+    <text x="300" y="625" text-anchor="middle" font-size="10" letter-spacing="1">SOMALIA</text>
+    <text x="90" y="280" text-anchor="middle" font-size="10" letter-spacing="1" transform="rotate(-75 90 280)">SUDAN</text>
+    <text x="760" y="380" text-anchor="middle" font-size="11" letter-spacing="1">OMAN</text>
+    <text x="555" y="360" text-anchor="middle" font-size="9" letter-spacing=".5" fill="#4A5565">UAE</text>
+    <text x="540" y="290" text-anchor="middle" font-size="9" letter-spacing=".5" fill="#4A5565">QATAR</text>
+  </g>
+  <g font-family="JetBrains Mono" font-size="10" fill="#3A4452" opacity=".85" font-style="italic">
+    <text x="160" y="270" text-anchor="middle">Red Sea</text>
+    <text x="560" y="500">Gulf of Aden</text>
+    <text x="640" y="310" transform="rotate(-20 640 310)">P. Gulf</text>
+    <text x="850" y="450">Arabian Sea</text>
+  </g>`;
+
+  // Shipping lanes
+  if(L.lanes){
+    LANES.forEach(ln => s+=`<path d="${ln.path}" stroke="#7DDBB0" stroke-width="1.3" stroke-dasharray="5 3" fill="none" opacity=".5"/>`);
+  }
+
+  // Attack risk zone
+  if(L.risk){
+    s+=`<path d="${RISK_POLY}" fill="rgba(255,122,138,.15)" stroke="#FF7A8A" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>`;
+    s+=`<text x="270" y="490" font-family="JetBrains Mono" font-size="11" fill="#FF7A8A" opacity=".7">HIGH-RISK CORRIDOR</text>`;
+  }
+
+  // SAM envelopes
+  if(L.sam){
+    SAM.forEach(r => {
+      s+=`<circle cx="${r.x}" cy="${r.y}" r="${r.r}" fill="url(#sam-grad)" stroke="#FF7A8A" stroke-width=".8" stroke-dasharray="3 2" opacity=".55"/>`;
+    });
+  }
+
+  // Revisit heatmap (before markers)
+  if(L.revisit){
+    s+=renderRevisit();
+  } else if(L.isr){
+    // ISR footprints: each UAV + AWACS-capable platform
+    AIR.filter(a=>a.orbit).forEach(a => {
+      // Sensor footprint radius ~160 nm ≈ 160/2.1 px = ~76 px at z=1
+      s+=`<circle cx="${a.x}" cy="${a.y}" r="76" fill="url(#isr-grad)" stroke="rgba(184,160,255,.45)" stroke-width=".8" stroke-dasharray="2 3" class="isr-footprint"/>`;
+    });
+    // CVN with embarked E-2D: wider ~200nm
+    NAVAL.filter(n=>n.type==='CVN').forEach(n => {
+      s+=`<circle cx="${n.x}" cy="${n.y}" r="95" fill="rgba(184,160,255,.05)" stroke="rgba(184,160,255,.25)" stroke-width=".6" stroke-dasharray="2 4" class="isr-footprint"/>`;
+    });
+  }
+
+  // Time-distance rings
+  renderTDRings().forEach(r => s+=r);
+
+  // Markers
+  CATS.forEach(cat => {
+    if(!L[cat]) return;
+    const list = cat==='naval'?NAVAL:cat==='air'?AIR:cat==='coalition'?COAL:cat==='iran'?IRAN:HOU;
+    list.forEach(a => {
+      const col = COLORS[cat];
+      s += renderMarker(a, col);
+    });
+  });
+
+  // Chokepoints
+  if(L.choke){
+    CHOKE.forEach(c => {
+      const closed = c.name.includes('CLOSED');
+      s+=`<g class="marker" data-cat="choke" data-id="${c.name}">
+        <rect x="${c.x-7}" y="${c.y-7}" width="14" height="14" fill="${closed?'#FF7A8A':'#FFB186'}" transform="rotate(45 ${c.x} ${c.y})" stroke="#0A0D12" stroke-width="1.5"/>
+        <text class="marker-label" x="${c.x+12}" y="${c.y+4}" fill="${closed?'#FF7A8A':'#FFB186'}">${c.name}</text>
+      </g>`;
+    });
+  }
+
+  svg.innerHTML = s;
+  // Wire marker clicks
+  svg.querySelectorAll('.marker').forEach(m => m.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = m.dataset.id; const cat = m.dataset.cat;
+    showIntel(id, cat);
+  }));
+  updateCounts();
+}
+
+function renderMarker(a, col){
+  const shape = a.type==='CVN'?'triangle':a.type==='LHD'||a.type==='DDG'||a.type==='FFG'?'square':a.type==='AB'?'pentagon':a.type==='UAV'?'diamond':a.type==='NUC'?'hex':'circle';
+  let svg='';
+  if(shape==='triangle'){
+    svg=`<path d="M ${a.x},${a.y-7} L ${a.x+7},${a.y+5} L ${a.x-7},${a.y+5} Z" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  } else if(shape==='square'){
+    svg=`<rect x="${a.x-5}" y="${a.y-5}" width="10" height="10" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  } else if(shape==='pentagon'){
+    svg=`<path d="M ${a.x} ${a.y-7} L ${a.x+7} ${a.y-2} L ${a.x+4} ${a.y+6} L ${a.x-4} ${a.y+6} L ${a.x-7} ${a.y-2} Z" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  } else if(shape==='diamond'){
+    svg=`<path d="M ${a.x} ${a.y-7} L ${a.x+6} ${a.y} L ${a.x} ${a.y+7} L ${a.x-6} ${a.y} Z" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  } else if(shape==='hex'){
+    svg=`<path d="M ${a.x-6} ${a.y-3} L ${a.x} ${a.y-7} L ${a.x+6} ${a.y-3} L ${a.x+6} ${a.y+3} L ${a.x} ${a.y+7} L ${a.x-6} ${a.y+3} Z" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  } else {
+    svg=`<circle cx="${a.x}" cy="${a.y}" r="5" fill="${col}" stroke="#0A0D12" stroke-width="1.5"/>`;
+  }
+  let label = '';
+  if(view.zoom >= 1.3 || a.type==='CVN' || a.type==='NUC' || a.type==='LHD'){
+    const short = a.name.length > 24 ? a.name.split('·')[0].trim() : a.name;
+    label = `<text class="marker-label" x="${a.x+10}" y="${a.y+3}">${short}</text>`;
+  }
+  return `<g class="marker" data-cat="${a.cat}" data-id="${a.id}">${svg}${label}</g>`;
+}
+
+function renderTDRings(){
+  const rings=[];
+  // Each CVN, base, MQ-9 gets rings
+  const allAssets=[...NAVAL, ...AIR, ...COAL];
+  allAssets.forEach(a => {
+    const kts = SPEED_PROFILE[a.type] || a.speed || 0;
+    if(kts <= 0) return;
+    const r1 = kts / NM_PER_PX;           // 1 hr
+    const r6 = 6 * r1;                    // 6 hr
+    const r24 = 24 * r1;                  // 24 hr
+    const col = COLORS.td;
+    const opa = a.cat==='naval' ? .4 : a.cat==='coalition' ? .25 : .3;
+    if(L.td1 && r1 > 5){
+      rings.push(`<circle cx="${a.x}" cy="${a.y}" r="${r1}" class="ring-ts" stroke="${col}" stroke-width=".8" opacity="${opa}"/>`);
+    }
+    if(L.td6 && r6 > 10){
+      rings.push(`<circle cx="${a.x}" cy="${a.y}" r="${r6}" class="ring-ts" stroke="${col}" stroke-width=".8" opacity="${opa*.7}"/>`);
+    }
+    if(L.td24 && r24 > 20){
+      rings.push(`<circle cx="${a.x}" cy="${a.y}" r="${Math.min(r24, 1500)}" class="ring-ts" stroke="${col}" stroke-width=".6" opacity="${opa*.4}"/>`);
+    }
+  });
+  return rings;
+}
+
+// Revisit heatmap: grid cells, count of ISR footprints overlapping
+function renderRevisit(){
+  const cells=[];
+  const sensors = [
+    ...AIR.filter(a=>a.orbit).map(a=>({x:a.x,y:a.y,r:76})),
+    ...NAVAL.filter(n=>n.type==='CVN').map(n=>({x:n.x,y:n.y,r:95})),
+    ...NAVAL.filter(n=>n.type==='LHD').map(n=>({x:n.x,y:n.y,r:55})),
+    ...NAVAL.filter(n=>n.type==='DDG').map(n=>({x:n.x,y:n.y,r:45})),
+  ];
+  const GRID=22;
+  let s='<g opacity=".6">';
+  for(let gx=0; gx<1000; gx+=GRID){
+    for(let gy=0; gy<650; gy+=GRID){
+      let count=0;
+      for(const sn of sensors){
+        const dx=gx+GRID/2-sn.x, dy=gy+GRID/2-sn.y;
+        if(dx*dx+dy*dy < sn.r*sn.r) count++;
+      }
+      if(count===0) continue;
+      const opa = Math.min(.6, .12 + count*.11);
+      const col = count>=3 ? '#7DDBB0' : count>=2 ? '#6DD9FF' : '#B8A0FF';
+      s+=`<rect x="${gx}" y="${gy}" width="${GRID}" height="${GRID}" fill="${col}" opacity="${opa}"/>`;
+    }
+  }
+  s+='</g>';
+  // Legend
+  s+=`<g font-family="JetBrains Mono" font-size="9" fill="#8B95A3">
+    <rect x="36" y="68" width="14" height="14" fill="#B8A0FF" opacity=".35"/>
+    <text x="56" y="78">1 sensor (low revisit)</text>
+    <rect x="36" y="86" width="14" height="14" fill="#6DD9FF" opacity=".4"/>
+    <text x="56" y="96">2 sensors</text>
+    <rect x="36" y="104" width="14" height="14" fill="#7DDBB0" opacity=".5"/>
+    <text x="56" y="114">3+ (continuous coverage)</text>
+  </g>`;
+  return s;
+}
+
+function updateCounts(){
+  document.getElementById('c-naval').textContent = NAVAL.length;
+  document.getElementById('c-air').textContent = AIR.length;
+  document.getElementById('c-coal').textContent = COAL.length;
+  document.getElementById('c-iran').textContent = IRAN.length;
+  document.getElementById('c-hou').textContent = HOU.length;
+}
+
+// ============ Intel panel ============
+function showIntel(id, cat){
+  const list = cat==='naval'?NAVAL:cat==='air'?AIR:cat==='coalition'?COAL:cat==='iran'?IRAN:cat==='houthi'?HOU:null;
+  if(!list){
+    // Chokepoints
+    if(cat==='choke'){
+      const c = CHOKE.find(x=>x.name===id);
+      if(c) return showChoke(c);
+    }
+    return;
+  }
+  const a = list.find(x=>x.id===id);
+  if(!a) return;
+  const catLbl = {naval:'U.S. Naval',air:'U.S. Air',coalition:'Coalition',iran:'Iran',houthi:'Houthi/Ansar Allah'}[cat];
+  const catClass = {naval:'',air:'',coalition:'v',iran:'r',houthi:'w'}[cat];
+  let statsHtml='';
+  if(a.stats) statsHtml = `<dl>${Object.entries(a.stats).map(([k,v])=>`<dt>${k.toUpperCase()}</dt><dd>${v}</dd>`).join('')}</dl>`;
+  // Compute reach from this asset
+  const kts = SPEED_PROFILE[a.type] || a.speed || 0;
+  let reach='';
+  if(kts>0){
+    reach = `<dl><dt>SUSTAINED SPEED</dt><dd><b>${kts} kts</b></dd><dt>1-HR RADIUS</dt><dd>${kts} nm</dd><dt>6-HR RADIUS</dt><dd>${6*kts} nm</dd><dt>24-HR RADIUS</dt><dd>${24*kts} nm</dd></dl>`;
+  }
+  document.getElementById('intel').innerHTML = `
+    <div class="eye">${catLbl} · ${a.type || ''}</div>
+    <span class="cat ${catClass}">${a.type || cat.toUpperCase()}</span>
+    <h3>${a.name}</h3>
+    <p>${a.notes}</p>
+    ${statsHtml}
+    <dl><dt>POSITION</dt><dd>${a.x}, ${a.y} · canvas</dd><dt>CATEGORY</dt><dd>${catLbl}</dd></dl>
+    ${reach}
+  `;
+}
+
+function showChoke(c){
+  document.getElementById('intel').innerHTML = `
+    <div class="eye">Strategic chokepoint</div>
+    <span class="cat w">CHOKEPOINT</span>
+    <h3>${c.name}</h3>
+    <p>${c.sub}. Primary control over regional energy transit.</p>
+  `;
+}
+
+// ============ Pan &amp; zoom ============
+let drag=null;
+svg.addEventListener('mousedown', e => {
+  drag = {x:e.clientX, y:e.clientY, vx:view.x, vy:view.y};
+  svg.classList.add('drag');
+});
+window.addEventListener('mousemove', e => {
+  if(!drag) return;
+  const rect = svg.getBoundingClientRect();
+  const scaleFactor = (1000/view.zoom)/rect.width;
+  view.x = drag.vx - (e.clientX - drag.x)*scaleFactor;
+  view.y = drag.vy - (e.clientY - drag.y)*scaleFactor;
+  viewBox();
+});
+window.addEventListener('mouseup', () => {drag=null; svg.classList.remove('drag');});
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = svg.getBoundingClientRect();
+  const mx = (e.clientX - rect.left)/rect.width * (1000/view.zoom) + view.x;
+  const my = (e.clientY - rect.top)/rect.height * (650/view.zoom) + view.y;
+  const factor = e.deltaY > 0 ? .85 : 1.18;
+  const newZ = Math.max(.5, Math.min(5, view.zoom*factor));
+  const zR = newZ/view.zoom;
+  view.x = mx - (mx - view.x)/zR;
+  view.y = my - (my - view.y)/zR;
+  view.zoom = newZ;
+  viewBox(); renderMap();
+}, {passive:false});
+
+document.getElementById('b-in').addEventListener('click', () => {view.zoom = Math.min(5, view.zoom*1.3); viewBox(); renderMap();});
+document.getElementById('b-out').addEventListener('click', () => {view.zoom = Math.max(.5, view.zoom*.77); viewBox(); renderMap();});
+document.getElementById('b-reset').addEventListener('click', () => {view={x:0,y:0,zoom:1}; viewBox(); renderMap();});
+
+// Layer toggles
+document.querySelectorAll('.layer input').forEach(cb => cb.addEventListener('change', () => {
+  L[cb.dataset.layer] = cb.checked ? 1 : 0;
+  renderMap();
+}));
+
+// Initial
+viewBox();
+renderMap();
+</script>
+</body>
+</html>

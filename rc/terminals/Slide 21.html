@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AETHER COMMAND - Comparative Scenario Report</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#004a77",
+                    "background": "#0d131f",
+                    "surface-container-highest": "#2f3542",
+                    "tertiary-container": "#cc9200",
+                    "on-error": "#690005",
+                    "outline": "#88919d",
+                    "tertiary-fixed": "#ffdea8",
+                    "secondary-fixed": "#b8eaff",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "on-primary-fixed": "#001d33",
+                    "inverse-primary": "#00629d",
+                    "inverse-on-surface": "#2a303d",
+                    "surface-container-lowest": "#080e1a",
+                    "surface-dim": "#0d131f",
+                    "on-primary-container": "#00375a",
+                    "error": "#ffb4ab",
+                    "secondary": "#67d4f9",
+                    "inverse-surface": "#dde2f3",
+                    "surface-bright": "#333946",
+                    "tertiary": "#ffba20",
+                    "surface-container-high": "#242a36",
+                    "on-surface-variant": "#bec7d4",
+                    "on-secondary-container": "#002e3b",
+                    "surface-tint": "#98cbff",
+                    "on-secondary": "#003544",
+                    "on-error-container": "#ffdad6",
+                    "surface": "#0d131f",
+                    "on-tertiary-container": "#463000",
+                    "on-tertiary-fixed": "#271900",
+                    "primary-fixed-dim": "#98cbff",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#67d4f9",
+                    "surface-variant": "#2f3542",
+                    "primary": "#98cbff",
+                    "on-tertiary": "#412d00",
+                    "tertiary-fixed-dim": "#ffba20",
+                    "primary-fixed": "#cfe5ff",
+                    "secondary-container": "#1a9dc1",
+                    "on-tertiary-fixed-variant": "#5e4200",
+                    "surface-container": "#1a202c",
+                    "on-background": "#dde2f3",
+                    "surface-container-low": "#161c27",
+                    "on-primary": "#003354",
+                    "primary-container": "#00a3ff",
+                    "on-surface": "#dde2f3",
+                    "outline-variant": "#3f4852",
+                    "on-secondary-fixed": "#001f28"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "grid-columns": "12",
+                    "container-padding": "24px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "gutter": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "display-hero": [
+                            "Instrument Serif"
+                    ],
+                    "data-lg": [
+                            "JetBrains Mono"
+                    ],
+                    "body-base": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Space Grotesk"
+                    ],
+                    "data-sm": [
+                            "JetBrains Mono"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-hero": [
+                            "72px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-base": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "data-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .symbol-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom utilities for tactical aesthetic */
+        .glass-panel {
+            background-color: rgba(26, 32, 44, 0.8); /* surface-container */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(136, 145, 157, 0.2); /* outline */
+        }
+        .data-stroke {
+            height: 1.5px;
+            background: linear-gradient(90deg, rgba(0,163,255,1) 0%, rgba(0,163,255,0) 100%);
+            box-shadow: 0 0 2px rgba(0,163,255,0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base text-body-base antialiased min-h-screen overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Atmospheric Background Layer -->
+<div class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity" data-alt="A highly detailed, ultra-high-definition view of Earth from low orbit, heavily stylized in a dark, tactical command center aesthetic. The planet is shrouded in deep obsidian and slate shadows, with illuminated city grids appearing as glowing cyan and amber data nodes. Thin, glowing orbital telemetry lines arc across the atmosphere. The lighting is dramatic and cinematic, creating a tense, high-stakes military simulation atmosphere, dominating the background behind a layer of frosted glass." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBweo2N_vq34Eq2dwyFw8BzhlLtO5puc-Lw46nMvuW4AqUfkxkLisNY-PsdOhCO7UBY5GTRwE84bVhT3M2E8LQTmCrY3_hpswSMJE9gZl8ofAA3Kr3eX4KOWCNbxZDHkxCCF2J3bVDcTNXfGOeiEnEXugeGTfUucXaxZJKNeRn-S6ykQ2TrzGZl9PdaATyEQPbpqbYBCA6A6FcBUspKe1fC7D1sFDAO8XLQri-Cg8LQwANrn2blr7OBwkjVedn35aHZG5_fPmWIf6o');">
+</div>
+<!-- Deep void overlay to ensure text legibility -->
+<div class="fixed inset-0 z-0 bg-gradient-to-b from-background/90 via-background/70 to-background"></div>
+<!-- SHARED COMPONENT: TopAppBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-14 bg-[#06090E]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,163,255,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-black text-sky-500 text-xl tracking-tighter">AETHER COMMAND</span>
+</div>
+<div class="flex items-center gap-6 text-sky-500 font-mono uppercase tracking-widest text-xs">
+<div class="flex items-center gap-4 hidden md:flex">
+<span class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors cursor-pointer p-1 rounded"><span class="material-symbols-outlined text-lg align-middle">wifi</span></span>
+<span class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors cursor-pointer p-1 rounded"><span class="material-symbols-outlined text-lg align-middle">schedule</span></span>
+<span class="hover:bg-sky-500/10 hover:text-sky-300 transition-colors cursor-pointer p-1 rounded"><span class="material-symbols-outlined text-lg align-middle">lock</span></span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline/30 overflow-hidden ml-4">
+<img alt="Operator Profile" class="w-full h-full object-cover grayscale" data-alt="A monochromatic, high-contrast silhouette portrait of a tactical operator. The lighting is harsh and directional, emphasizing structural facial features while obscuring identity. The image fits within a small circular avatar frame, looking like a secure dossier photo." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp_xEix8wLfuYZa8d0-zhBowtOumpydS9i0ewODPpQt0GexyOMqB8JyLgc-aGDI0SOGllCxSvt-x4gissyUXt5zk8p9b6NHw16ewAllwTRGjBNZNQ7s-oxSgcvekdJzB7rwbW4kaLUyIO2ldwsmL-Bw9eqw96i_5lEUdK5v5sRXje5ItSL1gS2eaTC84CpAoPzEXSUGMHkRpCu8lkjc3_D2LX22iJ1xkmT1daRHrbN8FpOUhwmZEj1JJIbkLqiT_CYjjUfmh6oBVo"/>
+</div>
+</div>
+</nav>
+<!-- SHARED COMPONENT: SideNavBar (WEB) -->
+<aside class="hidden md:flex fixed left-0 top-14 bottom-0 w-20 z-40 flex flex-col items-center py-4 bg-[#06090E]/90 backdrop-blur-2xl border-r border-white/10">
+<div class="flex flex-col items-center mb-8">
+<div class="w-10 h-10 rounded bg-primary/10 border border-primary/30 flex items-center justify-center mb-2 shadow-[0_0_10px_rgba(0,163,255,0.2)]">
+<span class="material-symbols-outlined text-primary">public</span>
+</div>
+<span class="font-bold text-sky-500 text-[10px] tracking-tight text-center leading-tight">STRATCOM<br/><span class="text-slate-500 font-normal">Sector 7-G</span></span>
+</div>
+<nav class="flex-1 w-full flex flex-col gap-2">
+<!-- Active State Logic: 'Orbital Theater' aligns with comparative scenarios for asset positioning -->
+<a class="bg-sky-500/20 text-sky-400 border-r-2 border-sky-500 flex flex-col items-center py-4 w-full group relative" href="#" title="Orbital Theater">
+<span class="material-symbols-outlined symbol-fill mb-1 drop-shadow-[0_0_5px_rgba(0,163,255,0.8)]">public</span>
+<span class="font-mono text-[10px] tracking-tight text-center">Orbital Theater</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="Asset Tracking">
+<span class="material-symbols-outlined mb-1">satellite_alt</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="Signal Intel">
+<span class="material-symbols-outlined mb-1">radar</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="Threat Matrix">
+<span class="material-symbols-outlined mb-1">warning</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="Comm Link">
+<span class="material-symbols-outlined mb-1">terminal</span>
+</a>
+</nav>
+<div class="w-full flex flex-col gap-2 mt-auto">
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="System Logs">
+<span class="material-symbols-outlined">description</span>
+</a>
+<a class="text-slate-600 flex flex-col items-center py-4 w-full hover:bg-white/5 hover:text-sky-200 transition-all" href="#" title="Settings">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</div>
+</aside>
+<!-- SHARED COMPONENT: BottomNavBar (MOBILE) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex justify-center space-x-8 py-2 px-8 bg-slate-900/40 backdrop-blur-lg docked bottom-4 left-1/2 -translate-x-1/2 rounded-none border border-sky-500/30 w-[90%] max-w-[600px] shadow-[0_0_20px_rgba(0,163,255,0.2)]">
+<a class="flex flex-col items-center text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300" href="#">
+<span class="material-symbols-outlined text-lg mb-1">play_circle</span>
+<span class="font-mono text-[9px] font-bold">DEPLOY</span>
+</a>
+<a class="flex flex-col items-center text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300" href="#">
+<span class="material-symbols-outlined text-lg mb-1">wifi_tethering</span>
+<span class="font-mono text-[9px] font-bold">SCAN</span>
+</a>
+<a class="flex flex-col items-center text-sky-400 bg-sky-950/50 border border-sky-500/50 px-4 py-1" href="#">
+<span class="material-symbols-outlined text-lg mb-1 symbol-fill">insights</span>
+<span class="font-mono text-[9px] font-bold">ANALYZE</span>
+</a>
+<a class="flex flex-col items-center text-slate-400 px-4 py-1 hover:border-sky-400 hover:text-sky-300" href="#">
+<span class="material-symbols-outlined text-lg mb-1">cancel</span>
+<span class="font-mono text-[9px] font-bold">ABORT</span>
+</a>
+</nav>
+<!-- MAIN CANVAS -->
+<main class="relative z-10 pt-14 md:pl-20 pb-24 md:pb-8 min-h-screen flex flex-col">
+<div class="container-padding flex-1 max-w-[1600px] mx-auto w-full flex flex-col gap-stack-lg mt-stack-md">
+<!-- Page Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md border-b border-outline/20 pb-stack-sm">
+<div>
+<h2 class="font-label-caps text-label-caps text-primary tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_theme(colors.primary)]"></span>
+                        Executive Summary
+                    </h2>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Comparative Scenario Report</h1>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-2 max-w-2xl">
+                        Analysis of primary Possibility Arrays based on current telemetry. Projecting long-term asset positioning and theater congestion states.
+                    </p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 bg-transparent border border-primary text-primary font-label-caps text-label-caps uppercase hover:bg-primary/10 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span> Export Matrix
+                    </button>
+</div>
+</header>
+<!-- Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter flex-1">
+<!-- SCENARIO A: Stabilized Orbit (Optimal/Baseline) -->
+<article class="glass-panel rounded-DEFAULT p-stack-md flex flex-col gap-stack-md relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-secondary">public</span>
+</div>
+<header class="border-b border-outline/20 pb-3">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-secondary px-2 py-0.5 bg-secondary/10 border border-secondary/30 rounded-sm">ARRAY ALPHA</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">Conf: 87%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Stabilized Orbit</h3>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-1 h-10">Optimal asset dispersion. Nominal interference vectors.</p>
+</header>
+<!-- Metrics -->
+<div class="flex flex-col gap-stack-sm flex-1">
+<!-- Metric 1 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Delta in Stability</span>
+<span class="font-data-lg text-data-lg text-secondary">+14.2%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%] shadow-[0_0_8px_theme(colors.secondary)] relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[9px] text-outline">BASELINE</span>
+<span class="font-data-sm text-[9px] text-outline">TARGET</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Resource Efficiency</span>
+<span class="font-data-lg text-data-lg text-secondary">0.92</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden relative">
+<!-- Target Zone -->
+<div class="absolute left-0 h-full w-[90%] bg-secondary/20"></div>
+<!-- Actual -->
+<div class="h-full bg-secondary w-[75%] shadow-[0_0_8px_theme(colors.secondary)] relative z-10">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Strategic Reach</span>
+<span class="font-data-lg text-data-lg text-on-surface">Tier 1</span>
+</div>
+<div class="flex gap-1 h-3 mt-1">
+<div class="flex-1 bg-secondary shadow-[0_0_5px_theme(colors.secondary)]"></div>
+<div class="flex-1 bg-secondary shadow-[0_0_5px_theme(colors.secondary)]"></div>
+<div class="flex-1 bg-secondary shadow-[0_0_5px_theme(colors.secondary)]"></div>
+<div class="flex-1 bg-secondary shadow-[0_0_5px_theme(colors.secondary)]"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 mt-auto bg-transparent border border-outline/30 text-on-surface-variant font-label-caps text-label-caps uppercase hover:bg-secondary/10 hover:border-secondary hover:text-secondary transition-all">
+                        Select Array
+                    </button>
+</article>
+<!-- SCENARIO B: Congested Theater (Warning) -->
+<article class="glass-panel rounded-DEFAULT p-stack-md flex flex-col gap-stack-md relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-tertiary">radar</span>
+</div>
+<header class="border-b border-outline/20 pb-3">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-tertiary px-2 py-0.5 bg-tertiary/10 border border-tertiary/30 rounded-sm">ARRAY BETA</span>
+<span class="font-data-sm text-data-sm text-on-surface-variant">Conf: 64%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Congested Theater</h3>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-1 h-10">High density of foreign assets. Signal degradation expected.</p>
+</header>
+<!-- Metrics -->
+<div class="flex flex-col gap-stack-sm flex-1">
+<!-- Metric 1 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Delta in Stability</span>
+<span class="font-data-lg text-data-lg text-tertiary">-5.4%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[45%] shadow-[0_0_8px_theme(colors.tertiary)] relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[9px] text-outline">BASELINE</span>
+<span class="font-data-sm text-[9px] text-outline">TARGET</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Resource Efficiency</span>
+<span class="font-data-lg text-data-lg text-tertiary">0.68</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden relative">
+<!-- Target Zone -->
+<div class="absolute left-0 h-full w-[90%] bg-secondary/20"></div>
+<!-- Actual -->
+<div class="h-full bg-tertiary w-[55%] shadow-[0_0_8px_theme(colors.tertiary)] relative z-10">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Strategic Reach</span>
+<span class="font-data-lg text-data-lg text-on-surface">Tier 3</span>
+</div>
+<div class="flex gap-1 h-3 mt-1">
+<div class="flex-1 bg-tertiary shadow-[0_0_5px_theme(colors.tertiary)]"></div>
+<div class="flex-1 bg-tertiary shadow-[0_0_5px_theme(colors.tertiary)]"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 mt-auto bg-transparent border border-outline/30 text-on-surface-variant font-label-caps text-label-caps uppercase hover:bg-tertiary/10 hover:border-tertiary hover:text-tertiary transition-all">
+                        Select Array
+                    </button>
+</article>
+<!-- SCENARIO C: Cascade Failure (Critical) -->
+<article class="glass-panel rounded-DEFAULT p-stack-md flex flex-col gap-stack-md relative overflow-hidden group border-error/30">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-error">warning</span>
+</div>
+<header class="border-b border-error/20 pb-3">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-caps text-label-caps text-error px-2 py-0.5 bg-error/10 border border-error/30 rounded-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-error rounded-full animate-pulse"></span>
+                                ARRAY OMEGA
+                            </span>
+<span class="font-data-sm text-data-sm text-error/80">Conf: 12%</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-error">Cascade Failure</h3>
+<p class="font-data-sm text-data-sm text-on-surface-variant mt-1 h-10">Uncontrolled kinetic events. Total loss of sector command.</p>
+</header>
+<!-- Metrics -->
+<div class="flex flex-col gap-stack-sm flex-1">
+<!-- Metric 1 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Delta in Stability</span>
+<span class="font-data-lg text-data-lg text-error">-89.1%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error w-[12%] shadow-[0_0_8px_theme(colors.error)] relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[9px] text-outline">BASELINE</span>
+<span class="font-data-sm text-[9px] text-outline">TARGET</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Resource Efficiency</span>
+<span class="font-data-lg text-data-lg text-error">0.11</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden relative">
+<!-- Target Zone -->
+<div class="absolute left-0 h-full w-[90%] bg-secondary/20"></div>
+<!-- Actual -->
+<div class="h-full bg-error w-[18%] shadow-[0_0_8px_theme(colors.error)] relative z-10">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white"></div>
+</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="mb-2">
+<div class="flex justify-between items-end mb-1">
+<span class="font-data-sm text-data-sm text-on-surface">Strategic Reach</span>
+<span class="font-data-lg text-data-lg text-error">Tier 5</span>
+</div>
+<div class="flex gap-1 h-3 mt-1">
+<div class="flex-1 bg-error shadow-[0_0_5px_theme(colors.error)]"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+<div class="flex-1 bg-surface-container-highest"></div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 mt-auto bg-error text-on-error font-label-caps text-label-caps uppercase hover:bg-error/90 transition-all font-bold">
+                        INITIATE MITIGATION
+                    </button>
+</article>
+</div>
+</div>
+</main>
+</body></html>
+
+<!-- Aether Command: Executive Briefing Terminal -->
