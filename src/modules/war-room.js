@@ -307,7 +307,7 @@ function panelOverview(state) {
     </div>
 
     <div class="panel-head" style="margin-bottom:8px">
-      <div><div class="node-kicker">Strike Planner</div><h3>Solution Control</h3></div>
+      <div><div class="node-kicker">Mission Planning</div><h3>Solution Board</h3></div>
       <span class="chip chip-cyan">${state.strikePlanner.lockCount} locks</span>
     </div>
     <div class="planner-grid" style="margin-bottom:16px">
@@ -331,7 +331,7 @@ function panelOverview(state) {
     </div>
 
     <div class="panel-head" style="margin-bottom:4px">
-      <div><div class="node-kicker">Command Log</div><h3>Recent Events</h3></div>
+      <div><div class="node-kicker">Event Log</div><h3>Recent Activity</h3></div>
     </div>
     ${state.system.log.slice(-6).reverse().map(e => `<div class="log-entry">${e}</div>`).join("")}
   `;
@@ -346,7 +346,7 @@ function panelTurnEngine(state) {
   return `
     <!-- Week timeline -->
     <div style="margin-bottom:20px">
-      <div class="node-kicker" style="margin-bottom:8px">10-Week Campaign Timeline</div>
+      <div class="node-kicker" style="margin-bottom:8px">Campaign Timeline</div>
       <div style="display:flex;gap:4px;flex-wrap:wrap">
         ${Array.from({ length: 10 }, (_, i) => i + 1).map(w => {
           const cls = w === week    ? "timeline-week-active"
@@ -362,7 +362,7 @@ function panelTurnEngine(state) {
 
     <!-- Actor posture board -->
     <div style="margin-bottom:20px">
-      <div class="node-kicker" style="margin-bottom:8px">Theater Actors</div>
+      <div class="node-kicker" style="margin-bottom:8px">Actor Posture Board</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px">
         ${WAR_GAME_ACTORS.map(actor => {
           const posture = actorPosture(actor.id, state);
@@ -379,7 +379,7 @@ function panelTurnEngine(state) {
     </div>
 
     <!-- Action tracks -->
-    <div class="node-kicker" style="margin-bottom:8px">Issue Directives — Select per Track</div>
+    <div class="node-kicker" style="margin-bottom:8px">Directive Selection — Issue per Track</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px">
       ${ACTION_TRACKS.map(track => `
         <div class="panel" style="padding:12px;background:rgba(6,9,14,0.6)">
@@ -413,10 +413,10 @@ function panelTurnEngine(state) {
 
 function panelCausal() {
   return `
-    <div class="node-kicker" style="margin-bottom:8px">18-Node Bayesian Causal Cascade</div>
+    <div class="node-kicker" style="margin-bottom:8px">Causal Cascade Analysis — 18 Nodes</div>
     <p class="data-sm text-muted" style="margin-bottom:12px;line-height:1.6">
-      Node size and value reflect current simulation state. Edges show causal influence direction.
-      Run the Monte Carlo simulation to overlay posterior probabilities as arc indicators.
+      Node size and value reflect current state metrics. Edges show causal influence direction.
+      Run the probabilistic assessment to overlay posterior probabilities as arc indicators.
     </p>
     <canvas id="causal-canvas"
       style="width:100%;height:420px;display:block;background:rgba(6,9,14,0.7);border:1px solid rgba(34,48,68,1);border-radius:4px">
@@ -471,14 +471,14 @@ function panelMonteCarlo(state) {
   return `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div>
-        <div class="node-kicker">Monte Carlo Workbench</div>
+        <div class="node-kicker">Probabilistic Assessment</div>
         <p class="data-sm text-muted" style="margin-top:4px;line-height:1.5">
-          18-node Bayesian DAG · 1 000 forward samples · do-calculus interventions
+          18-node Bayesian DAG · 1,000 forward samples · do-calculus interventions
         </p>
       </div>
       <div style="display:flex;gap:8px">
-        <button class="primary-action" data-wr-mc-run="1" style="padding:6px 14px">Run Simulation</button>
-        ${hasBeliefs ? `<button class="primary-action" data-wr-mc-clear="1" style="padding:6px 14px;opacity:0.7">Clear All</button>` : ""}
+        <button class="primary-action" data-wr-mc-run="1" style="padding:6px 14px">Run Assessment</button>
+        ${hasBeliefs ? `<button class="primary-action" data-wr-mc-clear="1" style="padding:6px 14px;opacity:0.7">Clear</button>` : ""}
       </div>
     </div>
 
@@ -524,7 +524,7 @@ function panelMonteCarlo(state) {
     ` : `
       <div class="data-card" style="text-align:center;padding:32px;color:#595f77">
         <span class="material-symbols-outlined" style="font-size:40px;display:block;margin-bottom:8px">scatter_plot</span>
-        <div class="data-sm">Click <strong style="color:#38BDF8">Run Simulation</strong> to propagate beliefs through the causal DAG</div>
+        <div class="data-sm">Click <strong style="color:#38BDF8">Run Assessment</strong> to propagate beliefs through the causal DAG</div>
       </div>
     `}
   `;
@@ -544,9 +544,9 @@ function html(state) {
   return `
     <div class="viewport-head" style="margin-bottom:16px">
       <div>
-        <div class="node-kicker">War Room / W${state.system.week}</div>
-        <h2>Threat &amp; Strike Control</h2>
-        <p>Protocol board, strike planner, turn engine, and causal cascade.</p>
+        <div class="node-kicker">Ops Cell / W${state.system.week}</div>
+        <h2>Theater Operations</h2>
+        <p>Threat protocols, mission planning, turn engine, and causal cascade.</p>
       </div>
       <div class="hero-panel">
         <span class="chip chip-red">THREAT ${state.system.threat}</span>
@@ -560,15 +560,15 @@ function html(state) {
       <!-- Main panel -->
       <section class="panel panel-large">
         <div class="panel-head" style="margin-bottom:12px">
-          <div><div class="node-kicker">War Room Terminal</div><h3>Operations</h3></div>
+          <div><div class="node-kicker">Operations Terminal</div><h3>Theater Control</h3></div>
           <span class="chip chip-red">${state.system.threat} threat</span>
         </div>
 
         <div class="segmented" style="margin-bottom:16px">
-          <button class="${panel === "overview"      ? "segment-active" : ""}" data-wr-panel="overview">Overview</button>
+          <button class="${panel === "overview"      ? "segment-active" : ""}" data-wr-panel="overview">Status</button>
           <button class="${panel === "turn-engine"   ? "segment-active" : ""}" data-wr-panel="turn-engine">Turn Engine</button>
           <button class="${panel === "causal"        ? "segment-active" : ""}" data-wr-panel="causal">Causal Graph</button>
-          <button class="${panel === "monte-carlo"   ? "segment-active" : ""}" data-wr-panel="monte-carlo">Monte Carlo</button>
+          <button class="${panel === "monte-carlo"   ? "segment-active" : ""}" data-wr-panel="monte-carlo">Prob. Assessment</button>
         </div>
 
         <div id="wr-panel-body">
@@ -582,7 +582,7 @@ function html(state) {
       <!-- Screen rail -->
       <div class="panel">
         <div class="panel-head">
-          <div><div class="node-kicker">War Room Screens</div><h3>Operations</h3></div>
+          <div><div class="node-kicker">Ops Cell Screens</div><h3>Navigation</h3></div>
           <span class="chip chip-cyan">${screens.length}</span>
         </div>
         <div class="screen-list">

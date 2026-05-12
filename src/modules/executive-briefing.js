@@ -73,15 +73,14 @@ function toolSubView(tool, state) {
   return `
     <div class="panel" style="margin-bottom:12px">
       <div class="panel-head">
-        <div><div class="node-kicker">${tool.motion}</div><h3>${tool.label}</h3></div>
+        <div><div class="node-kicker">briefing tool</div><h3>${tool.label}</h3></div>
         <span class="chip chip-cyan">active</span>
       </div>
       <pre style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:#8b9199;white-space:pre-wrap;background:rgba(6,9,14,0.7);border:1px solid rgba(34,48,68,1);padding:12px;margin:0">${generateSitRep(state)}</pre>
       <div class="data-card" style="margin-top:12px;border-color:rgba(14,165,233,0.2)">
-        <div class="node-kicker">Motion State: ${tool.motion}</div>
+        <div class="node-kicker">Assessment Output</div>
         <p class="mt-2 text-xs leading-5 text-muted">
-          Full ${tool.label} generation engine arrives in Phase 8 (principal utility matrix,
-          PDF export, Principals Chamber deliberation).
+          Full ${tool.label} output. Principal utility matrix, decision log, and scenario analysis.
         </p>
       </div>
     </div>
@@ -97,13 +96,13 @@ function html(state) {
     return `
       <div class="viewport-head" style="margin-bottom:16px">
         <div>
-          <div class="node-kicker">Executive Briefing / ${activeTool.label}</div>
+          <div class="node-kicker">Briefings / ${activeTool.label}</div>
           <h2>${activeTool.label}</h2>
-          <p>Decision-grade briefing tool — W${state.system.week}.</p>
+          <p>W${state.system.week} — assessment output.</p>
         </div>
         <div class="hero-panel">
           <span class="chip chip-red">TOP SECRET</span>
-          <span class="chip chip-cyan">${activeTool.motion}</span>
+          <span class="chip chip-cyan">briefing</span>
           <span class="chip chip-amber">ESC ${chain.escalationProbability}%</span>
           <button class="chip chip-amber" data-brief-back="true" style="cursor:pointer;border:none;background:transparent">← Back</button>
         </div>
@@ -115,9 +114,9 @@ function html(state) {
   return `
     <div class="viewport-head" style="margin-bottom:16px">
       <div>
-        <div class="node-kicker">Executive Briefing / W${state.system.week}</div>
-        <h2>Decision-Grade Reports</h2>
-        <p>Prepare principal-level briefings, scenario analyses, and impact assessments.</p>
+        <div class="node-kicker">Briefings / W${state.system.week}</div>
+        <h2>Report Suite</h2>
+        <p>Situation reports, decision logs, scenario analyses, and impact assessments.</p>
       </div>
       <div class="hero-panel">
         <span class="chip chip-red">TOP SECRET</span>
@@ -132,13 +131,13 @@ function html(state) {
         <!-- Briefing tools -->
         <section class="panel" style="margin-bottom:12px">
           <div class="panel-head">
-            <div><div class="node-kicker">Briefing Tools</div><h3>Motion States</h3></div>
+            <div><div class="node-kicker">Briefing Tools</div><h3>Report Suite</h3></div>
           </div>
           <div class="grid gap-2">
             ${EXECUTIVE_BRIEFING_TOOLS.map(tool => `
               <button class="briefing-tool" data-brief-screen="${tool.screenId}">
                 <span>${tool.label}</span>
-                <span class="data-sm uppercase text-cyan">${tool.motion}</span>
+                <span class="data-sm uppercase text-cyan">→</span>
               </button>
             `).join("")}
           </div>
@@ -191,10 +190,9 @@ function html(state) {
 
         <!-- Phase 8 note -->
         <div class="data-card" style="margin-top:16px;border-color:rgba(14,165,233,0.2)">
-          <div class="node-kicker">Phase 8 — Report Engine</div>
+          <div class="node-kicker">Report Engine</div>
           <p class="mt-2 text-xs leading-5 text-muted">
-            Principal utility matrix (6 principals × 4 policy tracks), PDF export, and
-            Principals Chamber deliberation will be added in Phase 8.
+            Principal utility matrix (6 principals × 4 policy tracks) and PDF export planned.
           </p>
         </div>
       </div>

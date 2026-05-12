@@ -152,14 +152,14 @@ export const STITCH_SCREENS = Object.freeze(SCREEN_ROWS.map(([screenId, route, t
 })));
 
 export const NAV_MODULES = Object.freeze([
-  { id: "overview", label: "Overview", icon: "grid_view", objective: "Synthesize theater-wide readiness." },
-  { id: "planets", label: "Planets", icon: "public", objective: "Bridge NASA orbital data into command simulations." },
-  { id: "war-room", label: "War Room", icon: "warning", objective: "Run resource, strike, and escalation decisions." },
+  { id: "overview", label: "Overview", icon: "grid_view", objective: "Theater-wide status and readiness summary." },
+  { id: "planets", label: "Space ISR", icon: "public", objective: "Satellite and airborne ISR collection coverage." },
+  { id: "war-room", label: "Ops Cell", icon: "warning", objective: "Threat protocols, mission planning, and escalation." },
   { id: "orbital", label: "Orbital", icon: "satellite_alt", objective: "Track orbital assets, sensors, and telemetry." },
-  { id: "drone-swarm", label: "Drone Swarm", icon: "flight", objective: "Coordinate UAV node drill-down and ISR tasking." },
-  { id: "electronic-warfare", label: "EW", icon: "settings_input_antenna", objective: "Monitor spectrum, comms, jamming, and sensor denial." },
-  { id: "hormuz-escalation", label: "Hormuz", icon: "crisis_alert", objective: "Model Strait of Hormuz escalation ladders." },
-  { id: "executive-briefing", label: "Executive Briefing", icon: "article", objective: "Prepare decision-grade reports and briefing tools." }
+  { id: "drone-swarm", label: "UAV Ops", icon: "flight", objective: "UAV node status, ISR tasking, and swarm coordination." },
+  { id: "electronic-warfare", label: "EW", icon: "settings_input_antenna", objective: "Spectrum integrity, jamming events, and GPS denial." },
+  { id: "hormuz-escalation", label: "Hormuz", icon: "crisis_alert", objective: "Strait of Hormuz escalation index and parameters." },
+  { id: "executive-briefing", label: "Briefings", icon: "article", objective: "Situation reports, decision logs, and policy briefs." }
 ]);
 
 export const SIDEBAR_TARGETS = Object.freeze([
@@ -285,9 +285,9 @@ export function createHubState(options = {}) {
       actors: { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 },
       ewJamming: { events: 0, lastSource: null, intensity: 0 },
       log: [
-        "Final Stitch canvas synced: Tactical Operations Command",
-        "Command Center hierarchy initialized",
-        "Persistent drill-down state online"
+        "SYS: Module state initialized",
+        "SYS: Persistent session state loaded",
+        "SYS: Theater feed active"
       ]
     }
   };

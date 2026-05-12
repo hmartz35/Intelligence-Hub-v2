@@ -50,12 +50,12 @@ function metricCard(label, value, suffix, icon, heroColor, borderColor, subtext,
           <span class="material-symbols-outlined" style="font-size:14px;color:#88919d;">${icon}</span>
         </div>
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:500;
-                  line-height:1;color:${heroColor};margin-top:12px;letter-spacing:-0.01em;">
-        ${value}<span style="font-size:14px;color:#88919d;margin-left:4px;">${suffix}</span>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;
+                  line-height:1;color:${heroColor};margin-top:8px;letter-spacing:-0.01em;">
+        ${value}<span style="font-size:12px;color:#88919d;margin-left:4px;">${suffix}</span>
       </div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${heroColor};
-                  opacity:0.7;margin-top:6px;text-transform:uppercase;letter-spacing:0.08em;">
+                  opacity:0.7;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;">
         ${subtext}
       </div>
       ${sparkBars(value, week, sparkColor, faintColor)}
@@ -80,12 +80,12 @@ function threatCard(threat, week) {
           <span class="material-symbols-outlined" style="font-size:13px;">warning</span>THREAT LEVEL
         </div>
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:500;
-                  line-height:1;color:${color};margin-top:12px;">${threat}
-        <span style="font-size:14px;color:#88919d;margin-left:4px;">IDX</span>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;
+                  line-height:1;color:${color};margin-top:8px;">${threat}
+        <span style="font-size:12px;color:#88919d;margin-left:4px;">IDX</span>
       </div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
-                  color:${color};margin-top:6px;text-transform:uppercase;letter-spacing:0.1em;">${label}</div>
+                  color:${color};margin-top:4px;text-transform:uppercase;letter-spacing:0.1em;">${label}</div>
       <div style="display:flex;gap:3px;height:6px;margin-top:14px;border-radius:2px;overflow:hidden;">
         ${segs}
       </div>
@@ -135,18 +135,21 @@ function logEntryHTML(entry, idx) {
 
 function entityCard(state, summary) {
   const active = summary.find(m => m.active) ?? summary[0];
+  const si = state.system.spectrumIntegrity;
   const metrics = [
-    { label: "SCREENS",  value: active?.screenCount ?? "–" },
-    { label: "CRITICAL", value: active?.critical ?? "–"    },
-    { label: "WEEK",     value: `W${state.system.week}`    },
-    { label: "THREAT",   value: state.system.threat        }
+    { label: "SCREENS",   value: active?.screenCount ?? "–" },
+    { label: "CRITICAL",  value: active?.critical ?? "–"    },
+    { label: "WEEK",      value: `W${state.system.week}`    },
+    { label: "THREAT",    value: state.system.threat        },
+    { label: "SPECTRUM",  value: `${si}%`                   },
+    { label: "READINESS", value: `${state.system.readiness}%` }
   ];
 
   return `
     <div style="background:rgba(6,9,14,0.80);border:1px solid rgba(63,72,82,0.6);
                 padding:14px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;">
       <div class="font-label-caps" style="color:#88919d;border-bottom:1px solid rgba(63,72,82,0.5);
-                                          padding-bottom:8px;">SELECTED ENTITY</div>
+                                          padding-bottom:8px;">ACTIVE MODULE</div>
       <div style="display:flex;gap:10px;align-items:center;">
         <div style="width:44px;height:44px;background:rgba(26,32,44,0.9);
                     border:1px solid rgba(63,72,82,0.8);display:flex;align-items:center;
@@ -172,6 +175,20 @@ function entityCard(state, summary) {
             <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#dde2f3;">
               ${m.value}
             </span>
+          </div>
+        `).join("")}
+      </div>
+      <div style="border-top:1px solid rgba(63,72,82,0.4);padding-top:8px;display:flex;flex-direction:column;gap:4px;">
+        <div class="font-label-caps" style="color:#3a4252;font-size:8px;margin-bottom:2px;">SYSTEM HEALTH</div>
+        ${[
+          { label: "COMMS",    ok: si >= 70,                       note: si >= 70 ? "nominal" : "degraded" },
+          { label: "ISR",      ok: state.system.orbitalISRCertainty >= 70, note: `${state.system.orbitalISRCertainty ?? "–"}%` },
+          { label: "UAV SWRM", ok: state.system.swarmCohesion >= 60, note: `${state.system.swarmCohesion}%` }
+        ].map(r => `
+          <div style="display:flex;align-items:center;justify-content:space-between;
+                      font-family:'JetBrains Mono',monospace;font-size:9px;">
+            <span style="color:#595f77;">${r.label}</span>
+            <span style="color:${r.ok ? "#4ade80" : "#ffba20"};">${r.note}</span>
           </div>
         `).join("")}
       </div>
@@ -382,26 +399,25 @@ function html(state) {
       <!-- ── Header ─────────────────────────────────────────────────── -->
       <header class="ov-header">
         <div>
-          <h1 style="font-family:'Inter',system-ui,sans-serif;font-size:24px;font-weight:600;
-                     color:#dde2f3;display:flex;align-items:center;gap:10px;letter-spacing:-0.01em;">
-            <span class="material-symbols-outlined" style="font-size:22px;color:#98cbff;">public</span>
-            COMMAND THEATER
+          <h1 style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+                     color:#88919d;display:flex;align-items:center;gap:8px;letter-spacing:0.12em;
+                     text-transform:uppercase;">
+            <span class="material-symbols-outlined" style="font-size:14px;color:#595f77;">grid_view</span>
+            Theater Status
           </h1>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#88919d;
-                    text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">
-            CENTCOM // W${week} // ${NAV_MODULES.length} TERMINALS // ${STITCH_SCREENS.length} STATES
+          <p style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#3a4252;
+                    text-transform:uppercase;letter-spacing:0.1em;margin-top:3px;">
+            CENTCOM // W${week} // ${NAV_MODULES.length} modules // ${STITCH_SCREENS.length} states
           </p>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:rgba(6,9,14,0.80);border:1px solid rgba(63,72,82,0.7);
-                      padding:5px 10px;display:flex;align-items:center;gap:7px;">
-            <span style="width:6px;height:6px;border-radius:50%;background:#38BDF8;
-                         box-shadow:0 0 6px rgba(56,189,248,0.8);flex-shrink:0;"></span>
-            <span class="font-label-caps" style="color:#98cbff;">LIVE SAT-LINK</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="background:transparent;border:1px solid rgba(63,72,82,0.5);
+                      padding:4px 9px;display:flex;align-items:center;gap:6px;">
+            <span style="width:5px;height:5px;border-radius:50%;background:#4ade80;flex-shrink:0;"></span>
+            <span class="font-label-caps" style="color:#595f77;font-size:9px;">DATA LINK ACTIVE</span>
           </div>
-          <div style="background:rgba(6,9,14,0.80);border:1px solid rgba(63,72,82,0.7);
-                      padding:5px 10px;">
-            <span class="font-label-caps" style="color:#88919d;">SOURCE: ${STITCH_PROJECT.source}</span>
+          <div style="background:transparent;border:1px solid rgba(63,72,82,0.4);padding:4px 9px;">
+            <span class="font-label-caps" style="color:#3a4252;font-size:9px;">CENTCOM THEATER</span>
           </div>
         </div>
       </header>
@@ -420,7 +436,7 @@ function html(state) {
             specColor, specBorder,
             spectrumIntegrity >= 70 ? "comms integrity OK" : "interference detected",
             specColor, "rgba(152,203,255,0.12)", week)}
-          ${metricCard("COHESION", swarmCohesion, "%", "hub",
+          ${metricCard("UAV COHESION", swarmCohesion, "%", "hub",
             cohColor, `rgba(${swarmCohesion >= 60 ? "103,212,249" : "255,186,32"},0.25)`,
             swarmCohesion >= 60 ? "swarm nominal" : "formation degraded",
             cohColor, `rgba(${swarmCohesion >= 60 ? "103,212,249" : "255,186,32"},0.12)`, week)}
@@ -442,7 +458,7 @@ function html(state) {
                       align-items:center;padding:7px 14px;
                       background:rgba(6,9,14,0.75);border-bottom:1px solid rgba(26,32,44,0.9);
                       backdrop-filter:blur(8px);">
-            <span class="font-label-caps" style="color:#88919d;">TERMINAL STACK</span>
+            <span class="font-label-caps" style="color:#88919d;">MODULE INDEX</span>
             <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a4252;
                          border:1px solid rgba(63,72,82,0.4);padding:2px 6px;">
               ${summary.filter(t => t.active).map(t => t.label.toUpperCase()).join("") || "OVERVIEW"} // ACTIVE
@@ -458,7 +474,7 @@ function html(state) {
           <div style="padding:14px 14px 20px;border-top:1px solid rgba(26,32,44,0.9);">
             <div class="font-label-caps" style="color:#3a4252;margin-bottom:12px;padding-bottom:6px;
                          border-bottom:1px solid rgba(26,32,44,0.9);">
-              CONCEPT STATE SCAFFOLD — ${STITCH_SCREENS.length} SCREENS
+              STATE REGISTRY — ${STITCH_SCREENS.length} ENTRIES
             </div>
             ${screenScaffold(state)}
           </div>
@@ -469,9 +485,9 @@ function html(state) {
 
           <div class="ov-log-panel">
             <div class="ov-log-header">
-              <span class="font-label-caps" style="color:#dde2f3;">INCIDENT LOG</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#88919d;">
-                AUTO-SCROLL ON
+              <span class="font-label-caps" style="color:#88919d;">EVENT LOG</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a4252;">
+                W${week} · ${state.system.log.length} entries
               </span>
             </div>
             <div class="ov-log-scroll">

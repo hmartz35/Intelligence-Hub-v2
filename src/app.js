@@ -115,7 +115,21 @@ export function dispatch(fn, ...args) {
 function initTopBar() {
   topbar.innerHTML = `
     <div class="shell-top-inner">
-      <div class="shell-brand">AETHER COMMAND</div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="shell-brand">INTEL OPS</div>
+        <div class="shell-op-strip">
+          <span class="shell-op-item">
+            <span class="shell-op-dot" style="background:#4ade80;"></span>COMMS
+          </span>
+          <span class="shell-op-item">
+            <span class="shell-op-dot" id="shell-spectrum-dot" style="background:#4ade80;"></span>
+            SPECTRUM&nbsp;<span id="shell-spectrum-val">${state.system.spectrumIntegrity}%</span>
+          </span>
+          <span class="shell-op-item">
+            <span class="shell-op-dot" id="shell-isr-dot" style="background:#4ade80;"></span>ISR
+          </span>
+        </div>
+      </div>
       <div class="shell-top-right">
         <div class="shell-live-indicator">
           <span class="shell-live-dot"></span>
@@ -126,6 +140,8 @@ function initTopBar() {
           THREAT&nbsp;<span id="shell-threat" class="text-red">${state.system.threat}</span>
           &nbsp;|&nbsp;
           READY&nbsp;<span id="shell-ready" class="text-cyan">${state.system.readiness}</span>%
+          &nbsp;|&nbsp;
+          SPECTRUM&nbsp;<span id="shell-spectrum" class="text-cyan">${state.system.spectrumIntegrity}</span>%
           &nbsp;|&nbsp;
           W<span id="shell-week">${state.system.week}</span>
         </span>
@@ -140,12 +156,22 @@ function initTopBar() {
 
 /** Targeted DOM updates for metric values — does not touch the clock element. */
 function updateShellMetrics() {
-  const threat = document.getElementById("shell-threat");
-  const ready  = document.getElementById("shell-ready");
-  const week   = document.getElementById("shell-week");
-  if (threat) threat.textContent = state.system.threat;
-  if (ready)  ready.textContent  = state.system.readiness;
-  if (week)   week.textContent   = state.system.week;
+  const threat    = document.getElementById("shell-threat");
+  const ready     = document.getElementById("shell-ready");
+  const week      = document.getElementById("shell-week");
+  const spectrum  = document.getElementById("shell-spectrum");
+  const specVal   = document.getElementById("shell-spectrum-val");
+  const specDot   = document.getElementById("shell-spectrum-dot");
+  const isrDot    = document.getElementById("shell-isr-dot");
+  const si = state.system.spectrumIntegrity;
+  const isr = state.system.orbitalISRCertainty ?? state.system.swarmCohesion;
+  if (threat)   threat.textContent   = state.system.threat;
+  if (ready)    ready.textContent    = state.system.readiness;
+  if (week)     week.textContent     = state.system.week;
+  if (spectrum) spectrum.textContent = si;
+  if (specVal)  specVal.textContent  = `${si}%`;
+  if (specDot)  specDot.style.background = si >= 70 ? "#4ade80" : si >= 45 ? "#ffba20" : "#ff4d4d";
+  if (isrDot)   isrDot.style.background  = isr >= 70 ? "#4ade80" : isr >= 45 ? "#ffba20" : "#ff4d4d";
 }
 
 function updateShellRail() {
@@ -182,16 +208,17 @@ function injectShellStyles() {
       background: rgba(6,9,14,0.90);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 4px 20px rgba(0,163,255,0.08);
+      box-shadow: none;
     }
     .shell-top-inner {
       display: flex; align-items: center; justify-content: space-between;
       height: 100%; padding: 0 24px;
     }
     .shell-brand {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 20px; font-weight: 900; letter-spacing: -0.03em;
-      color: #38BDF8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #88919d;
     }
     .shell-top-right {
       display: flex; align-items: center; gap: 18px;
@@ -201,15 +228,30 @@ function injectShellStyles() {
     }
     .shell-live-indicator {
       display: flex; align-items: center; gap: 6px;
-      color: #bec7d4;
+      color: #595f77;
     }
     .shell-live-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #38BDF8;
-      box-shadow: 0 0 6px rgba(56,189,248,0.7);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80;
+      box-shadow: none;
     }
     .shell-clock  { color: #595f77; }
     .shell-metrics { color: #595f77; }
+    .shell-op-strip {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.10em;
+      color: #3a4252;
+      border-left: 1px solid rgba(63,72,82,0.4);
+      padding-left: 14px;
+    }
+    .shell-op-item {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .shell-op-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      flex-shrink: 0;
+    }
     .text-red  { color: #ffb4ab; }
     .text-cyan { color: #38BDF8; }
     .shell-icon-btn {

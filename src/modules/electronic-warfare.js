@@ -202,7 +202,7 @@ function html(state) {
       <div>
         <div class="node-kicker">Electronic Warfare / W${state.system.week}</div>
         <h2>Spectrum Operations</h2>
-        <p>Monitor spectrum integrity, jamming overlays, GPS denial zones. Apply "sig2" directive in War Room to degrade spectrum.</p>
+        <p>Spectrum integrity, jamming overlays, and GPS denial zones. Apply "sig2" directive in Ops Cell to degrade spectrum.</p>
       </div>
       <div class="hero-panel">
         <span class="chip ${si > 70 ? "chip-cyan" : si > 45 ? "chip-amber" : "chip-red"}">SPECTRUM ${si}%</span>
@@ -214,13 +214,13 @@ function html(state) {
     <div class="workspace-grid" style="margin-bottom:12px">
       <section class="panel panel-large">
         <div class="panel-head">
-          <div><div class="node-kicker">EW Terminal</div><h3>Spectrum Dominance</h3></div>
+          <div><div class="node-kicker">Spectrum Terminal</div><h3>Spectrum Operations</h3></div>
           <span class="chip ${si > 70 ? "chip-cyan" : "chip-amber"}">${si}% integrity</span>
         </div>
 
         <div class="segmented">
-          ${["overview","spectrum","nodes","gps-denial"].map(p => `
-            <button class="${drill.panel === p ? "segment-active" : ""}" data-ew-panel="${p}">${p}</button>
+          ${[["overview","Status"],["spectrum","Spectrum"],["nodes","EW Nodes"],["gps-denial","GPS Denial"]].map(([p, label]) => `
+            <button class="${drill.panel === p ? "segment-active" : ""}" data-ew-panel="${p}">${label}</button>
           `).join("")}
         </div>
 
@@ -276,7 +276,7 @@ function html(state) {
               </div>
               <p class="data-sm text-muted" style="margin-bottom:10px;line-height:1.5">
                 Radial denial zones over Gulf theater. Zone radius scales with node power × spectrum integrity.
-                Apply <strong class="text-amber">sig2</strong> in War Room to degrade spectrum and shrink US jamming coverage.
+                Apply <strong class="text-amber">sig2</strong> directive in Ops Cell to degrade spectrum and shrink jamming coverage.
               </p>
               <div id="gps-canvas-mount" style="width:100%;height:280px;background:rgba(6,9,14,0.8);border:1px solid rgba(255,77,77,0.15);border-radius:4px;overflow:hidden"></div>
               <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
@@ -307,7 +307,7 @@ function html(state) {
                 </svg>
               </div>
               <div class="data-card" style="margin-top:12px;border-color:rgba(255,186,32,0.2)">
-                <div class="node-kicker">Flagship Chain</div>
+                <div class="node-kicker">Causal Chain Status</div>
                 <div class="mt-2 data-sm text-muted">
                   Jamming ${chain.ewJammingActive ? "active" : "idle"} / sensor ${chain.sensorConfidence}% / escalation ${chain.escalationProbability}%
                 </div>
