@@ -18,6 +18,7 @@
  */
 
 import {
+  getCausalChainSummary,
   getScreensForModule,
   selectScreen,
   advanceWarRoom,
@@ -206,6 +207,7 @@ function html(state) {
   const cProb   = conflictProbability(idx, state.system.threat);
   const screens = getScreensForModule("hormuz-escalation");
   const panel   = state.drillDown["hormuz-escalation"]?.panel ?? "ladder";
+  const chain   = getCausalChainSummary(state);
 
   return `
     <div class="viewport-head" style="margin-bottom:16px">
@@ -218,6 +220,7 @@ function html(state) {
         <span class="chip ${idx > 72 ? "chip-red" : idx > 40 ? "chip-amber" : "chip-cyan"}"
           id="hormuz-head-idx">ESC ${idx}</span>
         <span class="chip chip-red" id="hormuz-head-cprob">CONFLICT ${cProb}%</span>
+        <span class="chip chip-amber" id="hormuz-head-eprob">ESC PROB ${chain.escalationProbability}%</span>
         <span class="chip chip-amber">W${state.system.week}</span>
       </div>
     </div>
@@ -271,10 +274,10 @@ function html(state) {
         </div>
 
         <div class="data-card" style="margin-top:16px;border-color:rgba(255,186,32,0.2)">
-          <div class="node-kicker">Phase 5 — Nash Equilibrium Solver</div>
+          <div class="node-kicker">Causal Escalation</div>
+          <div class="metric-value text-amber" style="font-size:2rem;margin-top:6px">${chain.escalationProbability}<span>%</span></div>
           <p class="mt-2 text-xs leading-5 text-muted">
-            Game-theoretic escalation model with 6 actors.
-            Nash solver computes equilibrium strategies per rung.
+            EW pressure and ISR certainty feed the canonical escalation probability.
           </p>
         </div>
       </div>
@@ -460,8 +463,10 @@ export function update(container, state) {
     const cProb = conflictProbability(idx, state.system.threat);
     const hi    = container.querySelector("#hormuz-head-idx");
     const hc    = container.querySelector("#hormuz-head-cprob");
+    const hp    = container.querySelector("#hormuz-head-eprob");
     if (hi) hi.textContent = `ESC ${idx}`;
     if (hc) hc.textContent = `CONFLICT ${cProb}%`;
+    if (hp) hp.textContent = `ESC PROB ${getCausalChainSummary(state).escalationProbability}%`;
     const oilEl = container.querySelector("#hormuz-oil-val");
     const recEl = container.querySelector("#hormuz-rec-val");
     if (oilEl) {

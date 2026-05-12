@@ -17,7 +17,9 @@
  */
 
 import {
+  getCausalChainSummary,
   getScreensForModule,
+  initiateEWJammingEvent,
   selectScreen,
   updateDrillDownState
 } from "../../hub-controller.js";
@@ -193,6 +195,7 @@ function html(state) {
   const drill = state.drillDown["electronic-warfare"] ?? { panel: "overview", selectedNodeId: null };
   const screens = getScreensForModule("electronic-warfare");
   const si = state.system.spectrumIntegrity;
+  const chain = getCausalChainSummary(state);
 
   return `
     <div class="viewport-head" style="margin-bottom:16px">
@@ -203,6 +206,7 @@ function html(state) {
       </div>
       <div class="hero-panel">
         <span class="chip ${si > 70 ? "chip-cyan" : si > 45 ? "chip-amber" : "chip-red"}">SPECTRUM ${si}%</span>
+        <span class="chip ${chain.sensorConfidence > 70 ? "chip-cyan" : "chip-amber"}">SENSOR ${chain.sensorConfidence}%</span>
         <span class="chip chip-amber">THREAT ${state.system.threat}</span>
       </div>
     </div>
@@ -239,7 +243,8 @@ function html(state) {
             <div class="data-card" style="margin-top:8px">
               <div class="node-kicker">Composite Spectrum Integrity</div>
               <div class="metric-value ${si > 70 ? "text-cyan" : si > 45 ? "text-amber" : "text-red"}" style="font-size:3rem;margin-top:8px">${si}<span>%</span></div>
-              <div class="data-sm text-muted" style="margin-top:8px">Degraded by EW sandbox activity and sig2 directive. Range: 25–100.</div>
+              <div class="data-sm text-muted" style="margin-top:8px">Sensor confidence ${chain.sensorConfidence}% / ISR certainty ${chain.orbitalISRCertainty}%.</div>
+              <button class="primary-action mt-4" data-ew-jam="EW-NODE-12" data-ew-intensity="72">Trigger Jamming Event</button>
             </div>
           ` : drill.panel === "nodes" ? `
             <div class="grid gap-3">
@@ -301,6 +306,13 @@ function html(state) {
                   <path class="danger" d="M36 42 C48 50 62 50 76 64" />
                 </svg>
               </div>
+              <div class="data-card" style="margin-top:12px;border-color:rgba(255,186,32,0.2)">
+                <div class="node-kicker">Flagship Chain</div>
+                <div class="mt-2 data-sm text-muted">
+                  Jamming ${chain.ewJammingActive ? "active" : "idle"} / sensor ${chain.sensorConfidence}% / escalation ${chain.escalationProbability}%
+                </div>
+                <button class="primary-action mt-4" data-ew-jam="EW-NODE-12" data-ew-intensity="72">Trigger Jamming Event</button>
+              </div>
             </div>
           `}
         </div>
@@ -356,6 +368,14 @@ export function mount(container, state, dispatch) {
     if (panelBtn) { dispatch(updateDrillDownState, "electronic-warfare", { panel: panelBtn.dataset.ewPanel }); return; }
     const nodeBtn = e.target.closest("[data-ew-node]");
     if (nodeBtn) { dispatch(updateDrillDownState, "electronic-warfare", { selectedNodeId: nodeBtn.dataset.ewNode }); return; }
+    const jamBtn = e.target.closest("[data-ew-jam]");
+    if (jamBtn) {
+      dispatch(initiateEWJammingEvent, {
+        source: jamBtn.dataset.ewJam,
+        intensity: Number(jamBtn.dataset.ewIntensity ?? 72)
+      });
+      return;
+    }
     const screenBtn = e.target.closest("[data-ew-screen]");
     if (screenBtn) {
       const screenId = screenBtn.dataset.ewScreen;

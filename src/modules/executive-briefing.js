@@ -24,6 +24,7 @@
 
 import {
   EXECUTIVE_BRIEFING_TOOLS,
+  getCausalChainSummary,
   getScreensForModule,
   selectScreen,
   COMMAND_CENTER_PATHS
@@ -35,6 +36,9 @@ function generateSitRep(state) {
   const hormuz = state.system.hormuzEscalation;
   const si = state.system.spectrumIntegrity;
   const week = state.system.week;
+  const chain = getCausalChainSummary(state);
+  const riskLow = Math.max(0, chain.warRoomRiskCenter - chain.warRoomRiskSpread);
+  const riskHigh = Math.min(100, chain.warRoomRiskCenter + chain.warRoomRiskSpread);
 
   const threatLevel = threat > 70 ? "CRITICAL" : threat > 50 ? "ELEVATED" : "MANAGED";
   const readinessLevel = readiness > 80 ? "OPTIMAL" : readiness > 60 ? "ADEQUATE" : "DEGRADED";
@@ -45,7 +49,13 @@ function generateSitRep(state) {
     THREAT STATUS:    ${threatLevel} (${threat} / 100)
     FORCE READINESS:  ${readinessLevel} (${readiness}%)
     SPECTRUM:         ${si >= 70 ? "NOMINAL" : "DEGRADED"} (${si}%)
+    SENSOR CONF:      ${chain.sensorConfidence}%
+    ORBITAL ISR:      ${chain.orbitalISRCertainty}%
     HORMUZ INDEX:     ${hormuz} / 100
+    ESCALATION PROB:  ${chain.escalationProbability}%
+    RISK RANGE:       ${riskLow}-${riskHigh}%
+    IRAN POSTURE:     ${Math.round(chain.actorPosture.iran * 100)}%
+    HOUTHI POSTURE:   ${Math.round(chain.actorPosture.houthis * 100)}%
     SWARM COHESION:   ${state.system.swarmCohesion}%
     CONFIDENCE:       ${state.system.confidence}%
     ─────────────────────────────────────────
@@ -82,6 +92,7 @@ function html(state) {
   const screens = getScreensForModule("executive-briefing");
   const sitRep = generateSitRep(state);
   const activeTool = EXECUTIVE_BRIEFING_TOOLS.find(t => t.screenId === state.activeScreenId);
+  const chain = getCausalChainSummary(state);
   if (activeTool) {
     return `
       <div class="viewport-head" style="margin-bottom:16px">
@@ -93,6 +104,7 @@ function html(state) {
         <div class="hero-panel">
           <span class="chip chip-red">TOP SECRET</span>
           <span class="chip chip-cyan">${activeTool.motion}</span>
+          <span class="chip chip-amber">ESC ${chain.escalationProbability}%</span>
           <button class="chip chip-amber" data-brief-back="true" style="cursor:pointer;border:none;background:transparent">← Back</button>
         </div>
       </div>
@@ -110,6 +122,7 @@ function html(state) {
       <div class="hero-panel">
         <span class="chip chip-red">TOP SECRET</span>
         <span class="chip chip-cyan">${screens.length} tools</span>
+        <span class="chip chip-amber">ESC ${chain.escalationProbability}%</span>
         <span class="chip chip-amber">W${state.system.week}</span>
       </div>
     </div>

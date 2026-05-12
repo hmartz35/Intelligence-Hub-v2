@@ -222,6 +222,10 @@ function seededNoise(seed, week, salt) {
   return Math.floor((x - Math.floor(x)) * 9);
 }
 
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
 function defaultDrillDown() {
   return Object.fromEntries(NAV_MODULES.map((module) => [
     module.id,
@@ -272,11 +276,14 @@ export function createHubState(options = {}) {
       readiness: 72,
       threat: 41,
       confidence: 86,
+      sensorConfidence: 84,
       spectrumIntegrity: 78,
+      orbitalISRCertainty: 82,
       swarmCohesion: 83,
       hormuzEscalation: 46,
       hormuzHistory: [{ week: 1, escalation: 46 }],
       actors: { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 },
+      ewJamming: { events: 0, lastSource: null, intensity: 0 },
       log: [
         "Final Stitch canvas synced: Tactical Operations Command",
         "Command Center hierarchy initialized",
@@ -476,6 +483,113 @@ export function initiateThreatProtocol(state, protocolId) {
   }, "war-room", {
     activeScreenId: threatScreenId,
     selectedNodeId: protocolId,
+    panel: "spectrum"
+  });
+}
+
+export function getCausalChainSummary(state) {
+  const system = state.system ?? {};
+  const actors = system.actors ?? { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 };
+  const ewJamming = system.ewJamming ?? { events: 0, intensity: 0 };
+  const sensorConfidence = clamp(
+    system.sensorConfidence ?? Math.round((system.confidence ?? 86) * 0.65 + (system.spectrumIntegrity ?? 78) * 0.35),
+    0,
+    100
+  );
+  const orbitalISRCertainty = clamp(
+    system.orbitalISRCertainty ?? Math.round(sensorConfidence * 0.7 + (system.spectrumIntegrity ?? 78) * 0.3),
+    0,
+    100
+  );
+  const threat = system.threat ?? 41;
+  const readiness = system.readiness ?? 72;
+  const hormuzEscalation = system.hormuzEscalation ?? 46;
+  const warRoomRiskCenter = clamp(Math.round(
+    threat * 0.42 +
+    hormuzEscalation * 0.28 +
+    (100 - readiness) * 0.16 +
+    (100 - orbitalISRCertainty) * 0.14
+  ), 0, 100);
+  const warRoomRiskSpread = clamp(Math.round(
+    6 +
+    (100 - sensorConfidence) * 0.10 +
+    (100 - orbitalISRCertainty) * 0.16 +
+    (ewJamming.events ?? 0) * 2
+  ), 6, 34);
+  const escalationProbability = clamp(Math.round(
+    hormuzEscalation * 0.42 +
+    threat * 0.26 +
+    (100 - orbitalISRCertainty) * 0.14 +
+    actors.iran * 12 +
+    actors.houthis * 6 +
+    (ewJamming.intensity ?? 0) * 0.08
+  ), 0, 99);
+
+  return {
+    ewJammingActive: (ewJamming.events ?? 0) > 0,
+    ewJammingIntensity: ewJamming.intensity ?? 0,
+    sensorConfidence,
+    orbitalISRCertainty,
+    warRoomRiskCenter,
+    warRoomRiskSpread,
+    actorPosture: {
+      iran: actors.iran,
+      houthis: actors.houthis,
+      israel: actors.israel,
+      ksa: actors.ksa
+    },
+    escalationProbability
+  };
+}
+
+export function initiateEWJammingEvent(state, event = {}) {
+  const intensity = clamp(Math.round(Number(event.intensity ?? 64)), 0, 100);
+  const source = event.source ?? "EW-JAM-UNSPEC";
+  const current = getCausalChainSummary(state);
+  const prevActors = state.system.actors ?? { iran: 0.55, houthis: 0.42, israel: 0.31, ksa: 0.25 };
+  const spectrumLoss = Math.round(8 + intensity * 0.12);
+  const sensorLoss = Math.round(6 + intensity * 0.10);
+  const isrLoss = Math.round(5 + intensity * 0.08);
+  const threatRise = Math.round(2 + intensity * 0.05);
+  const hormuzRise = Math.round(1 + intensity * 0.04);
+  const ewScreenId = getScreensForModule("electronic-warfare")[0]?.screenId ?? state.activeScreenId;
+
+  return updateDrillDownState({
+    ...state,
+    activeModule: "electronic-warfare",
+    activeTerminal: "electronic-warfare",
+    activeScreenId: ewScreenId,
+    system: {
+      ...state.system,
+      spectrumIntegrity: clamp(state.system.spectrumIntegrity - spectrumLoss, 25, 100),
+      confidence: clamp(state.system.confidence - Math.ceil(sensorLoss * 0.6), 45, 99),
+      sensorConfidence: clamp(current.sensorConfidence - sensorLoss, 35, 99),
+      orbitalISRCertainty: clamp(current.orbitalISRCertainty - isrLoss, 30, 99),
+      threat: clamp(state.system.threat + threatRise, 0, 100),
+      hormuzEscalation: clamp(state.system.hormuzEscalation + hormuzRise, 0, 100),
+      hormuzHistory: [
+        ...(state.system.hormuzHistory ?? []),
+        { week: state.system.week, escalation: clamp(state.system.hormuzEscalation + hormuzRise, 0, 100), source: "ew-jamming" }
+      ],
+      actors: {
+        iran: clamp(prevActors.iran + intensity * 0.0005, 0, 1),
+        houthis: clamp(prevActors.houthis + intensity * 0.00035, 0, 1),
+        israel: clamp(prevActors.israel + intensity * 0.0002, 0, 1),
+        ksa: clamp(prevActors.ksa + intensity * 0.00015, 0, 1)
+      },
+      ewJamming: {
+        events: (state.system.ewJamming?.events ?? 0) + 1,
+        lastSource: source,
+        intensity
+      },
+      log: [
+        ...state.system.log,
+        `W${state.system.week}: EW jamming event / ${source} / intensity ${intensity}`
+      ]
+    }
+  }, "electronic-warfare", {
+    activeScreenId: ewScreenId,
+    selectedNodeId: source,
     panel: "spectrum"
   });
 }

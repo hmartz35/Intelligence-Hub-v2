@@ -22,6 +22,7 @@ import {
   advanceWarRoom,
   updateDrillDownState,
   selectScreen,
+  getCausalChainSummary,
   getScreensForModule,
   STRIKE_SOLUTIONS,
   THREAT_PROTOCOLS,
@@ -273,12 +274,21 @@ function drawCausalGraphWithBeliefs(canvas, state) {
 // ─── Panel content ────────────────────────────────────────────────────────────
 
 function panelOverview(state) {
+  const chain = getCausalChainSummary(state);
+  const riskLow = Math.max(0, chain.warRoomRiskCenter - chain.warRoomRiskSpread);
+  const riskHigh = Math.min(100, chain.warRoomRiskCenter + chain.warRoomRiskSpread);
   return `
     <div class="threat-grid" style="margin-bottom:16px">
       <div class="threat-core">
         <div class="node-kicker">Composite Risk</div>
         <div class="threat-score">${state.system.threat}</div>
         <div class="data-sm uppercase text-muted">Readiness ${state.system.readiness}% / Spectrum ${state.system.spectrumIntegrity}%</div>
+        <div class="data-card" style="margin-top:14px;border-color:rgba(255,186,32,0.25)">
+          <div class="node-kicker">Risk Estimate Range</div>
+          <div class="metric-value text-amber" style="font-size:2rem;margin-top:6px">${riskLow}-${riskHigh}<span>%</span></div>
+          <div class="data-sm text-muted" style="margin-top:6px">Widened by sensor confidence ${chain.sensorConfidence}% and ISR certainty ${chain.orbitalISRCertainty}%.</div>
+          <div class="data-sm text-muted" style="margin-top:6px">Iran posture ${Math.round(chain.actorPosture.iran * 100)}% / Houthi ${Math.round(chain.actorPosture.houthis * 100)}%.</div>
+        </div>
       </div>
       <div class="grid gap-3">
         ${THREAT_PROTOCOLS.map(p => {
@@ -529,6 +539,7 @@ function statusClass(status) {
 function html(state) {
   const panel   = state.drillDown["war-room"]?.panel ?? "overview";
   const screens = getScreensForModule("war-room");
+  const chain = getCausalChainSummary(state);
 
   return `
     <div class="viewport-head" style="margin-bottom:16px">
@@ -539,6 +550,7 @@ function html(state) {
       </div>
       <div class="hero-panel">
         <span class="chip chip-red">THREAT ${state.system.threat}</span>
+        <span class="chip chip-amber">RISK ${chain.warRoomRiskCenter}±${chain.warRoomRiskSpread}</span>
         <span class="chip chip-cyan">W${state.system.week}</span>
         <span class="chip chip-amber">READY ${state.system.readiness}%</span>
       </div>

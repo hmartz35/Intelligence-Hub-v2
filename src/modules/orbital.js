@@ -13,6 +13,7 @@ import {
   THEATER_ASSETS,
   THEATER_BOUNDS,
   HORMUZ_ZOOM_BOUNDS,
+  getCausalChainSummary,
   getScreensForModule,
   selectScreen,
   updateDrillDownState,
@@ -208,6 +209,7 @@ function selectedAssetHTML(state) {
 // ─── Panel content ────────────────────────────────────────────────────────────
 
 function panelOverview(state) {
+  const chain = getCausalChainSummary(state);
   return `
     <style>
       #theater-map-mount { height:400px;border-radius:4px;border:1px solid rgba(34,48,68,1);overflow:hidden }
@@ -235,6 +237,13 @@ function panelOverview(state) {
     </div>
 
     <div id="theater-selected-info">${selectedAssetHTML(state)}</div>
+    <div class="data-card" style="margin-top:12px;border-color:rgba(255,186,32,0.2)">
+      <div class="node-kicker">ISR Certainty</div>
+      <div class="metric-value ${chain.orbitalISRCertainty > 70 ? "text-cyan" : "text-amber"}" style="font-size:2rem;margin-top:6px">${chain.orbitalISRCertainty}<span>%</span></div>
+      <div class="data-sm text-muted" style="margin-top:6px">
+        Sensor confidence ${chain.sensorConfidence}% after EW pressure.
+      </div>
+    </div>
   `;
 }
 
@@ -332,6 +341,7 @@ function panelContent(state) {
 function html(state) {
   const drill = state.drillDown["orbital"] ?? { panel: "overview" };
   const screens = getScreensForModule("orbital");
+  const chain = getCausalChainSummary(state);
 
   return `
     <div class="viewport-head" style="margin-bottom:16px">
@@ -342,6 +352,7 @@ function html(state) {
       </div>
       <div class="hero-panel">
         <span class="chip chip-cyan">spectrum ${state.system.spectrumIntegrity}%</span>
+        <span class="chip ${chain.orbitalISRCertainty > 70 ? "chip-cyan" : "chip-amber"}">ISR ${chain.orbitalISRCertainty}%</span>
         <span class="chip chip-amber">W${state.system.week}</span>
       </div>
     </div>

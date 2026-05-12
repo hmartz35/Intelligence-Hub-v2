@@ -17,6 +17,8 @@ import {
   TACTICAL_THEME,
   lockStrikeSolution,
   initiateThreatProtocol,
+  initiateEWJammingEvent,
+  getCausalChainSummary,
   setHormuzParameters,
   ESCALATION_RUNGS,
   WAR_GAME_ACTORS
@@ -239,4 +241,30 @@ test("no-action turn still advances week and drifts actors without crash", () =>
   assert.equal(next.system.week, 2);
   assert.ok(next.system.actors.iran >= 0 && next.system.actors.iran <= 1);
   assert.ok(next.system.log.some(e => e.startsWith("W2:")));
+});
+
+test("EW jamming event propagates through the flagship causal chain", () => {
+  const state = createHubState();
+  const before = getCausalChainSummary(state);
+  const jammed = initiateEWJammingEvent(state, { source: "EW-NODE-12", intensity: 72 });
+  const after = getCausalChainSummary(jammed);
+
+  assert.equal(jammed.activeModule, "electronic-warfare");
+  assert.equal(jammed.drillDown["electronic-warfare"].panel, "spectrum");
+  assert.equal(jammed.system.ewJamming.events, 1);
+  assert.equal(jammed.system.ewJamming.lastSource, "EW-NODE-12");
+
+  assert.ok(jammed.system.spectrumIntegrity < state.system.spectrumIntegrity,
+    "EW jamming must degrade spectrum integrity");
+  assert.ok(jammed.system.sensorConfidence < state.system.sensorConfidence,
+    "sensor confidence must drop");
+  assert.ok(jammed.system.orbitalISRCertainty < state.system.orbitalISRCertainty,
+    "orbital ISR certainty must drop");
+  assert.ok(after.warRoomRiskSpread > before.warRoomRiskSpread,
+    "war-room risk estimate must widen");
+  assert.ok(jammed.system.actors.iran > state.system.actors.iran,
+    "regional actor posture must shift");
+  assert.ok(after.escalationProbability > before.escalationProbability,
+    "escalation probability must rise");
+  assert.ok(jammed.system.log.at(-1).includes("EW jamming event"));
 });
