@@ -593,6 +593,17 @@ function html(state) {
 // ─── Canvas lifecycle ─────────────────────────────────────────────────────────
 
 let _causal = null; // canvas element when causal panel is active
+let _container = null;
+let _onClick = null;
+
+export function cleanup() {
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  _causal = null;
+  _container = null;
+  _onClick = null;
+}
 
 function initCausal(container, state) {
   const canvas = container.querySelector("#causal-canvas");
@@ -606,7 +617,7 @@ function initCausal(container, state) {
 // ─── Module exports ───────────────────────────────────────────────────────────
 
 export function mount(container, state, dispatch) {
-  _causal = null;
+  cleanup();
   container.innerHTML = html(state);
 
   const panel = state.drillDown["war-room"]?.panel ?? "overview";
@@ -657,10 +668,9 @@ export function mount(container, state, dispatch) {
   }
 
   container.addEventListener("click", onClick);
-  return () => {
-    _causal = null;
-    container.removeEventListener("click", onClick);
-  };
+  _container = container;
+  _onClick = onClick;
+  return cleanup;
 }
 
 export function update(container, state) {

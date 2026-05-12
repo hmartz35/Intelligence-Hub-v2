@@ -14,6 +14,17 @@ const registry = new Map();
 let _activeId = null;
 let _cleanup = null;
 
+function runCleanup() {
+  if (!_cleanup) return;
+  try {
+    _cleanup();
+  } catch (err) {
+    console.warn("[router] module cleanup failed:", err);
+  } finally {
+    _cleanup = null;
+  }
+}
+
 export function registerModule(id, mod) {
   registry.set(id, mod);
 }
@@ -25,11 +36,8 @@ export function routeTo(container, moduleId, state, dispatch) {
     return;
   }
 
-  // Tear down previous module
-  if (_cleanup) {
-    try { _cleanup(); } catch (_) {}
-    _cleanup = null;
-  }
+  // Tear down previous module before any new DOM is mounted.
+  runCleanup();
   container.innerHTML = '';
   _activeId = moduleId;
 
@@ -50,4 +58,10 @@ export function updateActive(container, state) {
 
 export function activeModuleId() {
   return _activeId;
+}
+
+export function resetRouterForTests() {
+  runCleanup();
+  registry.clear();
+  _activeId = null;
 }

@@ -41,6 +41,22 @@ function orbitalPanelFromRoute(route) {
 let _map       = null;
 let _markers   = {};
 let _dispatch  = null;
+let _container = null;
+let _onClick   = null;
+
+export function cleanup() {
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  if (_map) {
+    _map.remove();
+  }
+  _map = null;
+  _markers = {};
+  _dispatch = null;
+  _container = null;
+  _onClick = null;
+}
 
 // Asset type → color mapping (tactical palette)
 const TYPE_COLOR = {
@@ -87,6 +103,11 @@ function buildDivIcon(asset, state, selected) {
 }
 
 function initMap(container, state) {
+  if (_map) {
+    _map.remove();
+    _map = null;
+    _markers = {};
+  }
   if (!window.L) return;
 
   const mapEl = container.querySelector("#theater-map-mount");
@@ -363,8 +384,7 @@ function html(state) {
 // ─── Module exports ───────────────────────────────────────────────────────────
 
 export function mount(container, state, dispatch) {
-  _map = null;
-  _markers = {};
+  cleanup();
   _dispatch = dispatch;
 
   container.innerHTML = html(state);
@@ -406,12 +426,9 @@ export function mount(container, state, dispatch) {
   }
 
   container.addEventListener("click", onClick);
-  return () => {
-    container.removeEventListener("click", onClick);
-    if (_map) { _map.remove(); _map = null; }
-    _markers = {};
-    _dispatch = null;
-  };
+  _container = container;
+  _onClick = onClick;
+  return cleanup;
 }
 
 export function update(container, state) {

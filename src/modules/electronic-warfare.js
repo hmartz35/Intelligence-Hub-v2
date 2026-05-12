@@ -43,6 +43,8 @@ function _geoToPx(lat, lng, W, H) {
 // ─── GPS denial canvas ────────────────────────────────────────────────────────
 
 let _gpsCanvas = null;
+let _container = null;
+let _onClick = null;
 
 function drawGPSZones(canvas, state) {
   const ctx = canvas.getContext("2d");
@@ -148,6 +150,7 @@ function drawGPSZones(canvas, state) {
 }
 
 function initGPSCanvas(container, state) {
+  destroyGPSCanvas();
   const wrap = container.querySelector("#gps-canvas-mount");
   if (!wrap) return;
   wrap.innerHTML = "";
@@ -163,7 +166,17 @@ function initGPSCanvas(container, state) {
 }
 
 function destroyGPSCanvas() {
+  if (_gpsCanvas?.parentNode) _gpsCanvas.parentNode.removeChild(_gpsCanvas);
   _gpsCanvas = null;
+}
+
+export function cleanup() {
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  destroyGPSCanvas();
+  _container = null;
+  _onClick = null;
 }
 
 const SPECTRUM_CHANNELS = [
@@ -332,7 +345,7 @@ function html(state) {
 }
 
 export function mount(container, state, dispatch) {
-  destroyGPSCanvas();
+  cleanup();
   container.innerHTML = html(state);
 
   const drill = state.drillDown["electronic-warfare"] ?? { panel: "overview" };
@@ -355,7 +368,9 @@ export function mount(container, state, dispatch) {
   }
 
   container.addEventListener("click", onClick);
-  return () => { destroyGPSCanvas(); container.removeEventListener("click", onClick); };
+  _container = container;
+  _onClick = onClick;
+  return cleanup;
 }
 
 export function update(container, state) {

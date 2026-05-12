@@ -285,6 +285,25 @@ function html(state) {
 // ─── Chart.js lifecycle ───────────────────────────────────────────────────────
 
 let _chart = null;
+let _container = null;
+let _onChange = null;
+let _onClick = null;
+
+export function cleanup() {
+  if (_chart) {
+    _chart.destroy();
+    _chart = null;
+  }
+  if (_container && _onChange) {
+    _container.removeEventListener("input", _onChange);
+  }
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  _container = null;
+  _onChange = null;
+  _onClick = null;
+}
 
 function buildChartData(state) {
   const history = state.system.hormuzHistory ?? [{ week: 1, escalation: state.system.hormuzEscalation }];
@@ -305,6 +324,10 @@ function buildChartData(state) {
 }
 
 function initChart(container, state) {
+  if (_chart) {
+    _chart.destroy();
+    _chart = null;
+  }
   const canvas = container.querySelector("#hormuz-chart");
   if (!canvas || typeof Chart === "undefined") return null;
 
@@ -352,7 +375,7 @@ function patchSliderLabels(container, params) {
 // ─── Module exports ───────────────────────────────────────────────────────────
 
 export function mount(container, state, dispatch) {
-  _chart = null;
+  cleanup();
   container.innerHTML = html(state);
 
   const panel = state.drillDown["hormuz-escalation"]?.panel ?? "ladder";
@@ -413,12 +436,11 @@ export function mount(container, state, dispatch) {
 
   container.addEventListener("input", onChange);
   container.addEventListener("click", onClick);
+  _container = container;
+  _onChange = onChange;
+  _onClick = onClick;
 
-  return () => {
-    if (_chart) { _chart.destroy(); _chart = null; }
-    container.removeEventListener("input", onChange);
-    container.removeEventListener("click", onClick);
-  };
+  return cleanup;
 }
 
 export function update(container, state) {
@@ -454,7 +476,10 @@ export function update(container, state) {
   }
 
   // Non-dashboard, or switching panels — full re-render
-  _chart = null;
+  if (_chart) {
+    _chart.destroy();
+    _chart = null;
+  }
   container.innerHTML = html(state);
 
   if (panel === "dashboard") {

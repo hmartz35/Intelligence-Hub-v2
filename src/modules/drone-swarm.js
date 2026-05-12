@@ -59,6 +59,8 @@ let _animId   = null;
 let _agents   = null;
 let _swState  = null;  // latest state ref for animation loop
 let _dispatch = null;
+let _container = null;
+let _onClick = null;
 
 // ─── Coordinate mapping ───────────────────────────────────────────────────────
 
@@ -304,11 +306,22 @@ function initSwarmCanvas(container, state) {
 }
 
 function destroySwarm() {
-  if (_animId) { cancelAnimationFrame(_animId); _animId = null; }
+  if (_animId !== null) { cancelAnimationFrame(_animId); _animId = null; }
+  if (_canvas?.parentNode) _canvas.parentNode.removeChild(_canvas);
   _canvas   = null;
   _ctx      = null;
   _agents   = null;
+  _swState  = null;
   _dispatch = null;
+}
+
+export function cleanup() {
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  destroySwarm();
+  _container = null;
+  _onClick = null;
 }
 
 // ─── DOM helpers ─────────────────────────────────────────────────────────────
@@ -524,7 +537,7 @@ function html(state) {
 // ─── Module exports ───────────────────────────────────────────────────────────
 
 export function mount(container, state, dispatch) {
-  destroySwarm();
+  cleanup();
   _swState  = state;
   _dispatch = dispatch;
 
@@ -542,10 +555,9 @@ export function mount(container, state, dispatch) {
   }
 
   container.addEventListener("click", onClick);
-  return () => {
-    container.removeEventListener("click", onClick);
-    destroySwarm();
-  };
+  _container = container;
+  _onClick = onClick;
+  return cleanup;
 }
 
 export function update(container, state) {

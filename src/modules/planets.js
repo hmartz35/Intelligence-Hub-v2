@@ -140,6 +140,8 @@ let _animId    = null;
 let _simMin    = 0;       // accumulated sim-minutes (seeded from campaign week)
 let _lastNow   = 0;
 let _isrState  = null;    // latest state ref, updated every dispatch
+let _container = null;
+let _onClick   = null;
 
 // ─── Coordinate mapping ───────────────────────────────────────────────────────
 
@@ -393,6 +395,7 @@ function drawISR(canvas, state, simMin) {
 // ─── Canvas lifecycle ─────────────────────────────────────────────────────────
 
 function initISRCanvas(container, state) {
+  destroyISRCanvas();
   const mount = container.querySelector("#isr-canvas-mount");
   if (!mount) return;
 
@@ -422,9 +425,19 @@ function initISRCanvas(container, state) {
 }
 
 function destroyISRCanvas() {
-  if (_animId) { cancelAnimationFrame(_animId); _animId = null; }
+  if (_animId !== null) { cancelAnimationFrame(_animId); _animId = null; }
+  if (_isrCanvas?.parentNode) _isrCanvas.parentNode.removeChild(_isrCanvas);
   _isrCanvas = null;
   _isrState  = null;
+}
+
+export function cleanup() {
+  if (_container && _onClick) {
+    _container.removeEventListener("click", _onClick);
+  }
+  destroyISRCanvas();
+  _container = null;
+  _onClick = null;
 }
 
 // ─── HTML panels ─────────────────────────────────────────────────────────────
@@ -728,7 +741,7 @@ function html(state) {
 // ─── Module exports ───────────────────────────────────────────────────────────
 
 export function mount(container, state, dispatch) {
-  destroyISRCanvas();
+  cleanup();
   container.innerHTML = html(state);
 
   if (activePanel(state) === "coverage") initISRCanvas(container, state);
@@ -740,10 +753,9 @@ export function mount(container, state, dispatch) {
   }
 
   container.addEventListener("click", onClick);
-  return () => {
-    container.removeEventListener("click", onClick);
-    destroyISRCanvas();
-  };
+  _container = container;
+  _onClick = onClick;
+  return cleanup;
 }
 
 export function update(container, state) {
